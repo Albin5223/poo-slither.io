@@ -1,4 +1,4 @@
-package execption;
+package exceptions;
 
 public class ExecptionMoveInvalid extends Exception{
 

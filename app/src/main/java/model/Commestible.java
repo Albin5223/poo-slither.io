@@ -1,5 +1,5 @@
 package model;
 
-public enum Square {
+public enum Commestible {
     FOOD;
 }
