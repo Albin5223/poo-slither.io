@@ -3,15 +3,15 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Plateau {
+public final class Plateau {
 
-    private HashMap<Coordinate, Snake> plateau;
-    private HashMap<Coordinate, Commestible> nourritures;
+    private HashMap<CoordinateInteger, Snake> plateau;
+    private HashMap<CoordinateInteger, Commestible> nourritures;
 
 
     public Plateau() {
-        this.plateau = new HashMap<Coordinate, Snake>();
-        this.nourritures = new HashMap<Coordinate, Commestible>();
+        this.plateau = new HashMap<CoordinateInteger, Snake>();
+        this.nourritures = new HashMap<CoordinateInteger, Commestible>();
     }
 
     /**
@@ -24,7 +24,7 @@ public class Plateau {
         plateau.put(snake.getHead().getCenter(), snake);
     }
 
-    public void addFood(Coordinate c) throws IllegalArgumentException{
+    public void addFood(CoordinateInteger c) throws IllegalArgumentException{
         if (plateau.containsKey(c)) {
             throw new IllegalArgumentException("Snake already exists");
         }
@@ -36,8 +36,8 @@ public class Plateau {
      * @param snake the snake that has moved
      */
     public void update(Snake snake) {
-        Coordinate keyToRemove = null;  // We need to remove the old coordinate of the snake from the map
-        for (Map.Entry<Coordinate, Snake> entry : plateau.entrySet()) { // We search for the old coordinate
+        CoordinateInteger keyToRemove = null;  // We need to remove the old coordinate of the snake from the map
+        for (Map.Entry<CoordinateInteger, Snake> entry : plateau.entrySet()) { // We search for the old coordinate
             if (entry.getValue().equals(snake)) {   // We found the old coordinate
                 keyToRemove = entry.getKey();   // We save the old coordinate
                 break;
@@ -49,7 +49,7 @@ public class Plateau {
         }
 
         plateau.remove(keyToRemove);    // We remove the old coordinate    
-        plateau.put(snake.getHead().getCenter(), snake);    // We add the new coordinate
+        this.addSnake(snake);    // We add the new coordinate
     }
 
     /**
@@ -64,5 +64,11 @@ public class Plateau {
             }
         }
         return false;
+    }
+
+    public void removeSnake(Snake snake){
+        if(plateau.remove(snake.getHead().getCenter()) == null){
+            throw new IllegalArgumentException("Snake not found");
+        }
     }
 }

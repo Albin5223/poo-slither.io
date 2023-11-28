@@ -1,9 +1,11 @@
 package interfaces;
 
+import model.Snake.SnakePart.Direction;
+
 public interface Turnable {
 
     enum Turning {
-        LEFT, FORWARD, RIGHT;
+        GO_LEFT, FORWARD, GO_RIGHT;
     
         public static Turning randomDirection(){
             int random = (int) (Math.random() * Turning.values().length);
@@ -11,5 +13,5 @@ public interface Turnable {
         }
     }
 
-    public double turn(Turning turning, double initialAngle);
+    public Direction turn(Turning turning, Direction initialDirection);
 }
