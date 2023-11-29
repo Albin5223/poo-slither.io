@@ -1,9 +1,9 @@
 package interfaces;
 
 import java.util.ArrayList;
-import model.CoordinateInteger;
+import model.CoordinateDouble;
 
 public interface Data {
-    public ArrayList<CoordinateInteger> getAllPosition();
+    public ArrayList<CoordinateDouble> getAllPosition();
     public void move();
 }

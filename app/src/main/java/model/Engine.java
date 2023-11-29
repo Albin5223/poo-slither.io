@@ -1,42 +1,41 @@
 package model;
 
 import java.util.ArrayList;
-
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
-import exceptions.ExecptionMoveInvalid;
 import interfaces.Data;
 import interfaces.Observable;
 import interfaces.Observer;
-import model.Snake.SnakePart;
-import model.Snake.SnakePart.Direction;
+import interfaces.Orientation.Angle;
+import model.SnakeDouble.SnakePartDouble;
 
 
 public class Engine implements Observable, Data{
     
-    private Plateau plateau;
-    Snake[] snakes;
+    private Plateau<Double,Angle> plateau;
+    SnakeDouble[] snakes;
     Player[] players;
     int nbSnake = 0;
     ArrayList<Observer> observers;
 
-    public Engine(int n){
-        snakes = new Snake[n];
-        players = new Player[n];
-        this.plateau = new Plateau();
+    private Engine(int n,SnakeDouble[] snakes, Plateau<Double,Angle> plateau){
+        this.snakes = snakes;
+        this.players = new Player[n];
+        this.plateau = plateau;
         this.observers = new ArrayList<Observer>();
     }
 
-
-    public void addPlayer(char left, char right) throws ExecptionAddSnake {
-        addPlayerWithCoord(new CoordinateInteger(0, 0), left, right);
+    public static Engine createSnake(int n){
+        SnakeDouble[] s = new SnakeDouble[n];
+        Plateau<Double,Angle> p = Plateau.createPlateauSlitherio();
+        return new Engine(n,s,p);
     }
 
-    public void addPlayerWithCoord(CoordinateInteger coord,char left, char right) throws ExecptionAddSnake{
+    public void addPlayerWithCoord(CoordinateDouble coord,char left, char right) throws ExecptionAddSnake{
         if(nbSnake >= snakes.length){
             throw new ExecptionAddSnake("Action impossible");
         }
-        Snake newSnake = new Snake(coord, plateau, Direction.UP);
+        SnakeDouble newSnake = new SnakeDouble(coord, plateau, new Angle(90));
         Player newPlayer = new Player(left, right);
         players[nbSnake] = newPlayer;
         snakes[nbSnake] = newSnake;
@@ -46,15 +45,15 @@ public class Engine implements Observable, Data{
 
 
     @Override
-    public ArrayList<CoordinateInteger> getAllPosition() {
-        ArrayList<SnakePart[]> snakeParts = new ArrayList<SnakePart[]>();
-        for(Snake snake : snakes){
+    public ArrayList<CoordinateDouble> getAllPosition() {
+        ArrayList<SnakePartDouble[]> snakeParts = new ArrayList<SnakePartDouble[]>();
+        for(SnakeDouble snake : snakes){
             snakeParts.add(snake.getAllSnakePart());
         }
-        ArrayList<CoordinateInteger> allPosition = new ArrayList<CoordinateInteger>();
+        ArrayList<CoordinateDouble> allPosition = new ArrayList<CoordinateDouble>();
 
-        for(SnakePart[] snakePart : snakeParts){
-            for(SnakePart part : snakePart){
+        for(SnakePartDouble[] snakePart : snakeParts){
+            for(SnakePartDouble part : snakePart){
                 allPosition.add(part.getCenter());
             }
         }
@@ -85,17 +84,17 @@ public class Engine implements Observable, Data{
 
     @Override
     public void move() {
-        for (Snake snake : snakes) {
+        for (SnakeDouble snake : snakes) {
             try {
                 snake.move();
             } catch (ExceptionCollision e ) {
-                snake.resetSnake(new CoordinateInteger(0, 0), Direction.UP);
+                snake.resetSnake(new CoordinateDouble(0, 0), new Angle(90));
             }
         }
         notifyObservers();
     }
 
-    public Snake[] getSnakes() {
+    public SnakeDouble[] getSnakes() {
         return snakes;
     }
 

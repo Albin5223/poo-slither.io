@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 import interfaces.Coordinate;
-import model.Snake.SnakePart.Direction;
+import interfaces.Orientation.Direction;
 
-public class CoordinateInteger implements Coordinate<Integer>{
+public class CoordinateInteger implements Coordinate<Integer,Direction> {
 
     protected int x;
     protected int y;
@@ -15,10 +15,12 @@ public class CoordinateInteger implements Coordinate<Integer>{
         this.y = y;
     }
 
+    @Override
     public Integer getX() {
         return x;
     }
 
+    @Override
     public Integer getY() {
         return y;
     }
@@ -34,7 +36,7 @@ public class CoordinateInteger implements Coordinate<Integer>{
     }
 
     @Override
-    public double distanceTo(Coordinate<Integer> other) {
+    public double distanceTo(Coordinate<Integer,Direction> other) {
         return Math.sqrt(Math.pow(this.x - other.getX(), 2) + Math.pow(this.y - other.getY(), 2));
     }
 
@@ -46,11 +48,6 @@ public class CoordinateInteger implements Coordinate<Integer>{
         }
         return false;
     }
-        
-    @Override
-    public boolean isContainedIn(Coordinate<Integer> upLeft, Coordinate<Integer> downRight) {
-        return this.x >= upLeft.getX() && this.x <= downRight.getX() && this.y >= upLeft.getY() && this.y <= downRight.getY();
-    } 
 
     @Override
     public CoordinateInteger clone() {
@@ -58,12 +55,12 @@ public class CoordinateInteger implements Coordinate<Integer>{
     }
 
     @Override
-    public CoordinateInteger placeCoordinateFrom(Direction direction) {
+    public CoordinateInteger placeCoordinateFrom(Direction direction, Integer distance) {
        switch (direction) {
-        case UP:return new CoordinateInteger(this.x, this.y - 1);
-        case DOWN:return new CoordinateInteger(this.x, this.y + 1);
-        case LEFT:return new CoordinateInteger(this.x - 1, this.y);
-        case RIGHT:return new CoordinateInteger(this.x + 1, this.y);
+        case UP:return new CoordinateInteger(this.x, this.y - distance);
+        case DOWN:return new CoordinateInteger(this.x, this.y + distance);
+        case LEFT:return new CoordinateInteger(this.x - distance, this.y);
+        case RIGHT:return new CoordinateInteger(this.x + distance, this.y);
         default:
             throw new IllegalArgumentException("The direction " + direction + " is not a valid direction");
        }

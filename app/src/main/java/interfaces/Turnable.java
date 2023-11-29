@@ -1,8 +1,6 @@
 package interfaces;
 
-import model.Snake.SnakePart.Direction;
-
-public interface Turnable {
+public interface Turnable<O extends Orientation> {
 
     enum Turning {
         GO_LEFT, FORWARD, GO_RIGHT;
@@ -13,5 +11,5 @@ public interface Turnable {
         }
     }
 
-    public Direction turn(Turning turning, Direction initialDirection);
+    public O turn(Turning turning, O initialDirection);
 }

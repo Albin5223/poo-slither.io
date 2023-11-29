@@ -1,16 +1,13 @@
 package interfaces;
 
-import model.Snake.SnakePart.Direction;
-
-public interface Coordinate<Type extends Number> extends Cloneable {
+public interface Coordinate<Type extends Number, O extends Orientation> extends Cloneable {
     
     public Type getX();
     public Type getY();
-    public Coordinate<Type> clone();
-    public double distanceTo(Coordinate<Type> other);
-    public boolean isContainedIn(Coordinate<Type> upLeft, Coordinate<Type> downRight);
+    public Coordinate<Type,O> clone();
+    public double distanceTo(Coordinate<Type,O> other);
     public int hashCode();
     public String toString();
     public boolean equals(Object obj);
-    public Coordinate<Type> placeCoordinateFrom(Direction direction);
+    public Coordinate<Type,O> placeCoordinateFrom(O direction, Type distance);
 }

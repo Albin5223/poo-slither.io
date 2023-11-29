@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import controleur.KeyboardControler;
 import court.Court;
 import exceptions.ExecptionAddSnake;
-import model.CoordinateInteger;
+import model.CoordinateDouble;
 import model.Engine;
 
 public class AccueilPage extends JPanel {
@@ -52,7 +52,7 @@ public class AccueilPage extends JPanel {
 
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Engine engine = new Engine(2);
+                Engine engine = Engine.createSnake(2);
                 PlayPage playPage = new PlayPage(window);
                 KeyboardControler keyboardControler = new KeyboardControler(engine);
                 playPage.addKeyBoardListener(keyboardControler);
@@ -60,10 +60,10 @@ public class AccueilPage extends JPanel {
                 engine.notifyObservers();
 
                 try {
-                    engine.addPlayerWithCoord(new CoordinateInteger(0, 0),'a','e');
-                    engine.getSnakes()[0].grow(55);
-                    engine.addPlayerWithCoord(new CoordinateInteger(10, 0),'o','p');
-                    engine.getSnakes()[1].grow(0);
+                    engine.addPlayerWithCoord(new CoordinateDouble(-50, -50),'a','e');
+                    engine.getSnakes()[0].grow(100);
+                    engine.addPlayerWithCoord(new CoordinateDouble(50, 50),'o','p');
+                    engine.getSnakes()[1].grow(30);
                 } catch (ExecptionAddSnake e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -75,7 +75,7 @@ public class AccueilPage extends JPanel {
 
                 Court court = new Court(playPage, engine);
                 Timer timer = new Timer(true);
-                timer.schedule(court, 0, 200);
+                timer.schedule(court, 0, 100);
             }
         });
         

@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 
 import interfaces.Data;
 import interfaces.Observer;
-import model.CoordinateInteger;
-
+import model.CoordinateDouble;
+import model.SnakeDouble;
 import controleur.KeyboardControler;
 
 public class PlayPage extends JPanel implements Observer{
@@ -55,9 +55,10 @@ public class PlayPage extends JPanel implements Observer{
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                for (CoordinateInteger coordinate : data.getAllPosition()) {
+                for (CoordinateDouble coordinate : data.getAllPosition()) {
                     g.setColor(Color.BLACK);
-                    g.fillRect(X_D+(coordinate.getX()*SNAKE_WIDTH),Y_D+(coordinate.getY()*SNAKE_WIDTH), SNAKE_WIDTH, SNAKE_WIDTH);
+                    g.fillOval((int)(X_D+coordinate.getX()), (int)(Y_D+coordinate.getY()), (int)SnakeDouble.SnakePartDouble.hitboxRadius, (int)SnakeDouble.SnakePartDouble.hitboxRadius);
+                    //g.fillRect(X_D+(coordinate.getX()*SNAKE_WIDTH),Y_D+(coordinate.getY()*SNAKE_WIDTH), SNAKE_WIDTH, SNAKE_WIDTH);
                 }
             }
         };

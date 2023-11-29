@@ -3,191 +3,110 @@ package model;
 import java.util.ArrayList;
 
 import exceptions.ExceptionCollision;
-import exceptions.ExecptionMoveInvalid;
 import interfaces.Collisable;
+import interfaces.Coordinate;
+import interfaces.Orientation;
 import interfaces.Turnable;
-import model.Snake.SnakePart.Direction;
 
-public class Snake implements Turnable, Collisable<Snake> {
+
+public sealed abstract class Snake<Type extends Number, O extends Orientation> implements Turnable<O>, Collisable<Snake<Type,O>> permits SnakeInteger, SnakeDouble {
 
     /** The turning of the snake */
-    private Turning currentTurning = Turning.FORWARD;
+    protected Turning currentTurning = Turning.FORWARD;
 
+    protected Type gap_between_tail;
 
-    public class SnakePart implements Cloneable {
+    public static abstract sealed class SnakePart<Type extends Number,O extends Orientation> implements Collisable<SnakePart<Type,O>>, Cloneable permits SnakeInteger.SnakePartInteger, SnakeDouble.SnakePartDouble{
 
         /** The coordinate center of the snake part */
-        private CoordinateInteger center;
+        protected Coordinate<Type,O> center;
 
-        public enum Direction {LEFT,UP,RIGHT,DOWN;
-            private Direction changeDirectionWithTurn(Turning turning){
-                switch (turning) {
-                    case GO_LEFT : if (this.ordinal() == 0) return Direction.values()[Direction.values().length - 1];
-                                   else return Direction.values()[this.ordinal() - 1];
-                    case GO_RIGHT : return Direction.values()[(this.ordinal() + 1) % Direction.values().length];
-                    default :return this;
-                }       
-            }
+        protected double hitboxRadius;
 
-            public static Direction opposite(Direction direction) {
-                switch (direction) {
-                    case UP: return DOWN;   
-                    case DOWN: return UP;
-                    case LEFT: return RIGHT;
-                    case RIGHT: return LEFT;
-                    default:
-                        throw new IllegalArgumentException("Unexpected value: " + direction);
-                }
-            }
-        
-        }
         /** The direction of the snake part */
-        private Direction direction;
+        protected O orientation;
 
-
-        /**
-         * Private constructor for the {@link #clone} method
-         * @param left the left coordinate of the snake part
-         * @param center the center coordinate of the snake part
-         * @param right the right coordinate of the snake part
-         * @param direction the direction of the snake part
-         */
-        private SnakePart(CoordinateInteger center, Direction direction) {
+        protected SnakePart(Coordinate<Type,O> center, O direction, double hitboxRadius) {
             this.center = center.clone(); 
-            this.direction = direction;
+            this.orientation = direction;
+            this.hitboxRadius = hitboxRadius;
         }
 
         /**
          * @return the center of the snake part
          */
-        public CoordinateInteger getCenter(){
-            return center.clone();
+        public abstract Coordinate<Type,O> getCenter();
+
+        public O getOrientation(){
+            return orientation;
         }
 
-        /** The getter of the direction
-         * @return the direction of the snake part
-         */
-        public Direction getDirection() {
-            return direction;
-        }
-
-        /** The setter of the direction
-         * @param d the new direction of the snake part
-         */
-        public void setDirection(Direction d) {
-            this.direction = d;
-        }
-
-        @Override
-        public SnakePart clone() {
-            return new SnakePart(this.center, this.direction);
+        public void setHitboxRadius(double hitboxRadius) {
+            this.hitboxRadius = hitboxRadius;
         }
 
         @Override
         public String toString() {
-            return "SnakePart [center=" + center.toString() + ", direction=" + direction + "]";
+            return "SnakePart [center=" + center.toString() + ", orientation=" + orientation + ", hitboxRadius=" + hitboxRadius +"]";
+        }
+
+        @Override
+        public abstract SnakePart<Type,O> clone();
+
+        @Override
+        public boolean isColliding(SnakePart<Type,O> other) {
+            return center.distanceTo(other.center) <= this.hitboxRadius + other.hitboxRadius;
         }
     }
 
     /** The head of the snake */
-    private SnakePart head;
+    protected SnakePart<Type,O> head;
     /** The tail of the snake */
-    private ArrayList<SnakePart> tail;
+    protected ArrayList<SnakePart<Type,O>> tail;
     /** The board where the snake is */
-    private Plateau plateau;
-    
-    /**
-     * The constructor of the snake
-     * @param location the location of the snake
-     * @param plateau the board where the snake is
-     * @param startingDirection the starting angle of the snake
-     */
-    public Snake(CoordinateInteger location,Plateau plateau, Direction startingDirection) {
-        this.head = new SnakePart(location.clone(), startingDirection);
-        this.tail = new ArrayList<SnakePart>();
+    protected Plateau<Type,O> plateau;
 
-        Direction direction = head.getDirection();
-        SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(Direction.opposite(direction)), direction);
-        tail.add(tail1);
-
-        this.plateau = plateau;
-
-        plateau.addSnake(this);
+    public Snake(Type gap_between_tail){
+        this.gap_between_tail = gap_between_tail;
     }
 
-    public void resetSnake(CoordinateInteger location, Direction startingDirection) {
-
-        this.head = new SnakePart(location.clone(), startingDirection);
-        this.tail = new ArrayList<SnakePart>();
-
-        Direction direction = head.getDirection();
-        SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(Direction.opposite(direction)), direction);
-        tail.add(tail1);
-
-        plateau.update(this);
-    }
+    public abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection);
 
     /**
      * @return a copy of {@link #head}
      */
-    public SnakePart getHead() {
+    public SnakePart<Type,O> getHead() {
         return head;
     }
 
     /**
      * @return a copy of {@link #tail}
      */
-    public SnakePart[] getTail() {
-        return tail.stream().map(c -> c.clone()).toArray(SnakePart[]::new);
-    }
+    public abstract SnakePart<Type,O>[] getTail();
 
     /**
      * @return a copy of {@link #head} and {@link #tail}
      */
-    public SnakePart[] getAllSnakePart() {
-        SnakePart[] tail = getTail();
-        SnakePart[] allSnakePart = new SnakePart[tail.length + 1];
-        allSnakePart[0] = head;
-        for (int i = 0; i < tail.length; i++) {
-            allSnakePart[i + 1] = tail[i];
-        }
-        return allSnakePart;
-    }
+    public abstract SnakePart<Type,O>[] getAllSnakePart();
 
     /**
      * Update the position of the snake on the board (the snake has moved)
      * @throws ExceptionCollision if the snake is colliding with another snake
      */
-    public void move() throws ExceptionCollision {
-        // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
-        Direction newDirection = turn(currentTurning, head.getDirection());
-        SnakePart newHead = new SnakePart(head.getCenter().placeCoordinateFrom(newDirection), newDirection);
-
-        this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
-        this.tail.add(0, head); // We add the old head to the tail
-        this.head = newHead;    // We update the head
-
-        if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
-            throw new ExceptionCollision("Snake is colliding with another snake");
-        }
-        
-        plateau.update(this);   // We update the position of the snake on the board
-    }
+    public abstract void move() throws ExceptionCollision;
 
     /**
      * Turning the snake to the left or to the right, like in a trigonometric circle (0° is on the right, 90° is on the top, 180° is on the left, 270° is on the bottom)
      * @param turning the direction to turn
      */
     @Override
-    public Direction turn(Turning turning, Direction initialDirection) {
-        return initialDirection.changeDirectionWithTurn(turning);
-    }
+    public abstract O turn(Turning turning, O initialDirection);
 
     /**
      * @return the angle of the snake
      */
-    public Direction getDirection() {
-        return head.getDirection();
+    public O getDirection() {
+        return head.getOrientation();
     }
 
     public Turning getCurrentTurning() {
@@ -195,22 +114,17 @@ public class Snake implements Turnable, Collisable<Snake> {
     }
 
     @Override
-    public boolean isColliding(Snake other) {
-        SnakePart[] allParts = other.getAllSnakePart();
-        for (SnakePart snakePart : allParts) {
-            if (this.head.getCenter().equals(snakePart.getCenter())) {
+    public boolean isColliding(Snake<Type,O> other) {
+        SnakePart<Type,O>[] allParts = other.getAllSnakePart();
+        for (SnakePart<Type,O> snakePart : allParts) {
+            if(head.isColliding(snakePart)){
                 return true;
             }
         }
         return false;
     }
 
-    public void grow() {
-        SnakePart lastTail = tail.get(tail.size() - 1);
-        Direction direction = lastTail.getDirection();
-        SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(Direction.opposite(direction)), direction);
-        tail.add(newTail);
-    }
+    public abstract void grow();
 
     public void grow(int nb) {
         for (int i = 0; i < nb; i++) {
@@ -221,7 +135,7 @@ public class Snake implements Turnable, Collisable<Snake> {
     @Override
     public String toString() {
         String res = "Snake [head=" + head.toString() + ", tail=";
-        for (SnakePart s : tail) {
+        for (SnakePart<Type,O> s : tail) {
             res += s.toString() + " ";
         }
         res += "]";

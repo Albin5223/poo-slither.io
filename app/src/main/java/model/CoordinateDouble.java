@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 import interfaces.Coordinate;
-import model.Snake.SnakePart.Direction;
+import interfaces.Orientation.Angle;
 
-public class CoordinateDouble implements Coordinate<Double> {
+public class CoordinateDouble implements Coordinate<Double,Angle> {
 
     protected double x;
     protected double y;
@@ -15,10 +15,12 @@ public class CoordinateDouble implements Coordinate<Double> {
         this.y = y;
     }
 
+    @Override
     public Double getX() {
         return x;
     }
 
+    @Override
     public Double getY() {
         return y;
     }
@@ -34,21 +36,8 @@ public class CoordinateDouble implements Coordinate<Double> {
     }
 
     @Override
-    public double distanceTo(Coordinate<Double> other) {
+    public double distanceTo(Coordinate<Double,Angle> other) {
         return Math.sqrt(Math.pow(this.x - other.getX(), 2) + Math.pow(this.y - other.getY(), 2));
-    }
-
-    /** 
-     * Place a coordinate from {@code this} coordinate with a distance and an angle
-     * @param distance the distance from {@code this} and the new coordinate
-     * @param angle the angle from {@code this} and the new coordinate
-     * @return the new coordinate
-    */
-    public CoordinateDouble placeCoordinateFrom(double distance, double angle) {
-        double radian = Math.toRadians(angle);
-        double newX = this.x + Math.cos(radian) * distance;
-        double newY = this.y + Math.sin(radian) * distance;
-        return new CoordinateDouble(newX, newY);
     }
 
     @Override
@@ -59,11 +48,6 @@ public class CoordinateDouble implements Coordinate<Double> {
         }
         return false;
     }
-        
-    @Override
-    public boolean isContainedIn(Coordinate<Double> upLeft, Coordinate<Double> downRight) {
-        return this.x >= upLeft.getX() && this.x <= downRight.getX() && this.y >= upLeft.getY() && this.y <= downRight.getY();
-    } 
 
     @Override
     public CoordinateDouble clone() {
@@ -71,7 +55,10 @@ public class CoordinateDouble implements Coordinate<Double> {
     }
 
     @Override
-    public Coordinate<Double> placeCoordinateFrom(Direction direction) {
-        return null;
+    public CoordinateDouble placeCoordinateFrom(Angle direction, Double distance) {
+        double radian = Math.toRadians(direction.getAngle());
+        double newX = this.x + Math.cos(radian) * distance;
+        double newY = this.y + Math.sin(radian) * distance;
+        return new CoordinateDouble(newX, newY);
     }
 }
