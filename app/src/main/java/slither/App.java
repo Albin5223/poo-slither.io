@@ -3,14 +3,27 @@
  */
 package slither;
 
-public class App {
-    
+import GUI.Window;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class App extends Application{
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Window window = new Window(primaryStage);
+        
+        primaryStage.setTitle("Slither");
+        primaryStage.setScene(window.getScene());
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(e -> {
+            primaryStage.close();
+        });
+    }
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI.Window();
-            }
-        }); 
+        launch(args);
     }
+
+    
 }

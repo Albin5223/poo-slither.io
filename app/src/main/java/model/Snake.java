@@ -50,6 +50,10 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
             return "SnakePart [center=" + center.toString() + ", orientation=" + orientation + ", hitboxRadius=" + hitboxRadius +"]";
         }
 
+        public double getHitboxRadius() {
+            return hitboxRadius;
+        }
+
         @Override
         public abstract SnakePart<Type,O> clone();
 
@@ -70,7 +74,11 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
         this.gap_between_tail = gap_between_tail;
     }
 
-    public abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection);
+    public double getRadius(){
+        return head.getHitboxRadius();
+    }
+
+    public abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail);
 
     /**
      * @return a copy of {@link #head}

@@ -1,74 +1,57 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
 
-import javax.swing.JPanel;
-
+import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
+import javafx.animation.AnimationTimer;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import model.CoordinateDouble;
-import model.SnakeDouble;
-import controleur.KeyboardControler;
 
-public class PlayPage extends JPanel implements Observer{
+public class PlayPage extends Pane implements Observer{
     
-    JPanel panelGame;
     Window window;
+    Court court;
 
-    public static final int SNAKE_WIDTH = 10;
+    private int D_X;
+    private int D_Y;
 
+    AnimationTimer aTimer;
 
-    /*
-     * X_D is the X of the center of the screen
-     * Y_D is the Y of the center of the screen
-     * 
-     * X_D and Y_D are used to calculate the position of the snake for (0,0) is in the center of the page
-     * 
-     */
-    public int X_D;
-    private int Y_D; 
-
-    public PlayPage(Window window) {
-        this.setLayout(new BorderLayout());
-        panelGame = new JPanel();
+    public PlayPage(Window window, int D_X, int D_Y) {
         this.window = window;
-
-        X_D = window.getWidth()/2;
-        Y_D = window.getHeight()/2;
+        this.D_X = D_X;
+        this.D_Y = D_Y;
+        
     }
 
-    public void addKeyBoardListener(KeyboardControler keyboardControler){
-        window.requestFocus();
-        window.addKeyListener(keyboardControler);
-
+    public void setCourt(Court court){
+        this.court = court;
     }
+
+    
+    public void animate(){
+        aTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                court.update();
+            }
+    		
+    	};
+    	aTimer.start();
+    }
+
+    public void stopAnimate(){
+        aTimer.stop();
+    }
+
 
     @Override
     public void update(Data data) {
-        if(panelGame!=null){
-            this.remove(panelGame);
+        this.getChildren().clear();
+        for(CoordinateDouble coord : data.getAllPosition()){
+            Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(), data.getRadius());
+            this.getChildren().add(c);
         }
-
-        panelGame = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                for (CoordinateDouble coordinate : data.getAllPosition()) {
-                    g.setColor(Color.BLACK);
-                    g.fillOval((int)(X_D+coordinate.getX()), (int)(Y_D+coordinate.getY()), (int)SnakeDouble.SnakePartDouble.hitboxRadius, (int)SnakeDouble.SnakePartDouble.hitboxRadius);
-                    //g.fillRect(X_D+(coordinate.getX()*SNAKE_WIDTH),Y_D+(coordinate.getY()*SNAKE_WIDTH), SNAKE_WIDTH, SNAKE_WIDTH);
-                }
-            }
-        };
-        
-        this.add(panelGame);
-        window.revalidate();
-        panelGame.repaint();
-    }
-
-    
-
-    
-}
+    }}

@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
+import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observable;
 import interfaces.Observer;
@@ -10,7 +11,7 @@ import interfaces.Orientation.Angle;
 import model.SnakeDouble.SnakePartDouble;
 
 
-public class Engine implements Observable, Data{
+public class Engine implements Observable, Data,Court{
     
     private Plateau<Double,Angle> plateau;
     SnakeDouble[] snakes;
@@ -88,7 +89,7 @@ public class Engine implements Observable, Data{
             try {
                 snake.move();
             } catch (ExceptionCollision e ) {
-                snake.resetSnake(new CoordinateDouble(0, 0), new Angle(90));
+                snake.resetSnake(new CoordinateDouble(0, 0), new Angle(90),30);
             }
         }
         notifyObservers();
@@ -104,6 +105,16 @@ public class Engine implements Observable, Data{
 
     public int getNbSnake() {
         return nbSnake;
+    }
+
+    @Override
+    public void update() {
+        move();
+    }
+
+    @Override
+    public double getRadius() {
+        return snakes[0].getRadius();
     }
 
 }

@@ -11,11 +11,11 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     /*
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
-    private static final Angle TURNING_FORCE = new Angle(10);
+    private static final Angle TURNING_FORCE = new Angle(5);
 
     public final class SnakePartDouble extends SnakePart<Double,Angle> {
 
-        public static final double hitboxRadius = 20;
+        public static final double hitboxRadius = 10;
             
         private SnakePartDouble(Coordinate<Double,Angle> center, Angle direction) {
             super(center, direction, hitboxRadius);
@@ -52,13 +52,15 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     @Override
-    public void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection) {
+    public void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) {
         this.head = new SnakePartDouble(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Double,Angle>>();
 
         Angle direction = head.getOrientation();
+        for (int i = 0; i < nbTail; i++) {
         SnakePartDouble tail1 = new SnakePartDouble(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
         tail.add(tail1);
+        }
 
         plateau.update(this);
     }

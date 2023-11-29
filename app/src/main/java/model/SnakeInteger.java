@@ -45,13 +45,15 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     @Override
-    public void resetSnake(Coordinate<Integer,Direction> newLocation, Direction startingDirection) {
+    public void resetSnake(Coordinate<Integer,Direction> newLocation, Direction startingDirection, int nbTail) {
         this.head = new SnakePartInteger(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Integer,Direction>>();
 
         Direction direction = head.getOrientation();
-        SnakePartInteger tail1 = new SnakePartInteger(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
-        tail.add(tail1);
+        for (int i = 0; i < nbTail; i++) {
+            SnakePartInteger tail1 = new SnakePartInteger(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
+            tail.add(tail1);
+        }
 
         plateau.update(this);
     }

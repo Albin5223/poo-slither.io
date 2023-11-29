@@ -6,4 +6,5 @@ import model.CoordinateDouble;
 public interface Data {
     public ArrayList<CoordinateDouble> getAllPosition();
     public void move();
+    public double getRadius();
 }
