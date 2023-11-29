@@ -6,23 +6,15 @@ import java.util.Map;
 import interfaces.Coordinate;
 import interfaces.Orientation;
 
-public final class Plateau<Type extends Number, O extends Orientation> {
+public abstract sealed class Plateau<Type extends Number, O extends Orientation> permits PlateauDouble, PlateauInteger {
 
-    private HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau;
-    private HashMap<Coordinate<Type,O>, Commestible> nourritures;
+    protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau;
+    protected HashMap<Coordinate<Type,O>, Commestible> nourritures;
 
 
-    private Plateau() {
+    protected Plateau() {
         this.plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
         this.nourritures = new HashMap<Coordinate<Type,O>, Commestible>();
-    }
-
-    public static Plateau<Integer,Orientation.Direction> createPlateauSnake(){
-        return new Plateau<Integer,Orientation.Direction>();
-    }
-
-    public static Plateau<Double,Orientation.Angle> createPlateauSlitherio(){
-        return new Plateau<Double,Orientation.Angle>();
     }
 
 
@@ -36,12 +28,12 @@ public final class Plateau<Type extends Number, O extends Orientation> {
         plateau.put(snake.getHead().getCenter(), snake);
     }
 
-    public void addFood(Coordinate<Type,O> c) throws IllegalArgumentException{
-        if (plateau.containsKey(c)) {
-            throw new IllegalArgumentException("Snake already exists in this position");
-        }
-        nourritures.put(c, Commestible.FOOD);
+    public void addFood(Coordinate<Type,O> c,Commestible food) throws IllegalArgumentException{
+        if(nourritures.containsKey(c)){throw new IllegalArgumentException("Food added in another food");}
+        nourritures.put(c,food);
     }
+
+    public abstract void addAllFood();
 
     /**
      * Update the position of the snake on the board (the snake has moved)

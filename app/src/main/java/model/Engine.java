@@ -1,8 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
+import interfaces.Coordinate;
 import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observable;
@@ -28,7 +31,7 @@ public class Engine implements Observable, Data,Court{
 
     public static Engine createSnake(int n){
         SnakeDouble[] s = new SnakeDouble[n];
-        Plateau<Double,Angle> p = Plateau.createPlateauSlitherio();
+        PlateauDouble p = PlateauDouble.createPlateauSlitherio();
         return new Engine(n,s,p);
     }
 
@@ -115,6 +118,15 @@ public class Engine implements Observable, Data,Court{
     @Override
     public double getRadius() {
         return snakes[0].getRadius();
+    }
+
+    @Override
+    public HashMap<Coordinate<Double,Angle>, Commestible> getAllFood() {
+        HashMap<Coordinate<Double,Angle>, Commestible> copie = new HashMap<Coordinate<Double,Angle>, Commestible>();
+        for(Coordinate<Double,Angle> coord : plateau.nourritures.keySet()){
+            copie.put(coord, plateau.nourritures.get(coord));
+        }
+        return copie;
     }
 
 }

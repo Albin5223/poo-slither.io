@@ -13,6 +13,8 @@ public final class SnakeDouble extends Snake<Double,Angle> {
      */
     private static final Angle TURNING_FORCE = new Angle(5);
 
+    //private int size = 2;
+
     public final class SnakePartDouble extends SnakePart<Double,Angle> {
 
         public static final double hitboxRadius = 10;
