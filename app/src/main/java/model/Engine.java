@@ -92,6 +92,10 @@ public class Engine implements Observable, Data,Court{
             try {
                 snake.move();
             } catch (ExceptionCollision e ) {
+                SnakePartDouble[] all = snake.getAllSnakePart();
+                for(SnakePartDouble c : all){
+                    plateau.addFood(c.getCenter(), Commestible.DEATH_FOOD);
+                }
                 snake.resetSnake(new CoordinateDouble(0, 0), new Angle(90),30);
             }
         }

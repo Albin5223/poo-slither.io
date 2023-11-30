@@ -8,6 +8,7 @@ import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Commestible;
 import model.CoordinateDouble;
@@ -53,14 +54,18 @@ public class PlayPage extends Pane implements Observer{
     @Override
     public void update(Data data) {
         this.getChildren().clear();
+
+        for(Coordinate<Double,Angle> coord : data.getAllFood().keySet()){
+            Commestible commestible = data.getAllFood().get(coord);
+            Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(),commestible.getRange());
+            c.setFill(Paint.valueOf("#FA8072"));
+            this.getChildren().add(c);
+        }
+        
         for(CoordinateDouble coord : data.getAllPosition()){
             Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(), data.getRadius());
             this.getChildren().add(c);
         }
 
-        for(Coordinate<Double,Angle> coord : data.getAllFood().keySet()){
-            Commestible commestible = data.getAllFood().get(coord);
-            Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(),commestible.getRange());
-            this.getChildren().add(c);
-        }
+        
     }}

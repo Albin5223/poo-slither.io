@@ -77,7 +77,7 @@ public class Window {
             //KeyboardControler keyboardControler = new KeyboardControler(engine);
             try {
                 engine.addPlayerWithCoord(new CoordinateDouble(30, 30),'a','e');
-                engine.getSnakes()[0].grow(55);
+                engine.getSnakes()[0].grow(20);
                 engine.addPlayerWithCoord(new CoordinateDouble(-30, -30),'o','p');
                 engine.getSnakes()[1].grow(55);
             } catch (ExecptionAddSnake e1) {
@@ -103,7 +103,7 @@ public class Window {
         });
 
         exitButton.setOnAction(e -> {
-            System.out.println("Quitter le jeu");
+            primaryStage.close();
         });
 
         VBox layout = new VBox(20);

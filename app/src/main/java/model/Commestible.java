@@ -3,15 +3,18 @@ package model;
 import java.util.Random;
 
 public enum Commestible {
-    BIG_FOOD(5, 10),
-    SMALL_FOOD(1, 5);
+    BIG_FOOD(10, 10,false),
+    SMALL_FOOD(5, 5,false),
+    DEATH_FOOD(3,3,true);
 
     private int value;
     private int range;
+    private boolean respawn;
 
-    private Commestible(int value, int range) {
+    private Commestible(int value, int range,boolean respawn) {
         this.value = value;
         this.range = range;
+        this.respawn = respawn;
     }
 
     public int getValue() {
@@ -19,6 +22,9 @@ public enum Commestible {
     }
     public int getRange() {
         return range;
+    }
+    public boolean getRespawn() {
+        return respawn;
     }
 
     public static Commestible getRandom() {

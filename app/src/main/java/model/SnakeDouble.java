@@ -98,6 +98,10 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
+        int value = plateau.isCollidingWithFood(this);
+        if(value != -1){ // We check if the snake is colliding with a food
+            grow(value);
+        }
         
         plateau.update(this);   // We update the position of the snake on the board
     }

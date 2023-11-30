@@ -34,6 +34,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation>
     }
 
     public abstract void addAllFood();
+    public abstract int isCollidingWithFood(Snake<Type,O> snake);
 
     /**
      * Update the position of the snake on the board (the snake has moved)
