@@ -3,18 +3,17 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
 import interfaces.Coordinate;
-import interfaces.Court;
-import interfaces.Data;
-import interfaces.Observable;
+import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import model.SnakeDouble.SnakePartDouble;
 
 
-public class Engine implements Observable, Data,Court{
+public class EngineSlither implements Engine<Double,Angle>{
     
     private Plateau<Double,Angle> plateau;
     SnakeDouble[] snakes;
@@ -22,17 +21,17 @@ public class Engine implements Observable, Data,Court{
     int nbSnake = 0;
     ArrayList<Observer> observers;
 
-    private Engine(int n,SnakeDouble[] snakes, Plateau<Double,Angle> plateau){
+    private EngineSlither(int n,SnakeDouble[] snakes, Plateau<Double,Angle> plateau){
         this.snakes = snakes;
         this.players = new Player[n];
         this.plateau = plateau;
         this.observers = new ArrayList<Observer>();
     }
 
-    public static Engine createSnake(int n){
+    public static EngineSlither createSnake(int n){
         SnakeDouble[] s = new SnakeDouble[n];
         PlateauDouble p = PlateauDouble.createPlateauSlitherio();
-        return new Engine(n,s,p);
+        return new EngineSlither(n,s,p);
     }
 
     public void addPlayerWithCoord(CoordinateDouble coord,char left, char right) throws ExecptionAddSnake{
@@ -49,7 +48,7 @@ public class Engine implements Observable, Data,Court{
 
 
     @Override
-    public ArrayList<CoordinateDouble> getAllPosition() {
+    public CoordinateDouble[] getAllPosition() {
         ArrayList<SnakePartDouble[]> snakeParts = new ArrayList<SnakePartDouble[]>();
         for(SnakeDouble snake : snakes){
             snakeParts.add(snake.getAllSnakePart());
@@ -61,7 +60,13 @@ public class Engine implements Observable, Data,Court{
                 allPosition.add(part.getCenter());
             }
         }
-        return allPosition;
+
+
+        CoordinateDouble[] allPositionArray = new CoordinateDouble[allPosition.size()];
+        for (int i = 0; i < allPosition.size(); i++) {
+            allPositionArray[i] = allPosition.get(i);
+        }
+        return allPositionArray;
 
     }
 
@@ -102,21 +107,18 @@ public class Engine implements Observable, Data,Court{
         notifyObservers();
     }
 
+    @Override
     public SnakeDouble[] getSnakes() {
         return snakes;
     }
 
+    @Override
     public Player[] getPlayers() {
         return players;
     }
 
     public int getNbSnake() {
         return nbSnake;
-    }
-
-    @Override
-    public void update() {
-        move();
     }
 
     @Override
@@ -127,8 +129,8 @@ public class Engine implements Observable, Data,Court{
     @Override
     public HashMap<Coordinate<Double,Angle>, Commestible> getAllFood() {
         HashMap<Coordinate<Double,Angle>, Commestible> copie = new HashMap<Coordinate<Double,Angle>, Commestible>();
-        for(Coordinate<Double,Angle> coord : plateau.nourritures.keySet()){
-            copie.put(coord, plateau.nourritures.get(coord));
+        for(Coordinate<Double,Angle> coord : plateau.getNourritures().keySet()){
+            copie.put(coord, plateau.getNourritures().get(coord));
         }
         return copie;
     }

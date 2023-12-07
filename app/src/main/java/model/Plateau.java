@@ -17,6 +17,10 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation>
         this.nourritures = new HashMap<Coordinate<Type,O>, Commestible>();
     }
 
+    public HashMap<Coordinate<Type, O>, Commestible> getNourritures() {
+        return nourritures;
+    }
+
 
     /**
      * Add a snake to the board

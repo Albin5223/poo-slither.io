@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
+import model.Snake.SnakePart;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 

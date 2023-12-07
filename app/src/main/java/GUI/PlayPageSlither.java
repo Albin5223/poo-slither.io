@@ -5,15 +5,14 @@ import interfaces.Coordinate;
 import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
-import interfaces.Orientation.Angle;
+import interfaces.Orientation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Commestible;
-import model.CoordinateDouble;
 
-public class PlayPage extends Pane implements Observer{
+public class PlayPageSlither extends Pane implements Observer{
     
     Window window;
     Court court;
@@ -23,7 +22,7 @@ public class PlayPage extends Pane implements Observer{
 
     AnimationTimer aTimer;
 
-    public PlayPage(Window window, int D_X, int D_Y) {
+    public PlayPageSlither(Window window, int D_X, int D_Y) {
         this.window = window;
         this.D_X = D_X;
         this.D_Y = D_Y;
@@ -52,18 +51,18 @@ public class PlayPage extends Pane implements Observer{
 
 
     @Override
-    public void update(Data data) {
+    public void update(Data<? extends Number,? extends Orientation> data) {
         this.getChildren().clear();
 
-        for(Coordinate<Double,Angle> coord : data.getAllFood().keySet()){
+        for (Coordinate<? extends Number, ? extends Orientation> coord : data.getAllFood().keySet()) {
             Commestible commestible = data.getAllFood().get(coord);
-            Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(),commestible.getRange());
+            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRange());
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
-        
-        for(CoordinateDouble coord : data.getAllPosition()){
-            Circle c = new Circle(D_X+coord.getX(), D_Y+coord.getY(), data.getRadius());
+
+        for (Coordinate<? extends Number, ? extends Orientation> coord : data.getAllPosition()) {
+            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), data.getRadius());
             this.getChildren().add(c);
         }
 

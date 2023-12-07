@@ -2,9 +2,9 @@ package model;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
-
 import java.util.ArrayList;
 import exceptions.ExceptionCollision;
+import model.Snake.SnakePart;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
@@ -91,6 +91,10 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         }
         
         plateau.update(this);   // We update the position of the snake on the board
+
+        if(currentTurning != Turning.FORWARD){
+            currentTurning = Turning.FORWARD;
+        }
     }
 
     @Override
