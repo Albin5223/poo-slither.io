@@ -8,6 +8,9 @@ import model.Snake.SnakePart;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
+    public static final int WIDTH_OF_SNAKE = 20;
+    public static final int SIZE_OF_SNAKE_BIRTH = 2;
+
     public final class SnakePartInteger extends SnakePart<Integer,Direction> {
 
         private SnakePartInteger(Coordinate<Integer,Direction> center, Direction direction) {
@@ -28,6 +31,10 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         public CoordinateInteger getCenter() {
             return (CoordinateInteger) center;
         }
+    }
+
+    public Direction getOrientation() {
+        return head.getOrientation();
     }
 
     public SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
@@ -89,6 +96,15 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
+
+        if(((PlateauInteger )plateau).isCollidingWithWall(this) || isCollidingWithMe()){ // We check if the snake is colliding with a wall
+            System.out.println("Snake is colliding with a wall");
+            throw new ExceptionCollision("Snake is colliding with a wall");
+        }
+
+        if (plateau.isCollidingWithFood(this) != -1) { // We check if the snake is colliding with a food
+            grow();
+        }
         
         plateau.update(this);   // We update the position of the snake on the board
 
@@ -103,5 +119,14 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         Direction direction = lastTail.getOrientation();
         SnakePartInteger newTail = new SnakePartInteger(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
         tail.add(newTail);
+    }
+
+    public boolean isCollidingWithMe(){
+        for(SnakePart<Integer, Direction> part : tail){
+            if(part.getCenter().equals(head.getCenter())){
+                return true;
+            }
+        }
+        return false;
     }
 }

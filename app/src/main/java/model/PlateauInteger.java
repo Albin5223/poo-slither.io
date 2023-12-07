@@ -7,21 +7,32 @@ import java.util.Random;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
-    public PlateauInteger() {
+    private int xMin;
+    private int xMax;
+
+    private int yMin;
+    private int yMax;
+    public PlateauInteger(int width, int height) {
         super();
+
+        xMin = -1*width/(2*SnakeInteger.WIDTH_OF_SNAKE); 
+        xMax = width/(2*SnakeInteger.WIDTH_OF_SNAKE);
+
+        yMin = -1*height/(2*SnakeInteger.WIDTH_OF_SNAKE);
+        yMax = height/(2*SnakeInteger.WIDTH_OF_SNAKE);
     }
 
-    public static PlateauInteger createPlateauSnake(){
-        PlateauInteger plateau = new PlateauInteger();
+    public static PlateauInteger createPlateauSnake(int width, int height){
+        PlateauInteger plateau = new PlateauInteger(width,height);
         plateau.addAllFood();
         return plateau;
     }
 
     public void addOneFood(){
         int r = new Random().nextInt(2);
-        int x = r == 1 ? new Random().nextInt(200) : -1*new Random().nextInt(200);
+        int x = r == 1 ? new Random().nextInt(xMax) : -1*new Random().nextInt(xMax);
         r = new Random().nextInt(2);
-        int y = r == 1 ? new Random().nextInt(200) : -1*new Random().nextInt(200);
+        int y = r == 1 ? new Random().nextInt(yMax) : -1*new Random().nextInt(yMax);
         addFood(new CoordinateInteger(x,y),Commestible.getRandom());
     }
 
@@ -43,6 +54,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
             }
         }
         return -1;
+    }
+
+    public boolean isCollidingWithWall(Snake<Integer, Direction> snake){
+        Coordinate<Integer, Direction> c = snake.getHead().getCenter();
+        return c.getX() < xMin || c.getX() > xMax || c.getY() < yMin || c.getY() > yMax;
     }
     
 }

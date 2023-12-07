@@ -26,9 +26,9 @@ public class EngineSnake implements Engine<Integer,Direction> {
         this.observers = new ArrayList<Observer>();
     }
 
-    public static EngineSnake createSnake(int n){
+    public static EngineSnake createSnake(int n,int width, int height){
         SnakeInteger[] s = new SnakeInteger[n];
-        PlateauInteger p = PlateauInteger.createPlateauSnake();
+        PlateauInteger p = PlateauInteger.createPlateauSnake(width, height);
         return new EngineSnake(n,s,p);
     }
 
@@ -55,11 +55,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
             try {
                 snake.move();
             } catch (ExceptionCollision e) {
-                SnakePartInteger[] all = snake.getAllSnakePart();
-                for(SnakePartInteger c : all){
-                    plateau.addFood(c.getCenter(), Commestible.DEATH_FOOD);
-                }
-                snake.resetSnake(new CoordinateInteger(0, 0), Direction.RIGHT,30);
+                snake.resetSnake(new CoordinateInteger(0, 0), Direction.RIGHT, SnakeInteger.SIZE_OF_SNAKE_BIRTH);
             }
         }
         notifyObservers();

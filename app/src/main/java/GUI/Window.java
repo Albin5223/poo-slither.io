@@ -11,6 +11,7 @@ import model.CoordinateDouble;
 import model.CoordinateInteger;
 import model.EngineSlither;
 import model.EngineSnake;
+import interfaces.Orientation.Direction;
 import interfaces.Turnable.Turning;
 
 public class Window {
@@ -103,37 +104,60 @@ public class Window {
 
         playButtonSnake.setOnAction(e -> {
             PlayPageSnake playPage = new PlayPageSnake(this,WITDH/2,HEIGHT/2);
-            EngineSnake engine = EngineSnake.createSnake(2);
+            EngineSnake engine = EngineSnake.createSnake(1,WITDH,HEIGHT);
             
 
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
             gameScene.setOnKeyPressed(ev ->{
                 switch(ev.getCode()){
                     case LEFT:
-                        engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
+                        if(engine.getSnakes()[0].getDirection() != Direction.RIGHT && engine.getSnakes()[0].getDirection() != Direction.LEFT){
+                            if(engine.getSnakes()[0].getDirection() == Direction.UP){
+                                engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
+                            }
+                            else{
+                                engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
+                            }
+                        }
                         break;
                     case RIGHT:
-                        engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
+                        if(engine.getSnakes()[0].getDirection() != Direction.RIGHT && engine.getSnakes()[0].getDirection() != Direction.LEFT){
+                            if(engine.getSnakes()[0].getDirection() == Direction.UP){
+                                engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
+                            }
+                            else{
+                                engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
+                            }
+                        }
                         break;
-                    case A:
-                        engine.getSnakes()[1].setTurning(Turning.GO_LEFT);
-                        break;
-                    case E:
-                        engine.getSnakes()[1].setTurning(Turning.GO_RIGHT);
-                        break;
+                    case UP : if (engine.getSnakes()[0].getDirection() != Direction.UP && engine.getSnakes()[0].getDirection() != Direction.DOWN){
+                                if(engine.getSnakes()[0].getDirection() == Direction.LEFT){
+                                    engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
+                                }
+                                else{
+                                    engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
+                                }
+                            }
+                            break;
+                    
+                    case DOWN : if (engine.getSnakes()[0].getDirection() != Direction.UP && engine.getSnakes()[0].getDirection() != Direction.DOWN){
+                                if(engine.getSnakes()[0].getDirection() == Direction.LEFT){
+                                    engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
+                                }
+                                else{
+                                    engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
+                                }
+                            }
+                            break;
                     case SPACE:
                             playPage.stopAnimate(); break;
                     default: break;
                 }
             });
-
             
             //KeyboardControler keyboardControler = new KeyboardControler(engine);
             try {
-                engine.addPlayerWithCoord(new CoordinateInteger(30, 30),'a','e');
-                engine.getSnakes()[0].grow(20);
-                engine.addPlayerWithCoord(new CoordinateInteger(-30, -30),'o','p');
-                engine.getSnakes()[1].grow(55);
+                engine.addPlayerWithCoord(new CoordinateInteger(3, 3),'a','e');
             } catch (ExecptionAddSnake e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -149,6 +173,7 @@ public class Window {
             playPage.setFocusTraversable(true);
             playPage.requestFocus();
 
+            
             playPage.animate();
         });
 
