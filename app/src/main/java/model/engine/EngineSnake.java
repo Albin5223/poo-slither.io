@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import controleur.SnakeControler;
+import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
 import interfaces.Coordinate;
@@ -119,7 +119,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
         return snakes;
     }
 
-    public void addPlayer(SnakeControler snakeControler) throws ExecptionAddSnake{
+    public void addPlayer(KeyboardControler<Integer,Direction> snakeControler) throws ExecptionAddSnake{
         if(nbSnake >= snakes.length){
             throw new ExecptionAddSnake("Action impossible");
         }

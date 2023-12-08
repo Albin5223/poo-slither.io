@@ -1,6 +1,6 @@
 package GUI;
 
-import controleur.SnakeControler;
+import controleur.KeyboardControler;
 import exceptions.ExecptionAddSnake;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -113,7 +113,7 @@ public class Window {
                 engine.makeMouv(ev);
             });
             
-            SnakeControler controler = (ev,snake)-> {
+            KeyboardControler<Integer,Direction> controler = (ev,snake)-> {
                 switch(ev.getCode()){
                         case LEFT:
                             if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
