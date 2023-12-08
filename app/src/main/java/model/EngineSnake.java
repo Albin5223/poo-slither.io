@@ -2,26 +2,30 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
+import controleur.SnakeControler;
 import exceptions.ExceptionCollision;
 import exceptions.ExecptionAddSnake;
 import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
+import javafx.scene.input.KeyEvent;
 import model.SnakeInteger.SnakePartInteger;
+import model.player.HumanSnakePlayer;
 
 public class EngineSnake implements Engine<Integer,Direction> {
 
     private Plateau<Integer,Direction> plateau;
     SnakeInteger[] snakes;
-    Player[] players;
+    HumanSnakePlayer[] players;
     int nbSnake = 0;
     ArrayList<Observer> observers;
 
     private EngineSnake(int n,SnakeInteger[] snakes, Plateau<Integer,Direction> plateau){
         this.snakes = snakes;
-        this.players = new Player[n];
+        this.players = new HumanSnakePlayer[n];
         this.plateau = plateau;
         this.observers = new ArrayList<Observer>();
     }
@@ -57,6 +61,10 @@ public class EngineSnake implements Engine<Integer,Direction> {
             } catch (ExceptionCollision e) {
                 snake.resetSnake(new CoordinateInteger(0, 0), Direction.RIGHT, SnakeInteger.SIZE_OF_SNAKE_BIRTH);
             }
+        }
+        Random r = new Random();
+        if(r.nextInt(100) < 5){
+            ((PlateauInteger) plateau).addOneFood();
         }
         notifyObservers();
     }
@@ -96,8 +104,8 @@ public class EngineSnake implements Engine<Integer,Direction> {
         return allPositionArray;
     }
 
-    @Override
-    public Player[] getPlayers() {
+    
+    public HumanSnakePlayer[] getPlayers() {
         return players;
     }
 
@@ -106,15 +114,24 @@ public class EngineSnake implements Engine<Integer,Direction> {
         return snakes;
     }
 
-     public void addPlayerWithCoord(CoordinateInteger coord,char left, char right) throws ExecptionAddSnake{
+    public void addPlayer(SnakeControler snakeControler) throws ExecptionAddSnake{
         if(nbSnake >= snakes.length){
             throw new ExecptionAddSnake("Action impossible");
         }
-        SnakeInteger newSnake = new SnakeInteger(coord, plateau, Direction.DOWN);
-        Player newPlayer = new Player(left, right);
+        SnakeInteger newSnake = new SnakeInteger(new CoordinateInteger(3,3), plateau, Direction.DOWN);
+        HumanSnakePlayer newPlayer = new HumanSnakePlayer(newSnake, snakeControler);
         players[nbSnake] = newPlayer;
         snakes[nbSnake] = newSnake;
         notifyObservers();
         nbSnake++;
+    }
+
+    public void addPlayerWithCoord(Object object) {
+    }
+
+    public void makeMouv(KeyEvent ev) {
+        for(HumanSnakePlayer player : players){
+            player.execute(ev);
+        }
     }
 }

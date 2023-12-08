@@ -17,13 +17,11 @@ public class EngineSlither implements Engine<Double,Angle>{
     
     private Plateau<Double,Angle> plateau;
     SnakeDouble[] snakes;
-    Player[] players;
     int nbSnake = 0;
     ArrayList<Observer> observers;
 
     private EngineSlither(int n,SnakeDouble[] snakes, Plateau<Double,Angle> plateau){
         this.snakes = snakes;
-        this.players = new Player[n];
         this.plateau = plateau;
         this.observers = new ArrayList<Observer>();
     }
@@ -34,13 +32,11 @@ public class EngineSlither implements Engine<Double,Angle>{
         return new EngineSlither(n,s,p);
     }
 
-    public void addPlayerWithCoord(CoordinateDouble coord,char left, char right) throws ExecptionAddSnake{
+    public void addPlayerWithCoord(CoordinateDouble coord) throws ExecptionAddSnake{
         if(nbSnake >= snakes.length){
             throw new ExecptionAddSnake("Action impossible");
         }
         SnakeDouble newSnake = new SnakeDouble(coord, plateau, new Angle(90));
-        Player newPlayer = new Player(left, right);
-        players[nbSnake] = newPlayer;
         snakes[nbSnake] = newSnake;
         notifyObservers();
         nbSnake++;
@@ -110,11 +106,6 @@ public class EngineSlither implements Engine<Double,Angle>{
     @Override
     public SnakeDouble[] getSnakes() {
         return snakes;
-    }
-
-    @Override
-    public Player[] getPlayers() {
-        return players;
     }
 
     public int getNbSnake() {

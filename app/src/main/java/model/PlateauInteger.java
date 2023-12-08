@@ -33,12 +33,16 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         int x = r == 1 ? new Random().nextInt(xMax) : -1*new Random().nextInt(xMax);
         r = new Random().nextInt(2);
         int y = r == 1 ? new Random().nextInt(yMax) : -1*new Random().nextInt(yMax);
-        addFood(new CoordinateInteger(x,y),Commestible.getRandom());
+        try {
+            addFood(new CoordinateInteger(x,y),Commestible.getRandom());
+        } catch (IllegalArgumentException e) {
+            //Si la nourriture est présente alors on ne fait rien
+        }
     }
 
     @Override
     public void addAllFood() {
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 50; i++){
             addOneFood();
         }
     }

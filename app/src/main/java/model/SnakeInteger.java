@@ -8,7 +8,7 @@ import model.Snake.SnakePart;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
-    public static final int WIDTH_OF_SNAKE = 20;
+    public static final int WIDTH_OF_SNAKE = 10;
     public static final int SIZE_OF_SNAKE_BIRTH = 2;
 
     public final class SnakePartInteger extends SnakePart<Integer,Direction> {

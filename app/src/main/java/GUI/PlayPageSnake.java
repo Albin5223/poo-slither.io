@@ -21,7 +21,7 @@ public class PlayPageSnake extends Pane implements Observer{
     private int D_Y;
 
     AnimationTimer aTimer;
-    private static final double UPDATE_INTERVAL = 0.1e9; // Interval en nanosecondes (0.5 seconde)
+    private static final double UPDATE_INTERVAL = 0.05e9; // Interval en nanosecondes (0.05 seconde)
 
 
     public PlayPageSnake(Window window, int D_X, int D_Y) {

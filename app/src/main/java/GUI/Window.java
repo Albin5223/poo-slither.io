@@ -1,5 +1,6 @@
 package GUI;
 
+import controleur.SnakeControler;
 import exceptions.ExecptionAddSnake;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.CoordinateDouble;
-import model.CoordinateInteger;
 import model.EngineSlither;
 import model.EngineSnake;
 import interfaces.Orientation.Direction;
@@ -79,9 +79,9 @@ public class Window {
             
             //KeyboardControler keyboardControler = new KeyboardControler(engine);
             try {
-                engine.addPlayerWithCoord(new CoordinateDouble(30, 30),'a','e');
+                engine.addPlayerWithCoord(new CoordinateDouble(30, 30));
                 engine.getSnakes()[0].grow(20);
-                engine.addPlayerWithCoord(new CoordinateDouble(-30, -30),'o','p');
+                engine.addPlayerWithCoord(new CoordinateDouble(-30, -30));
                 engine.getSnakes()[1].grow(55);
             } catch (ExecptionAddSnake e1) {
                 // TODO Auto-generated catch block
@@ -108,56 +108,57 @@ public class Window {
             
 
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
+            gameScene.setOnKeyTyped(null);
             gameScene.setOnKeyPressed(ev ->{
-                switch(ev.getCode()){
-                    case LEFT:
-                        if(engine.getSnakes()[0].getDirection() != Direction.RIGHT && engine.getSnakes()[0].getDirection() != Direction.LEFT){
-                            if(engine.getSnakes()[0].getDirection() == Direction.UP){
-                                engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
-                            }
-                            else{
-                                engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
-                            }
-                        }
-                        break;
-                    case RIGHT:
-                        if(engine.getSnakes()[0].getDirection() != Direction.RIGHT && engine.getSnakes()[0].getDirection() != Direction.LEFT){
-                            if(engine.getSnakes()[0].getDirection() == Direction.UP){
-                                engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
-                            }
-                            else{
-                                engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
-                            }
-                        }
-                        break;
-                    case UP : if (engine.getSnakes()[0].getDirection() != Direction.UP && engine.getSnakes()[0].getDirection() != Direction.DOWN){
-                                if(engine.getSnakes()[0].getDirection() == Direction.LEFT){
-                                    engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
-                                }
-                                else{
-                                    engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
-                                }
-                            }
-                            break;
-                    
-                    case DOWN : if (engine.getSnakes()[0].getDirection() != Direction.UP && engine.getSnakes()[0].getDirection() != Direction.DOWN){
-                                if(engine.getSnakes()[0].getDirection() == Direction.LEFT){
-                                    engine.getSnakes()[0].setTurning(Turning.GO_LEFT);
-                                }
-                                else{
-                                    engine.getSnakes()[0].setTurning(Turning.GO_RIGHT);
-                                }
-                            }
-                            break;
-                    case SPACE:
-                            playPage.stopAnimate(); break;
-                    default: break;
-                }
+                engine.makeMouv(ev);
             });
             
-            //KeyboardControler keyboardControler = new KeyboardControler(engine);
+            SnakeControler controler = (ev,snake)-> {
+                switch(ev.getCode()){
+                        case LEFT:
+                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
+                                if(snake.getDirection() == Direction.UP){
+                                    snake.setTurning(Turning.GO_LEFT);
+                                }
+                                else{
+                                    snake.setTurning(Turning.GO_RIGHT);
+                                }
+                            }
+                            break;
+                        case RIGHT:
+                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
+                                if(snake.getDirection() == Direction.UP){
+                                    snake.setTurning(Turning.GO_RIGHT);
+                                }
+                                else{
+                                    snake.setTurning(Turning.GO_LEFT);
+                                }
+                            }
+                            break;
+                        case UP : if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
+                                    if(snake.getDirection() == Direction.LEFT){
+                                        snake.setTurning(Turning.GO_RIGHT);
+                                    }
+                                    else{
+                                        snake.setTurning(Turning.GO_LEFT);
+                                    }
+                                }
+                                break;
+                        case DOWN:
+                                if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
+                                    if(snake.getDirection() == Direction.LEFT){
+                                        snake.setTurning(Turning.GO_LEFT);
+                                    }
+                                    else{
+                                        snake.setTurning(Turning.GO_RIGHT);
+                                    }
+                                }
+                                break;
+                        default:break;
+                    }
+            };
             try {
-                engine.addPlayerWithCoord(new CoordinateInteger(3, 3),'a','e');
+                engine.addPlayer(controler);
             } catch (ExecptionAddSnake e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
