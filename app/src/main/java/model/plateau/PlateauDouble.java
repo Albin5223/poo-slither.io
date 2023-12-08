@@ -1,9 +1,11 @@
-package model;
+package model.plateau;
 
 import java.util.Random;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
+import model.Commestible;
+import model.coordinate.CoordinateDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
 

@@ -1,7 +1,9 @@
-package model;
+package model.plateau;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
+import model.Commestible;
+import model.coordinate.CoordinateInteger;
 
 import java.util.Random;
 

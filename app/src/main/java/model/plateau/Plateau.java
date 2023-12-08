@@ -1,10 +1,11 @@
-package model;
+package model.plateau;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import interfaces.Coordinate;
 import interfaces.Orientation;
+import model.Commestible;
 
 public abstract sealed class Plateau<Type extends Number, O extends Orientation> permits PlateauDouble, PlateauInteger {
 

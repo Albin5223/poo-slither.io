@@ -3,7 +3,7 @@ package model.player;
 import controleur.SnakeControler;
 import interfaces.HumanPlayer;
 import javafx.scene.input.KeyEvent;
-import model.SnakeInteger;
+import model.plateau.SnakeInteger;
 
 public class HumanSnakePlayer implements HumanPlayer{
 

@@ -8,9 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.CoordinateDouble;
-import model.EngineSlither;
-import model.EngineSnake;
+import model.coordinate.CoordinateDouble;
+import model.engine.EngineSlither;
+import model.engine.EngineSnake;
 import interfaces.Orientation.Direction;
 import interfaces.Turnable.Turning;
 

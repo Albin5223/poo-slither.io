@@ -1,4 +1,4 @@
-package model;
+package model.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,12 @@ import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
-import model.SnakeDouble.SnakePartDouble;
+import model.Commestible;
+import model.coordinate.CoordinateDouble;
+import model.plateau.Plateau;
+import model.plateau.PlateauDouble;
+import model.plateau.SnakeDouble;
+import model.plateau.SnakeDouble.SnakePartDouble;
 
 
 public class EngineSlither implements Engine<Double,Angle>{

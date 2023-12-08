@@ -1,11 +1,12 @@
-package model;
+package model.plateau;
 
 import java.util.ArrayList;
 
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
-import model.Snake.SnakePart;
+import model.coordinate.CoordinateDouble;
+import model.plateau.Snake.SnakePart;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 

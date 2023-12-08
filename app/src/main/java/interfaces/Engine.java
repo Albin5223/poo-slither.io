@@ -1,6 +1,6 @@
 package interfaces;
 
-import model.Snake;
+import model.plateau.Snake;
 
 public interface Engine<Type extends Number, O extends Orientation> extends Observable, Data<Type,O>, Court {
 

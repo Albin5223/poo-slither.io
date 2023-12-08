@@ -1,4 +1,4 @@
-package model;
+package model.plateau;
 
 import java.util.ArrayList;
 

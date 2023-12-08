@@ -1,7 +1,7 @@
 package controleur;
 
 import javafx.scene.input.KeyEvent;
-import model.SnakeInteger;
+import model.plateau.SnakeInteger;
 
 
 //Interface fonctionnelle

@@ -1,4 +1,4 @@
-package model;
+package model.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,12 @@ import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
-import model.SnakeInteger.SnakePartInteger;
+import model.Commestible;
+import model.coordinate.CoordinateInteger;
+import model.plateau.Plateau;
+import model.plateau.PlateauInteger;
+import model.plateau.SnakeInteger;
+import model.plateau.SnakeInteger.SnakePartInteger;
 import model.player.HumanSnakePlayer;
 
 public class EngineSnake implements Engine<Integer,Direction> {
