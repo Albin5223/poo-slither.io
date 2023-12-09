@@ -78,7 +78,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
         return head.getHitboxRadius();
     }
 
-    public abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail);
+    protected abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail) throws ExceptionCollision;
 
     /**
      * @return a copy of {@link #head}

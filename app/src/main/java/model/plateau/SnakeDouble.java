@@ -41,7 +41,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         }
     }
 
-    public SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
+    private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
         super(5.0);
         this.head = new SnakePartDouble(location.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Double,Angle>>();
@@ -55,18 +55,44 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         plateau.addSnake(this);
     }
 
+    public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
+        Coordinate<Double,Angle> location = ((PlateauDouble)plateau).getRandomCoordinate();
+        Angle angle = Angle.getRandom();
+        
+        try{
+            SnakeDouble snake = new SnakeDouble(location, plateau, angle);
+            return snake;
+        }
+        catch(Exception e){
+            return createSnakeDouble(plateau);
+        }
+        
+    }
+
     @Override
-    public void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) {
+    protected void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision{
         this.head = new SnakePartDouble(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Double,Angle>>();
 
         Angle direction = head.getOrientation();
         for (int i = 0; i < nbTail; i++) {
-        SnakePartDouble tail1 = new SnakePartDouble(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
-        tail.add(tail1);
+            SnakePartDouble tail1 = new SnakePartDouble(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
+            tail.add(tail1);
+        }
+
+        if(plateau.isCollidingWithAll(this)){
+            throw new ExceptionCollision("Snake is colliding with another snake");
         }
 
         plateau.update(this);
+    }
+
+        public static void resetSnake(SnakeDouble snake){
+        try {
+            snake.resetSnake(new CoordinateDouble(0, 0), Angle.getRandom(), 2);
+        } catch (ExceptionCollision e) {
+            resetSnake(snake);
+        }
     }
 
     @Override

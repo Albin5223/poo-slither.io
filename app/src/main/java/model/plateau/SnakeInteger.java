@@ -3,13 +3,14 @@ package model.plateau;
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
 import java.util.ArrayList;
+
 import exceptions.ExceptionCollision;
 import model.coordinate.CoordinateInteger;
 import model.plateau.Snake.SnakePart;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
-    public static final int WIDTH_OF_SNAKE = 10;
+    public static final int WIDTH_OF_SNAKE = 20;
     public static final int SIZE_OF_SNAKE_BIRTH = 2;
 
     public final class SnakePartInteger extends SnakePart<Integer,Direction> {
@@ -38,7 +39,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         return head.getOrientation();
     }
 
-    public SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
+    private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
         super(1);
         this.head = new SnakePartInteger(location.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Integer,Direction>>();
@@ -52,8 +53,23 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         plateau.addSnake(this);
     }
 
+    public static SnakeInteger creatSnakeInteger(Plateau<Integer,Direction> plateau) {
+        
+        Coordinate<Integer,Direction> location = ((PlateauInteger)plateau).getRandomCoordinate();
+        Direction dir = Direction.getRandom();
+        
+        try{
+            SnakeInteger snake = new SnakeInteger(location, plateau, dir);
+            return snake;
+        }
+        catch(Exception e){
+            return creatSnakeInteger(plateau);
+        }
+        
+    }
+
     @Override
-    public void resetSnake(Coordinate<Integer,Direction> newLocation, Direction startingDirection, int nbTail) {
+    protected void resetSnake(Coordinate<Integer,Direction> newLocation, Direction startingDirection, int nbTail) throws ExceptionCollision {
         this.head = new SnakePartInteger(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart<Integer,Direction>>();
 
@@ -63,7 +79,19 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             tail.add(tail1);
         }
 
+        if(plateau.isCollidingWithAll(this)){
+            throw new ExceptionCollision("Snake is colliding with another snake");
+        }
+
         plateau.update(this);
+    }
+
+    public static void resetSnake(SnakeInteger snake){
+        try {
+            snake.resetSnake(((PlateauInteger)snake.plateau).getRandomCoordinate(), Direction.getRandom(), SIZE_OF_SNAKE_BIRTH);
+        } catch (ExceptionCollision e) {
+            resetSnake(snake);
+        }
     }
 
     @Override

@@ -3,74 +3,54 @@ package model.engine;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
-import exceptions.ExecptionAddSnake;
 import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import model.Commestible;
-import model.coordinate.CoordinateDouble;
+import model.SnakeData;
 import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
 import model.plateau.SnakeDouble;
 import model.plateau.SnakeDouble.SnakePartDouble;
+import model.player.HumanSlitherPlayer;
 
 
 public class EngineSlither implements Engine<Double,Angle>{
     
     private Plateau<Double,Angle> plateau;
-    SnakeDouble[] snakes;
-    int nbSnake = 0;
+    ArrayList<SnakeDouble> snakes;
+    ArrayList<Color> colors; 
     ArrayList<Observer> observers;
+    ArrayList<HumanSlitherPlayer> players;
 
-    private EngineSlither(int n,SnakeDouble[] snakes, Plateau<Double,Angle> plateau){
+    private EngineSlither(ArrayList<SnakeDouble> snakes, Plateau<Double,Angle> plateau){
         this.snakes = snakes;
         this.plateau = plateau;
         this.observers = new ArrayList<Observer>();
+        this.colors = new ArrayList<Color>();
+        this.players = new ArrayList<HumanSlitherPlayer>();
     }
 
     public static EngineSlither createSnake(int n){
-        SnakeDouble[] s = new SnakeDouble[n];
+        ArrayList<SnakeDouble> s = new ArrayList<>();
         PlateauDouble p = PlateauDouble.createPlateauSlitherio();
-        return new EngineSlither(n,s,p);
+        return new EngineSlither(s,p);
     }
 
-    public void addPlayerWithCoord(CoordinateDouble coord) throws ExecptionAddSnake{
-        if(nbSnake >= snakes.length){
-            throw new ExecptionAddSnake("Action impossible");
-        }
-        SnakeDouble newSnake = new SnakeDouble(coord, plateau, new Angle(90));
-        snakes[nbSnake] = newSnake;
+    public void addPlayer(KeyboardControler<Double,Angle> snakeControler){
+        SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
+        HumanSlitherPlayer newPlayer = new HumanSlitherPlayer(newSnake, snakeControler);
+        players.add(newPlayer);
+        Color newColor = Color.DARKBLUE;
+        colors.add(newColor);
+        snakes.add(newSnake);
         notifyObservers();
-        nbSnake++;
     }
-
-
-    @Override
-    public CoordinateDouble[] getAllPosition() {
-        ArrayList<SnakePartDouble[]> snakeParts = new ArrayList<SnakePartDouble[]>();
-        for(SnakeDouble snake : snakes){
-            snakeParts.add(snake.getAllSnakePart());
-        }
-        ArrayList<CoordinateDouble> allPosition = new ArrayList<CoordinateDouble>();
-
-        for(SnakePartDouble[] snakePart : snakeParts){
-            for(SnakePartDouble part : snakePart){
-                allPosition.add(part.getCenter());
-            }
-        }
-
-
-        CoordinateDouble[] allPositionArray = new CoordinateDouble[allPosition.size()];
-        for (int i = 0; i < allPosition.size(); i++) {
-            allPositionArray[i] = allPosition.get(i);
-        }
-        return allPositionArray;
-
-    }
-
 
     @Override
     public void addObserver(Observer o) {
@@ -102,24 +82,16 @@ public class EngineSlither implements Engine<Double,Angle>{
                 for(SnakePartDouble c : all){
                     plateau.addFood(c.getCenter(), Commestible.DEATH_FOOD);
                 }
-                snake.resetSnake(new CoordinateDouble(0, 0), new Angle(90),30);
+                SnakeDouble.resetSnake(snake);
             }
         }
         notifyObservers();
     }
 
-    @Override
-    public SnakeDouble[] getSnakes() {
-        return snakes;
-    }
-
-    public int getNbSnake() {
-        return nbSnake;
-    }
 
     @Override
     public double getRadius() {
-        return snakes[0].getRadius();
+        return snakes.get(0).getRadius();
     }
 
     @Override
@@ -129,6 +101,30 @@ public class EngineSlither implements Engine<Double,Angle>{
             copie.put(coord, plateau.getNourritures().get(coord));
         }
         return copie;
+    }
+
+   
+    @Override
+    public ArrayList<SnakeData<Double, Angle>> getAllSnake() {
+        ArrayList<SnakeData<Double, Angle>> allSnake = new ArrayList<SnakeData<Double, Angle>>();
+        for(int i = 0; i < snakes.size(); i++){
+            allSnake.add(new SnakeData<Double, Angle>(snakes.get(i), colors.get(i)));
+        }
+        return allSnake;
+    }
+
+    @Override
+    public void makePressed(KeyEvent ev) {
+        for(HumanSlitherPlayer player : players){
+            player.execute(ev);
+        }
+    }
+
+    @Override
+    public void makeReleased(KeyEvent ev) {
+        for(HumanSlitherPlayer player : players){
+            player.released(ev);
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package GUI;
 
+import model.SnakeData;
+
 import interfaces.Coordinate;
 import interfaces.Court;
 import interfaces.Data;
@@ -70,10 +72,22 @@ public class PlayPageSnake extends Pane implements Observer{
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
+        for(SnakeData<? extends Number, ? extends Orientation> snakeData : data.getAllSnake()){
+            int x_head = D_X +SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getX().intValue();
+            int y_head = D_Y + SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getY().intValue();
+            int witdh = SnakeInteger.WIDTH_OF_SNAKE;
 
-        for (Coordinate<? extends Number, ? extends Orientation> coord : data.getAllPosition()) {
-            Rectangle c = new Rectangle(D_X + SnakeInteger.WIDTH_OF_SNAKE*coord.getX().doubleValue(), D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().doubleValue(),SnakeInteger.WIDTH_OF_SNAKE,SnakeInteger.WIDTH_OF_SNAKE);
-            this.getChildren().add(c);
+            Rectangle head = new Rectangle(x_head,y_head,witdh,witdh);
+            head.setFill(snakeData.getColor());
+            this.getChildren().add(head);
+
+            for(Coordinate<? extends Number, ? extends Orientation> coord : snakeData.getTail()){
+                int x = D_X +SnakeInteger.WIDTH_OF_SNAKE*coord.getX().intValue();
+                int y = D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().intValue();
+                Rectangle r = new Rectangle(x,y,witdh,witdh);
+                r.setFill(snakeData.getColor());
+                this.getChildren().add(r);
+            }
         }
 
         

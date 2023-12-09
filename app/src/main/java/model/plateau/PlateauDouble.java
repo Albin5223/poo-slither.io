@@ -53,6 +53,13 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         return -1;
     }
 
+    @Override
+    public CoordinateDouble getRandomCoordinate() {
+        double x = new Random().nextInt(400);
+        double y = new Random().nextInt(400);
+        return new CoordinateDouble(x,y);
+    }
+
     
     
 }

@@ -31,6 +31,10 @@ public sealed interface Orientation {
                 default :return this;
             }       
         }
+
+        public static Angle getRandom(){
+            return new Angle(Math.random() * 360);
+        }
     }
 
     public static enum Direction implements Orientation {LEFT,UP,RIGHT,DOWN;
@@ -53,7 +57,19 @@ public sealed interface Orientation {
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + this);
             }
-        }    
+        }  
+        
+        public static Direction getRandom(){
+            int r = (int) (Math.random() * 4);
+            switch (r) {
+                case 0: return Direction.UP;
+                case 1: return Direction.DOWN;
+                case 2: return Direction.LEFT;
+                case 3: return Direction.RIGHT;
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + r);
+            }
+        }
     }
 
 }

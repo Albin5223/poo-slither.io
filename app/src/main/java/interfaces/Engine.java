@@ -1,12 +1,17 @@
 package interfaces;
 
-import model.plateau.Snake;
+import javafx.scene.input.KeyEvent;
 
 public interface Engine<Type extends Number, O extends Orientation> extends Observable, Data<Type,O>, Court {
 
     public default void update() {
         move();
-    }
-    
-    public Snake<Type,O>[] getSnakes();
+    } 
+
+
+    public void makePressed(KeyEvent ev);
+
+    public void makeReleased(KeyEvent ev);
+
+
 }

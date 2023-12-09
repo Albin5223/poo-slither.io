@@ -30,6 +30,18 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         return plateau;
     }
 
+    @Override
+    public void addSnake(Snake<Integer, Direction> snake) throws IllegalArgumentException {
+        super.addSnake(snake);
+    }
+
+    @Override
+    public CoordinateInteger getRandomCoordinate(){
+        int x = new Random().nextInt(xMax - xMin) + xMin;
+        int y = new Random().nextInt(yMax - yMin) + yMin;
+        return new CoordinateInteger(x,y);
+    }
+
     public void addOneFood(){
         int r = new Random().nextInt(2);
         int x = r == 1 ? new Random().nextInt(xMax) : -1*new Random().nextInt(xMax);

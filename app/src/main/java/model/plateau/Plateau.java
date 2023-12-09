@@ -82,4 +82,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation>
             throw new IllegalArgumentException("Snake not found");
         }
     }
+
+
+    public abstract Coordinate<Type,O> getRandomCoordinate();
 }

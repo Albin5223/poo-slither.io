@@ -6,39 +6,45 @@ import java.util.Random;
 
 import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
-import exceptions.ExecptionAddSnake;
 import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import model.Commestible;
-import model.coordinate.CoordinateInteger;
+import model.SnakeData;
 import model.plateau.Plateau;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
-import model.plateau.SnakeInteger.SnakePartInteger;
 import model.player.HumanSnakePlayer;
 
 public class EngineSnake implements Engine<Integer,Direction> {
-
+    /*
+     * 
+     * 
+     * 
+     * FAIRE EN SORTE QUE IL Y A AU MAX 60% de nourriture
+     */
     private Plateau<Integer,Direction> plateau;
-    SnakeInteger[] snakes;
-    HumanSnakePlayer[] players;
-    int nbSnake = 0;
+    ArrayList<SnakeInteger> snakes;
+    ArrayList<HumanSnakePlayer> players;
+    
     ArrayList<Observer> observers;
+    ArrayList<Color> colors;
 
-    private EngineSnake(int n,SnakeInteger[] snakes, Plateau<Integer,Direction> plateau){
+    private EngineSnake(ArrayList<SnakeInteger> snakes, Plateau<Integer,Direction> plateau){
         this.snakes = snakes;
-        this.players = new HumanSnakePlayer[n];
+        this.players = new ArrayList<HumanSnakePlayer>();
         this.plateau = plateau;
+        this.colors = new ArrayList<Color>();
         this.observers = new ArrayList<Observer>();
     }
 
-    public static EngineSnake createSnake(int n,int width, int height){
-        SnakeInteger[] s = new SnakeInteger[n];
+    public static EngineSnake createSnake(int width, int height){
+        ArrayList<SnakeInteger> s = new ArrayList<SnakeInteger>();
         PlateauInteger p = PlateauInteger.createPlateauSnake(width, height);
-        return new EngineSnake(n,s,p);
+        return new EngineSnake(s,p);
     }
 
     @Override
@@ -64,11 +70,11 @@ public class EngineSnake implements Engine<Integer,Direction> {
             try {
                 snake.move();
             } catch (ExceptionCollision e) {
-                snake.resetSnake(new CoordinateInteger(0, 0), Direction.RIGHT, SnakeInteger.SIZE_OF_SNAKE_BIRTH);
+                SnakeInteger.resetSnake(snake);
             }
         }
         Random r = new Random();
-        if(r.nextInt(100) < 5){
+        if(r.nextInt(100) < 50){
             ((PlateauInteger) plateau).addOneFood();
         }
         notifyObservers();
@@ -87,56 +93,46 @@ public class EngineSnake implements Engine<Integer,Direction> {
         }
         return copie;
     }
-
-    @Override
-    public Coordinate<Integer, Direction>[] getAllPosition() {
-        ArrayList<SnakePartInteger[]> snakeParts = new ArrayList<SnakePartInteger[]>();
-        for(SnakeInteger snake : snakes){
-            snakeParts.add(snake.getAllSnakePart());
-        }
-        ArrayList<CoordinateInteger> allPosition = new ArrayList<CoordinateInteger>();
-
-        for(SnakePartInteger[] snakePart : snakeParts){
-            for(SnakePartInteger part : snakePart){
-                allPosition.add(new CoordinateInteger(part.getCenter().getX(), part.getCenter().getY()));
-            }
-        }
-
-        CoordinateInteger[] allPositionArray = new CoordinateInteger[allPosition.size()];
-        for (int i = 0; i < allPosition.size(); i++) {
-            allPositionArray[i] = allPosition.get(i);
-        }
-        return allPositionArray;
-    }
-
     
-    public HumanSnakePlayer[] getPlayers() {
+    public ArrayList<HumanSnakePlayer> getPlayers() {
         return players;
     }
 
-    @Override
-    public SnakeInteger[] getSnakes() {
-        return snakes;
-    }
 
-    public void addPlayer(KeyboardControler<Integer,Direction> snakeControler) throws ExecptionAddSnake{
-        if(nbSnake >= snakes.length){
-            throw new ExecptionAddSnake("Action impossible");
-        }
-        SnakeInteger newSnake = new SnakeInteger(new CoordinateInteger(3,3), plateau, Direction.DOWN);
+    public void addPlayer(KeyboardControler<Integer,Direction> snakeControler){
+        SnakeInteger newSnake = SnakeInteger.creatSnakeInteger(plateau);
         HumanSnakePlayer newPlayer = new HumanSnakePlayer(newSnake, snakeControler);
-        players[nbSnake] = newPlayer;
-        snakes[nbSnake] = newSnake;
+        players.add(newPlayer);
+        Random rand = new Random();
+        int red = rand.nextInt(255);
+        int green = rand.nextInt(255);
+        int blue = rand.nextInt(255);
+        Color newColor = Color.rgb(red, green, blue);
+        colors.add(newColor);
+        snakes.add(newSnake);
         notifyObservers();
-        nbSnake++;
+        
     }
 
-    public void addPlayerWithCoord(Object object) {
-    }
-
-    public void makeMouv(KeyEvent ev) {
+    @Override
+    public void makePressed(KeyEvent ev) {
         for(HumanSnakePlayer player : players){
             player.execute(ev);
         }
     }
+
+    @Override
+    public void makeReleased(KeyEvent ev) {
+    }
+
+    @Override
+    public ArrayList<SnakeData<Integer, Direction>> getAllSnake() {
+        ArrayList<SnakeData<Integer, Direction>> snakesData = new ArrayList<SnakeData<Integer, Direction>>();
+        for(int i = 0; i < snakes.size(); i++){
+            snakesData.add(new SnakeData<Integer, Direction>(snakes.get(i), colors.get(i)));
+        }
+        return snakesData;
+    }
+
+    
 }
