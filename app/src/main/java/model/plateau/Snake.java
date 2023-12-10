@@ -1,15 +1,11 @@
 package model.plateau;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import exceptions.ExceptionCollision;
 import interfaces.Collisable;
 import interfaces.Coordinate;
 import interfaces.Orientation;
-import interfaces.Orientation.Direction;
 import interfaces.Turnable;
-import model.plateau.SnakeInteger.SnakePartInteger;
 
 
 public sealed abstract class Snake<Type extends Number, O extends Orientation<O>> implements Turnable<O>, Collisable<Snake<Type,O>> permits SnakeInteger, SnakeDouble {

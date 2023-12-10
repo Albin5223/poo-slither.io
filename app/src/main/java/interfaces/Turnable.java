@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Turnable<O extends Orientation> {
+public interface Turnable<O extends Orientation<O>> {
 
     enum Turning {
         GO_LEFT, FORWARD, GO_RIGHT;

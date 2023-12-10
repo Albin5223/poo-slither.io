@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Coordinate<Type extends Number, O extends Orientation> extends Cloneable {
+public interface Coordinate<Type extends Number, O extends Orientation<O>> extends Cloneable {
     
     public Type getX();
     public Type getY();

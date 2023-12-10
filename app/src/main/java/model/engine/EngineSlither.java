@@ -17,8 +17,6 @@ import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
 import model.plateau.Snake;
 import model.plateau.SnakeDouble;
-import model.plateau.Snake.SnakePart;
-import model.plateau.SnakeDouble.SnakePartDouble;
 import model.player.HumanSlitherPlayer;
 
 
