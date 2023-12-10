@@ -2,11 +2,11 @@ package interfaces;
 
 import interfaces.Turnable.Turning;
 
-public sealed interface Orientation {
+public sealed interface Orientation<O extends Orientation<O>> {
 
-    public Orientation opposite();
+    public O opposite();
     
-    public final class Angle implements Orientation {
+    public final class Angle implements Orientation<Angle> {
 
         private double angle;
 
@@ -37,7 +37,7 @@ public sealed interface Orientation {
         }
     }
 
-    public static enum Direction implements Orientation {LEFT,UP,RIGHT,DOWN;
+    public static enum Direction implements Orientation<Direction> {LEFT,UP,RIGHT,DOWN;
         public Direction changeDirectionWithTurn(Turning turning){
             switch (turning) {
                 case GO_LEFT : if (this.ordinal() == 0) return Direction.values()[Direction.values().length - 1];

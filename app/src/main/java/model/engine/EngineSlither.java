@@ -15,7 +15,9 @@ import model.Commestible;
 import model.SnakeData;
 import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
+import model.plateau.Snake;
 import model.plateau.SnakeDouble;
+import model.plateau.Snake.SnakePart;
 import model.plateau.SnakeDouble.SnakePartDouble;
 import model.player.HumanSlitherPlayer;
 
@@ -78,8 +80,8 @@ public class EngineSlither implements Engine<Double,Angle>{
             try {
                 snake.move();
             } catch (ExceptionCollision e ) {
-                SnakePartDouble[] all = snake.getAllSnakePart();
-                for(SnakePartDouble c : all){
+                ArrayList<Snake<Double,Angle>.SnakePart> all = snake.getAllSnakePart();
+                for(Snake<Double,Angle>.SnakePart c : all){
                     plateau.addFood(c.getCenter(), Commestible.DEATH_FOOD);
                 }
                 SnakeDouble.resetSnake(snake);

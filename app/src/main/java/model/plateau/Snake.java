@@ -1,26 +1,30 @@
 package model.plateau;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exceptions.ExceptionCollision;
 import interfaces.Collisable;
 import interfaces.Coordinate;
 import interfaces.Orientation;
+import interfaces.Orientation.Direction;
 import interfaces.Turnable;
+import model.plateau.SnakeInteger.SnakePartInteger;
 
 
-public sealed abstract class Snake<Type extends Number, O extends Orientation> implements Turnable<O>, Collisable<Snake<Type,O>> permits SnakeInteger, SnakeDouble {
+public sealed abstract class Snake<Type extends Number, O extends Orientation<O>> implements Turnable<O>, Collisable<Snake<Type,O>> permits SnakeInteger, SnakeDouble {
 
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
 
-    protected Type gap_between_tail;
+    private final Type GAP_BETWEEN_TAIL;
 
-    public static abstract sealed class SnakePart<Type extends Number,O extends Orientation> implements Collisable<SnakePart<Type,O>>, Cloneable permits SnakeInteger.SnakePartInteger, SnakeDouble.SnakePartDouble{
+    public sealed class SnakePart implements Collisable<SnakePart>, Cloneable permits SnakeInteger.SnakePartInteger, SnakeDouble.SnakePartDouble{
 
         /** The coordinate center of the snake part */
         protected Coordinate<Type,O> center;
 
+        /** The hitbox radius of the snake part */
         protected double hitboxRadius;
 
         /** The direction of the snake part */
@@ -35,7 +39,9 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
         /**
          * @return the center of the snake part
          */
-        public abstract Coordinate<Type,O> getCenter();
+        public Coordinate<Type,O> getCenter(){
+            return center;
+        }
 
         public O getOrientation(){
             return orientation;
@@ -54,48 +60,85 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
             return hitboxRadius;
         }
 
-        @Override
-        public abstract SnakePart<Type,O> clone();
+        public SnakePart clone(){
+            return new SnakePart(this.center, this.orientation, this.hitboxRadius);
+        }
 
         @Override
-        public boolean isColliding(SnakePart<Type,O> other) {
+        public boolean isColliding(SnakePart other) {
             return center.distanceTo(other.center) <= this.hitboxRadius + other.hitboxRadius;
         }
     }
 
     /** The head of the snake */
-    protected SnakePart<Type,O> head;
+    protected SnakePart head;
     /** The tail of the snake */
-    protected ArrayList<SnakePart<Type,O>> tail;
+    protected ArrayList<SnakePart> tail;
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    public Snake(Type gap_between_tail){
-        this.gap_between_tail = gap_between_tail;
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius){
+        this.GAP_BETWEEN_TAIL = gap_between_tail;
+        this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
+        this.tail = new ArrayList<SnakePart>();
+
+        O direction = head.getOrientation();
+        SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
+        tail.add(tail1);
+
+        this.plateau = plateau;
+
+        plateau.addSnake(this);
     }
 
     public double getRadius(){
         return head.getHitboxRadius();
     }
 
-    protected abstract void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail) throws ExceptionCollision;
+    public O getOrientation(){
+        return head.getOrientation();
+    }
+
+    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollision {
+        this.head = new SnakePart(newLocation.clone(), startingDirection, hitboxRadius);
+        this.tail = new ArrayList<SnakePart>();
+
+        O direction = head.getOrientation();
+        for (int i = 0; i < nbTail; i++) {
+            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
+            tail.add(tail1);
+        }
+
+        if(plateau.isCollidingWithAll(this)){
+            throw new ExceptionCollision("Snake is colliding with another snake");
+        }
+
+        plateau.update(this);
+    }
 
     /**
      * @return a copy of {@link #head}
      */
-    public SnakePart<Type,O> getHead() {
+    public SnakePart getHead() {
         return head;
     }
 
     /**
      * @return a copy of {@link #tail}
      */
-    public abstract SnakePart<Type,O>[] getTail();
+    public ArrayList<SnakePart> getTail() {
+        return new ArrayList<>(tail);
+    }
 
     /**
      * @return a copy of {@link #head} and {@link #tail}
      */
-    public abstract SnakePart<Type,O>[] getAllSnakePart();
+    public ArrayList<SnakePart> getAllSnakePart() {
+        ArrayList<SnakePart> allSnakePart = new ArrayList<>();
+        allSnakePart.add(head);
+        allSnakePart.addAll(tail);
+        return allSnakePart;
+    }
 
     /**
      * Update the position of the snake on the board (the snake has moved)
@@ -123,8 +166,8 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
 
     @Override
     public boolean isColliding(Snake<Type,O> other) {
-        SnakePart<Type,O>[] allParts = other.getAllSnakePart();
-        for (SnakePart<Type,O> snakePart : allParts) {
+        ArrayList<SnakePart> allParts = other.getAllSnakePart();
+        for (SnakePart snakePart : allParts) {
             if(head.isColliding(snakePart)){
                 return true;
             }
@@ -132,7 +175,12 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
         return false;
     }
 
-    public abstract void grow();
+    public void grow(){
+        SnakePart lastTail = tail.get(tail.size() - 1);
+        O direction = lastTail.getOrientation();
+        SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, lastTail.getHitboxRadius());
+        tail.add(newTail);
+    }
 
     public void grow(int nb) {
         for (int i = 0; i < nb; i++) {
@@ -143,7 +191,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation> i
     @Override
     public String toString() {
         String res = "Snake [head=" + head.toString() + ", tail=";
-        for (SnakePart<Type,O> s : tail) {
+        for (SnakePart s : tail) {
             res += s.toString() + " ";
         }
         res += "]";

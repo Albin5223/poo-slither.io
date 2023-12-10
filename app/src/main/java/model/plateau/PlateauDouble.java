@@ -55,8 +55,8 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     @Override
     public CoordinateDouble getRandomCoordinate() {
-        double x = new Random().nextInt(400);
-        double y = new Random().nextInt(400);
+        double x = new Random().nextInt(20)-10;
+        double y = new Random().nextInt(20)-10;
         return new CoordinateDouble(x,y);
     }
 

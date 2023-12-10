@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import model.Commestible;
 import model.SnakeData;
 
-public interface Data<Type extends Number, O extends Orientation> {
+public interface Data<Type extends Number, O extends Orientation<O>> {
     public ArrayList<SnakeData<Type, O>> getAllSnake();
     public void move(); 
     public double getRadius();

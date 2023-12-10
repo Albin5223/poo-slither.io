@@ -1,12 +1,9 @@
 package model.plateau;
 
-import java.util.ArrayList;
-
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
 import model.coordinate.CoordinateDouble;
-import model.plateau.Snake.SnakePart;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 
@@ -14,49 +11,26 @@ public final class SnakeDouble extends Snake<Double,Angle> {
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
     private static final Angle TURNING_FORCE = new Angle(5);
+    private static final double GAP_BETWEEN_TAIL = 5.0;
+    private static final int SIZE_OF_SNAKE_BIRTH = 2;
 
     //private int size = 2;
 
-    public final class SnakePartDouble extends SnakePart<Double,Angle> {
+    public final class SnakePartDouble extends SnakePart {
 
-        public static final double hitboxRadius = 10;
+        public static final double HITBOX_RADIUS_BIRTH = 10;
             
         private SnakePartDouble(Coordinate<Double,Angle> center, Angle direction) {
-            super(center, direction, hitboxRadius);
-        }
-
-        @Override
-        public SnakePartDouble clone() {
-            return new SnakePartDouble(this.center, this.orientation);
-        }
-
-        @Override
-        public Angle getOrientation() {
-            return orientation;
-        }
-
-        @Override
-        public CoordinateDouble getCenter() {
-            return (CoordinateDouble) center;
+            super(center, direction, HITBOX_RADIUS_BIRTH);
         }
     }
 
     private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
-        super(5.0);
-        this.head = new SnakePartDouble(location.clone(), startingDirection);
-        this.tail = new ArrayList<SnakePart<Double,Angle>>();
-
-        Angle direction = head.getOrientation();
-        SnakePartDouble tail1 = new SnakePartDouble(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
-        tail.add(tail1);
-
-        this.plateau = plateau;
-
-        plateau.addSnake(this);
+        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH);
     }
 
     public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
-        Coordinate<Double,Angle> location = ((PlateauDouble)plateau).getRandomCoordinate();
+        Coordinate<Double,Angle> location = plateau.getRandomCoordinate();
         Angle angle = Angle.getRandom();
         
         try{
@@ -69,27 +43,13 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         
     }
 
-    @Override
-    protected void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision{
-        this.head = new SnakePartDouble(newLocation.clone(), startingDirection);
-        this.tail = new ArrayList<SnakePart<Double,Angle>>();
-
-        Angle direction = head.getOrientation();
-        for (int i = 0; i < nbTail; i++) {
-            SnakePartDouble tail1 = new SnakePartDouble(head.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
-            tail.add(tail1);
-        }
-
-        if(plateau.isCollidingWithAll(this)){
-            throw new ExceptionCollision("Snake is colliding with another snake");
-        }
-
-        plateau.update(this);
+    protected void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision {
+        super.resetSnake(newLocation, startingDirection, SnakePartDouble.HITBOX_RADIUS_BIRTH, nbTail);
     }
 
-        public static void resetSnake(SnakeDouble snake){
+    public static void resetSnake(SnakeDouble snake){
         try {
-            snake.resetSnake(new CoordinateDouble(0, 0), Angle.getRandom(), 2);
+            snake.resetSnake(new CoordinateDouble(0, 0), Angle.getRandom(), SIZE_OF_SNAKE_BIRTH);
         } catch (ExceptionCollision e) {
             resetSnake(snake);
         }
@@ -101,23 +61,10 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     @Override
-    public SnakePartDouble[] getTail() {
-        return tail.toArray(new SnakePartDouble[tail.size()]);
-    }
-
-    @Override
-    public SnakePartDouble[] getAllSnakePart() {
-        SnakePartDouble[] allSnakePart = new SnakePartDouble[tail.size() + 1];
-        allSnakePart[0] = (SnakePartDouble) head;
-        System.arraycopy(getTail(), 0, allSnakePart, 1, tail.size());
-        return allSnakePart;
-    }
-
-    @Override
     public void move() throws ExceptionCollision {
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Angle newDirection = turn(currentTurning, head.getOrientation());
-        SnakePartDouble newHead = new SnakePartDouble(head.getCenter().placeCoordinateFrom(newDirection,gap_between_tail), newDirection);
+        SnakePartDouble newHead = new SnakePartDouble(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
 
         this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
         this.tail.add(0, head); // We add the old head to the tail
@@ -132,14 +79,5 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         }
         
         plateau.update(this);   // We update the position of the snake on the board
-    }
-
-    @Override
-    public void grow() {
-        SnakePartDouble lastTail = (SnakePartDouble) tail.get(tail.size() - 1);
-        Angle direction = lastTail.getOrientation();
-        SnakePartDouble newTail = new SnakePartDouble(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),gap_between_tail), direction);
-        tail.add(newTail);
-    }
-    
+    }    
 }

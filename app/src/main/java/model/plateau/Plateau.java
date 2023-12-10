@@ -7,7 +7,7 @@ import interfaces.Coordinate;
 import interfaces.Orientation;
 import model.Commestible;
 
-public abstract sealed class Plateau<Type extends Number, O extends Orientation> permits PlateauDouble, PlateauInteger {
+public abstract sealed class Plateau<Type extends Number, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau;
     protected HashMap<Coordinate<Type,O>, Commestible> nourritures;

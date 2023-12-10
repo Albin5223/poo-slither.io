@@ -13,6 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.plateau.SnakeInteger;
+import javafx.scene.paint.Color;
 
 public class PlayPageSnake extends Pane implements Observer{
     
@@ -23,8 +24,8 @@ public class PlayPageSnake extends Pane implements Observer{
     private int D_Y;
 
     AnimationTimer aTimer;
-    private static final double UPDATE_INTERVAL = 0.05e9; // Interval en nanosecondes (0.05 seconde)
-
+    //private static final double UPDATE_INTERVAL = 0.05e9; // Interval en nanosecondes (0.05 seconde)
+    private static final double UPDATE_INTERVAL = 0.1e9;
 
     public PlayPageSnake(Window window, int D_X, int D_Y) {
         this.window = window;
@@ -61,10 +62,10 @@ public class PlayPageSnake extends Pane implements Observer{
 
 
     @Override
-    public void update(Data<? extends Number, ? extends Orientation> data) {
+    public void update(Data<? extends Number, ? extends Orientation<?>> data) {
         this.getChildren().clear();
 
-        for (Coordinate<? extends Number, ? extends Orientation> coord : data.getAllFood().keySet()) {
+        for (Coordinate<? extends Number, ? extends Orientation<?>> coord : data.getAllFood().keySet()) {
             int x = D_X +SnakeInteger.WIDTH_OF_SNAKE*coord.getX().intValue();
             int y = D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().intValue();
             int radius = SnakeInteger.WIDTH_OF_SNAKE/2;
@@ -72,20 +73,23 @@ public class PlayPageSnake extends Pane implements Observer{
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
-        for(SnakeData<? extends Number, ? extends Orientation> snakeData : data.getAllSnake()){
+        for(SnakeData<? extends Number, ? extends Orientation<?>> snakeData : data.getAllSnake()){
             int x_head = D_X +SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getX().intValue();
             int y_head = D_Y + SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getY().intValue();
             int witdh = SnakeInteger.WIDTH_OF_SNAKE;
 
             Rectangle head = new Rectangle(x_head,y_head,witdh,witdh);
-            head.setFill(snakeData.getColor());
+            head.setFill(Color.BLACK);
             this.getChildren().add(head);
 
-            for(Coordinate<? extends Number, ? extends Orientation> coord : snakeData.getTail()){
+            for(Coordinate<? extends Number, ? extends Orientation<?>> coord : snakeData.getTail()){
                 int x = D_X +SnakeInteger.WIDTH_OF_SNAKE*coord.getX().intValue();
                 int y = D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().intValue();
-                Rectangle r = new Rectangle(x,y,witdh,witdh);
+                Rectangle black_back = new Rectangle(x,y,witdh,witdh);
+                black_back.setFill(Color.BLACK);
+                Rectangle r = new Rectangle(x+1,y+1,witdh-2,witdh-2);
                 r.setFill(snakeData.getColor());
+                this.getChildren().add(black_back);
                 this.getChildren().add(r);
             }
         }
