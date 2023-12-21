@@ -53,23 +53,8 @@ public class Window {
                         default:break;
                     }
             };
-
-            KeyboardControler<Double,Angle> controler2 = (ev,snake) ->{
-                switch(ev.getCode()){
-                        case A:
-                            snake.setTurning(Turning.GO_LEFT);
-                            break;
-                        case E:
-                            snake.setTurning(Turning.GO_RIGHT);
-                            break;
-                        default:break;
-                    }
-            };
-             
-            //KeyboardControler keyboardControler = new KeyboardControler(engine);
             
             engine.addPlayer(controler1);
-            engine.addPlayer(controler2);
             
             playPage.setCourt(engine);
             engine.addObserver(playPage);

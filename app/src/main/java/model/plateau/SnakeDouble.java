@@ -1,5 +1,7 @@
 package model.plateau;
 
+import java.util.Random;
+
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
@@ -11,14 +13,14 @@ public final class SnakeDouble extends Snake<Double,Angle> {
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
     private static final Angle TURNING_FORCE = new Angle(5);
-    private static final double GAP_BETWEEN_TAIL = 5.0;
-    private static final int SIZE_OF_SNAKE_BIRTH = 2;
+    private static final double GAP_BETWEEN_TAIL = 0.4;
+    private static final int SIZE_OF_SNAKE_BIRTH = 10;
 
     //private int size = 2;
 
     public final class SnakePartDouble extends SnakePart {
 
-        public static final double HITBOX_RADIUS_BIRTH = 10;
+        public static final double HITBOX_RADIUS_BIRTH = 4;
             
         private SnakePartDouble(Coordinate<Double,Angle> center, Angle direction) {
             super(center, direction, HITBOX_RADIUS_BIRTH);
@@ -30,7 +32,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
-        Coordinate<Double,Angle> location = plateau.getRandomCoordinate();
+        Coordinate<Double,Angle> location = new CoordinateDouble(0,0);
         Angle angle = Angle.getRandom();
         
         try{
@@ -49,7 +51,10 @@ public final class SnakeDouble extends Snake<Double,Angle> {
 
     public static void resetSnake(SnakeDouble snake){
         try {
-            snake.resetSnake(new CoordinateDouble(0, 0), Angle.getRandom(), SIZE_OF_SNAKE_BIRTH);
+            Random random = new Random();
+            double x = random.nextDouble(60);
+            double y = random.nextDouble(60);
+            snake.resetSnake(new CoordinateDouble(x, y), Angle.getRandom(), SIZE_OF_SNAKE_BIRTH);
         } catch (ExceptionCollision e) {
             resetSnake(snake);
         }
