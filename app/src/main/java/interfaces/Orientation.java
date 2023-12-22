@@ -20,13 +20,13 @@ public sealed interface Orientation<O extends Orientation<O>> {
     
         @Override
         public Angle opposite() {
-            if(this.angle < 0 || this.angle > 360){throw new IllegalArgumentException("Angle must be between 0 and 360");}
+            if(this.angle < 0 || this.angle > 360){System.out.println("ANGLE bug : "+angle);throw new IllegalArgumentException("Angle must be between 0 and 360");}
             return new Angle((this.angle + 180) % 360);
         }
 
         public Angle changeAngleWithTurn(Turning turning, Angle step) {
             switch (turning) {
-                case GO_LEFT : return new Angle((this.angle - step.getAngle()) % 360);
+                case GO_LEFT : return new Angle((this.angle - step.getAngle() + 360) % 360);
                 case GO_RIGHT : return new Angle((this.angle + step.getAngle()) % 360);
                 default :return this;
             }       
@@ -34,6 +34,11 @@ public sealed interface Orientation<O extends Orientation<O>> {
 
         public static Angle getRandom(){
             return new Angle(Math.random() * 360);
+        }
+
+        @Override
+        public String toString() {
+            return "Angle [angle=" + angle + "]";
         }
     }
 
@@ -69,6 +74,11 @@ public sealed interface Orientation<O extends Orientation<O>> {
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + r);
             }
+        }
+
+        @Override
+        public String toString() {
+            return "Direction [name=" + this.name() + "]";
         }
     }
 

@@ -13,14 +13,14 @@ public final class SnakeDouble extends Snake<Double,Angle> {
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
     private static final Angle TURNING_FORCE = new Angle(5);
-    private static final double GAP_BETWEEN_TAIL = 0.4;
-    private static final int SIZE_OF_SNAKE_BIRTH = 10;
+    private static final double GAP_BETWEEN_TAIL = 1;
+    private static final int SIZE_OF_SNAKE_BIRTH = 50;
 
     //private int size = 2;
 
-    public final class SnakePartDouble extends SnakePart {
+    public final class SnakePartDouble extends Snake<Double,Angle>.SnakePart {
 
-        public static final double HITBOX_RADIUS_BIRTH = 4;
+        public static final double HITBOX_RADIUS_BIRTH = 10;
             
         private SnakePartDouble(Coordinate<Double,Angle> center, Angle direction) {
             super(center, direction, HITBOX_RADIUS_BIRTH);
@@ -28,7 +28,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
-        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH);
+        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SIZE_OF_SNAKE_BIRTH);
     }
 
     public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {

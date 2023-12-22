@@ -13,7 +13,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Commestible;
 import model.SnakeData; 
-import model.plateau.SnakeDouble.SnakePartDouble;
 
 public class PlayPageSlither extends Pane implements Observer{
     
@@ -65,21 +64,21 @@ public class PlayPageSlither extends Pane implements Observer{
         }
 
         for(SnakeData<? extends Number, ? extends Orientation<?>> snakeData : data.getAllSnake()){
-            double x_head = D_X +SnakePartDouble.HITBOX_RADIUS_BIRTH*snakeData.getHead().getX().intValue();
-            double y_head = D_Y + SnakePartDouble.HITBOX_RADIUS_BIRTH*snakeData.getHead().getY().intValue();
-
-            Circle head = new Circle(x_head,y_head,data.getRadius());
-            head.setFill(snakeData.getColor());
-            this.getChildren().add(head);
+            double x_head = D_X + snakeData.getHead().getX().intValue();
+            double y_head = D_Y + snakeData.getHead().getY().intValue();
 
             for(Coordinate<? extends Number, ? extends Orientation<?>> coord : snakeData.getTail()){
-                double x = D_X +SnakePartDouble.HITBOX_RADIUS_BIRTH*coord.getX().doubleValue();
-                double y = D_Y + SnakePartDouble.HITBOX_RADIUS_BIRTH*coord.getX().doubleValue();
+                double x = D_X + coord.getX().doubleValue();
+                double y = D_Y +  coord.getY().doubleValue();
 
                 Circle r = new Circle(x,y,data.getRadius());
-                r.setFill(Color.BLACK);
+                r.setFill(snakeData.getColor());
                 this.getChildren().add(r);
             }
+
+            Circle head = new Circle(x_head,y_head,data.getRadius());
+            head.setFill(Color.BLACK);
+            this.getChildren().add(head);
         }
 
 

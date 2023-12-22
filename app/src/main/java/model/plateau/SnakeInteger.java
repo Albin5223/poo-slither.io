@@ -8,9 +8,9 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static final int WIDTH_OF_SNAKE = 20;
     private static final Integer GAP_BETWEEN_TAIL = 1;
-    private static final int SIZE_OF_SNAKE_BIRTH = 2;
+    private static final int SIZE_OF_SNAKE_BIRTH = 10;
 
-    public final class SnakePartInteger extends SnakePart {
+    public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
         private SnakePartInteger(Coordinate<Integer,Direction> center, Direction direction) {
             super(center, direction,0);
@@ -22,7 +22,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
-        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0);
+        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH);
     }
 
     public static SnakeInteger creatSnakeInteger(Plateau<Integer,Direction> plateau) {
@@ -70,7 +70,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
 
-        if(((PlateauInteger )plateau).isCollidingWithWall(this) || isCollidingWithMe()){ // We check if the snake is colliding with a wall
+        if(((PlateauInteger)plateau).isCollidingWithWall(this) || isCollidingWithMe()){ // We check if the snake is colliding with a wall
             System.out.println("Snake is colliding with a wall");
             throw new ExceptionCollision("Snake is colliding with a wall");
         }
@@ -81,9 +81,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         
         plateau.update(this);   // We update the position of the snake on the board
 
-        if(currentTurning != Turning.FORWARD){
-            currentTurning = Turning.FORWARD;
-        }
+        currentTurning = Turning.FORWARD;
     }
 
     public boolean isCollidingWithMe(){

@@ -73,14 +73,16 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius){
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail){
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
         this.tail = new ArrayList<SnakePart>();
 
         O direction = head.getOrientation();
-        SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
-        tail.add(tail1);
+        for (int i = 0; i < nbTail; i++) {
+            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
+            tail.add(tail1);
+        }
 
         this.plateau = plateau;
 
