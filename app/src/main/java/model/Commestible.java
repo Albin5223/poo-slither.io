@@ -3,9 +3,9 @@ package model;
 import java.util.Random;
 
 public enum Commestible {
-    BIG_FOOD(10, 10,false),
-    SMALL_FOOD(5, 5,false),
-    DEATH_FOOD(3,3,true);
+    BIG_FOOD(10, 10,true),
+    SMALL_FOOD(5, 5,true),
+    DEATH_FOOD(3,3,false);
 
     private int value;
     private int range;

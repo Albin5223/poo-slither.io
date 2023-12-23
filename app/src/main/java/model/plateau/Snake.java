@@ -2,6 +2,8 @@ package model.plateau;
 
 import java.util.ArrayList;
 import exceptions.ExceptionCollision;
+import exceptions.ExceptionCollisionWithFood;
+import exceptions.ExceptionCollisionWithSnake;
 import interfaces.Collisable;
 import interfaces.Coordinate;
 import interfaces.Orientation;
@@ -79,7 +81,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging){
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.maxFoodCharging = maxFoodCharging;
         this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
@@ -104,7 +106,10 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         return head.getOrientation();
     }
 
-    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollision {
+    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollisionWithSnake, ExceptionCollisionWithFood {
+        
+        this.plateau.removeSnake(this); // We remove the snake from the board
+
         this.head = new SnakePart(newLocation.clone(), startingDirection, hitboxRadius);
         this.tail = new ArrayList<SnakePart>();
 
@@ -115,10 +120,10 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         }
 
         if(plateau.isCollidingWithAll(this)){
-            throw new ExceptionCollision("Snake is colliding with another snake");
+            throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
         }
 
-        plateau.update(this);
+        this.plateau.addSnake(this);
     }
 
     /**

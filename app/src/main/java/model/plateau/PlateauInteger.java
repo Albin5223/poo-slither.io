@@ -2,10 +2,11 @@ package model.plateau;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
-import model.Commestible;
 import model.coordinate.CoordinateInteger;
 
 import java.util.Random;
+
+import exceptions.ExceptionCollisionWithSnake;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
@@ -14,8 +15,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     private int yMin;
     private int yMax;
+
+    private final static int NB_FOOD = 50;
+
     public PlateauInteger(int width, int height) {
-        super();
+        super(NB_FOOD);
 
         xMin = -1*width/(2*SnakeInteger.WIDTH_OF_SNAKE); 
         xMax = width/(2*SnakeInteger.WIDTH_OF_SNAKE);
@@ -31,7 +35,7 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
     }
 
     @Override
-    public void addSnake(Snake<Integer, Direction> snake) throws IllegalArgumentException {
+    public void addSnake(Snake<Integer, Direction> snake) throws ExceptionCollisionWithSnake {
         super.addSnake(snake);
     }
 
@@ -40,25 +44,6 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         int x = new Random().nextInt(xMax - xMin) + xMin;
         int y = new Random().nextInt(yMax - yMin) + yMin;
         return new CoordinateInteger(x,y);
-    }
-
-    public void addOneFood(){
-        int r = new Random().nextInt(2);
-        int x = r == 1 ? new Random().nextInt(xMax) : -1*new Random().nextInt(xMax);
-        r = new Random().nextInt(2);
-        int y = r == 1 ? new Random().nextInt(yMax) : -1*new Random().nextInt(yMax);
-        try {
-            addFood(new CoordinateInteger(x,y),Commestible.getRandom());
-        } catch (IllegalArgumentException e) {
-            //Si la nourriture est présente alors on ne fait rien
-        }
-    }
-
-    @Override
-    public void addAllFood() {
-        for(int i = 0; i < 50; i++){
-            addOneFood();
-        }
     }
 
     @Override

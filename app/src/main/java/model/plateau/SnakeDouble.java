@@ -17,6 +17,9 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     private static final int SIZE_OF_SNAKE_BIRTH = 50;
     private static final int MAX_FOOD_CHARGING = 10;
 
+    /** Do we want to add food behind a dead snake ? */
+    private static final boolean DEATH_FOOD = true;
+
     //private int size = 2;
 
     public final class SnakePartDouble extends Snake<Double,Angle>.SnakePart {
@@ -28,19 +31,19 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         }
     }
 
-    private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
+    private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) throws ExceptionCollision {
         super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
     public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
-        Coordinate<Double,Angle> location = new CoordinateDouble(0,0);
+        Coordinate<Double,Angle> location = plateau.getRandomCoordinate();
         Angle angle = Angle.getRandom();
         
         try{
             SnakeDouble snake = new SnakeDouble(location, plateau, angle);
             return snake;
         }
-        catch(Exception e){
+        catch(ExceptionCollision e){
             return createSnakeDouble(plateau);
         }
         
@@ -68,6 +71,9 @@ public final class SnakeDouble extends Snake<Double,Angle> {
 
     @Override
     public void move() throws ExceptionCollision {
+
+        this.plateau.removeSnake(this); // We remove the snake from the board
+
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Angle newDirection = turn(currentTurning, head.getOrientation());
         SnakePartDouble newHead = new SnakePartDouble(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
@@ -77,6 +83,9 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         this.head = newHead;    // We update the head
 
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
+            if(DEATH_FOOD){
+                plateau.addDeathFood(this); // We add a death food for each part of the snake (except the head)
+            }
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
         int value = plateau.isCollidingWithFood(this);
@@ -84,6 +93,6 @@ public final class SnakeDouble extends Snake<Double,Angle> {
             chargeFood(value);
         }
         
-        plateau.update(this);   // We update the position of the snake on the board
+        plateau.addSnake(this);   // We update the position of the snake on the board
     }    
 }

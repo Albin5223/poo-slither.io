@@ -42,6 +42,7 @@ public class Window {
             gameScene.setOnKeyReleased(ev ->{
                 engine.makeReleased(ev);
             });
+
             KeyboardControler<Double,Angle> controler1 = (ev,snake) ->{
                 switch(ev.getCode()){
                         case LEFT:
@@ -53,8 +54,21 @@ public class Window {
                         default:break;
                     }
             };
+
+            KeyboardControler<Double,Angle> controler2 = (ev,snake) ->{
+                switch(ev.getCode()){
+                        case A:
+                            snake.setTurning(Turning.GO_LEFT);
+                            break;
+                        case E:
+                            snake.setTurning(Turning.GO_RIGHT);
+                            break;
+                        default:break;
+                    }
+            };
             
             engine.addPlayer(controler1);
+            engine.addPlayer(controler2);
             
             playPage.setCourt(engine);
             engine.addObserver(playPage);

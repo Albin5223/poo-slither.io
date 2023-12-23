@@ -4,13 +4,14 @@ import java.util.Random;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
-import model.Commestible;
 import model.coordinate.CoordinateDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
 
+    private final static int NB_FOOD = 100;
+
     public PlateauDouble() {
-        super();
+        super(NB_FOOD);
     }
 
     public static PlateauDouble createPlateauSlitherio(){
@@ -19,20 +20,14 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         return plateau;
     }
 
-
-    public void addOneFood(){
-        int r = new Random().nextInt(2);
-        double x = r == 1 ? new Random().nextInt(400) : -1*new Random().nextInt(400);
-        r = new Random().nextInt(2);
-        double y = r == 1 ? new Random().nextInt(400) : -1*new Random().nextInt(400);
-        addFood(new CoordinateDouble(x,y),Commestible.getRandom());
-    }
-
     @Override
-    public void addAllFood() {
-        for(int i = 0; i < 100; i++){
-            addOneFood();
-        }
+    public CoordinateDouble getRandomCoordinate() {
+        int bound = 300;
+        int r = new Random().nextInt(2);
+        double x = r == 1 ? new Random().nextInt(bound) : -1*new Random().nextInt(bound);
+        r = new Random().nextInt(2);
+        double y = r == 1 ? new Random().nextInt(bound) : -1*new Random().nextInt(bound);
+        return new CoordinateDouble(x,y);
     }
 
     @Override
@@ -41,25 +36,16 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
             double distance = c.distanceTo(snake.getHead().getCenter());
             if(distance<=snake.getRadius()+nourritures.get(c).getRange()){
                 int value = nourritures.get(c).getValue();
-                if(nourritures.get(c).getRespawn()){
-                    nourritures.remove(c);
+                if(!nourritures.get(c).getRespawn()){
+                    removeFood(c);
                     return value;
                 }
-                nourritures.remove(c);
+                removeFood(c);
                 addOneFood();
                 return value;
             }
         }
         return -1;
     }
-
-    @Override
-    public CoordinateDouble getRandomCoordinate() {
-        double x = new Random().nextInt(60)-10;
-        double y = new Random().nextInt(60)-10;
-        return new CoordinateDouble(x,y);
-    }
-
-    
     
 }

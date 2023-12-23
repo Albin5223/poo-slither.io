@@ -3,13 +3,16 @@ package model.plateau;
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
 import exceptions.ExceptionCollision;
+import exceptions.ExceptionCollisionWithWall;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static final int WIDTH_OF_SNAKE = 20;
-    private static final Integer GAP_BETWEEN_TAIL = 2;
+    private static final Integer GAP_BETWEEN_TAIL = 1;
     private static final int SIZE_OF_SNAKE_BIRTH = 10;
     private static final int MAX_FOOD_CHARGING = 5;
+    /** Do we want to add food behind a dead snake ? */
+    private static final boolean DEATH_FOOD = false;
 
     public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
@@ -22,7 +25,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         return head.getOrientation();
     }
 
-    private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
+    private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) throws ExceptionCollision {
         super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
@@ -34,7 +37,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             SnakeInteger snake = new SnakeInteger(location, plateau, dir);
             return snake;
         }
-        catch(Exception e){
+        catch(ExceptionCollision e){
             return creatSnakeInteger(plateau);
         }
         
@@ -59,6 +62,9 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
     @Override
     public void move() throws ExceptionCollision {
+
+        this.plateau.removeSnake(this); // We remove the snake from the board
+
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Direction newDirection = turn(currentTurning, head.getOrientation());
         SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
@@ -67,13 +73,12 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         this.tail.add(0, head); // We add the old head to the tail
         this.head = newHead;    // We update the head
 
-        if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
-            throw new ExceptionCollision("Snake is colliding with another snake");
-        }
-
-        if(((PlateauInteger)plateau).isCollidingWithWall(this) || isCollidingWithMe()){ // We check if the snake is colliding with a wall
-            System.out.println("Snake is colliding with a wall");
-            throw new ExceptionCollision("Snake is colliding with a wall");
+        // We check if the snake is colliding with a snake, wall or itself
+        if(plateau.isCollidingWithAll(this) || ((PlateauInteger)plateau).isCollidingWithWall(this) || isCollidingWithMe()){
+            if(DEATH_FOOD){
+                plateau.addDeathFood(this);
+            }
+            throw new ExceptionCollisionWithWall("Snake is colliding");
         }
 
         int foodValue = plateau.isCollidingWithFood(this);
@@ -81,7 +86,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             chargeFood(foodValue);
         }
         
-        plateau.update(this);   // We update the position of the snake on the board
+        plateau.addSnake(this);   // We update the position of the snake on the board
 
         currentTurning = Turning.FORWARD;
     }
