@@ -18,7 +18,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     private final Type GAP_BETWEEN_TAIL;
 
     /** The amount of food that the snake needs to eat before growing */
-    private final int maxFoodCharging;
+    private final int MAX_FOOD_CHARGING;
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
@@ -83,7 +83,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
 
     protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
-        this.maxFoodCharging = maxFoodCharging;
+        this.MAX_FOOD_CHARGING = maxFoodCharging;
         this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
         this.tail = new ArrayList<SnakePart>();
 
@@ -187,8 +187,8 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
 
     protected void chargeFood(int value){
         foodCharging += value;
-        int nbGrowth = foodCharging / maxFoodCharging;
-        foodCharging = foodCharging % maxFoodCharging;
+        int nbGrowth = foodCharging / MAX_FOOD_CHARGING;
+        foodCharging = foodCharging % MAX_FOOD_CHARGING;
         grow(nbGrowth);
     }
 

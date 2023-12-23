@@ -1,11 +1,11 @@
 package model.plateau;
 
-import java.util.Random;
-
 import exceptions.ExceptionCollision;
+import exceptions.ExceptionCollisionWithWall;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
 import model.coordinate.CoordinateDouble;
+import model.plateau.SnakeInteger.SnakePartInteger;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 
@@ -20,7 +20,8 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     /** Do we want to add food behind a dead snake ? */
     private static final boolean DEATH_FOOD = true;
 
-    //private int size = 2;
+    /** Are we reappearing in the opposite side of the board when traversing the wall ? */
+    private static final boolean TRAVERSABLE_WALL = true;
 
     public final class SnakePartDouble extends Snake<Double,Angle>.SnakePart {
 
@@ -31,12 +32,12 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         }
     }
 
-    private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) throws ExceptionCollision {
+    private SnakeDouble(CoordinateDouble location, PlateauDouble plateau, Angle startingDirection) throws ExceptionCollision {
         super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
-    public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
-        Coordinate<Double,Angle> location = plateau.getRandomCoordinate();
+    public static SnakeDouble createSnakeDouble(PlateauDouble plateau) {
+        CoordinateDouble location = (CoordinateDouble) plateau.border.getRandomCoordinate();
         Angle angle = Angle.getRandom();
         
         try{
@@ -49,16 +50,13 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         
     }
 
-    protected void resetSnake(Coordinate<Double, Angle> newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision {
+    protected void resetSnake(CoordinateDouble newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision {
         super.resetSnake(newLocation, startingDirection, SnakePartDouble.HITBOX_RADIUS_BIRTH, nbTail);
     }
 
     public static void resetSnake(SnakeDouble snake){
         try {
-            Random random = new Random();
-            double x = random.nextDouble(60);
-            double y = random.nextDouble(60);
-            snake.resetSnake(new CoordinateDouble(x, y), Angle.getRandom(), SIZE_OF_SNAKE_BIRTH);
+            snake.resetSnake((CoordinateDouble)snake.plateau.border.getRandomCoordinate(), Angle.getRandom(), SIZE_OF_SNAKE_BIRTH);
         } catch (ExceptionCollision e) {
             resetSnake(snake);
         }
@@ -77,6 +75,19 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Angle newDirection = turn(currentTurning, head.getOrientation());
         SnakePartDouble newHead = new SnakePartDouble(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
+
+        // We check if the snake is traversing the wall
+        if(TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
+            System.out.println("Snake is traversing the wall");
+            newHead = new SnakePartDouble(plateau.border.getOpposite(newHead.getCenter()), newDirection);
+        }
+        // We check if the snake is colliding with the wall
+        else if(!plateau.border.isInside(newHead.getCenter())){
+            if(DEATH_FOOD){
+                plateau.addDeathFood(this);
+            }
+            throw new ExceptionCollisionWithWall("Snake is colliding with the wall");
+        }
 
         this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
         this.tail.add(0, head); // We add the old head to the tail

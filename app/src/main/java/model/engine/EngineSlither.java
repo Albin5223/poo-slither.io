@@ -13,7 +13,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import model.Commestible;
 import model.SnakeData;
-import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
 import model.plateau.SnakeDouble;
 import model.player.HumanSlitherPlayer;
@@ -21,13 +20,13 @@ import model.player.HumanSlitherPlayer;
 
 public class EngineSlither implements Engine<Double,Angle>{
     
-    private Plateau<Double,Angle> plateau;
+    private PlateauDouble plateau;
     ArrayList<SnakeDouble> snakes;
     ArrayList<Color> colors; 
     ArrayList<Observer> observers;
     ArrayList<HumanSlitherPlayer> players;
 
-    private EngineSlither(ArrayList<SnakeDouble> snakes, Plateau<Double,Angle> plateau){
+    private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakes = snakes;
         this.plateau = plateau;
         this.observers = new ArrayList<Observer>();

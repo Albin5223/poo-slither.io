@@ -6,6 +6,7 @@ import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
 import interfaces.Coordinate;
+import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.Commestible;
 
@@ -14,6 +15,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau;
     protected HashMap<Coordinate<Type,O>, Commestible> nourritures;
 
+    protected GameBorder<Type,O> border;
 
     private final int NB_FOOD;
 
@@ -101,7 +103,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
 
     public void addOneFood(){
         try {
-            addFood(getRandomCoordinate(),Commestible.getRandom());
+            addFood(border.getRandomCoordinate(),Commestible.getRandom());
         } catch (ExceptionCollision e) {
             //Si la nourriture est présente alors on ne fait rien
         }
@@ -112,8 +114,6 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
             addOneFood();
         }
     }
-
-    public abstract int isCollidingWithFood(Snake<Type, O> snake);
 
     /**
      * Check if the snake is colliding with another snake already on the board
@@ -130,5 +130,5 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         return false;
     }
 
-    public abstract Coordinate<Type,O> getRandomCoordinate();
+    public abstract int isCollidingWithFood(Snake<Type, O> snake);
 }

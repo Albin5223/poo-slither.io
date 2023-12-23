@@ -2,7 +2,9 @@ package model.plateau;
 
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
+import model.coordinate.CoordinateInteger;
 import exceptions.ExceptionCollision;
+import exceptions.ExceptionCollisionWithSnake;
 import exceptions.ExceptionCollisionWithWall;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
@@ -11,8 +13,12 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     private static final Integer GAP_BETWEEN_TAIL = 1;
     private static final int SIZE_OF_SNAKE_BIRTH = 10;
     private static final int MAX_FOOD_CHARGING = 5;
+
     /** Do we want to add food behind a dead snake ? */
     private static final boolean DEATH_FOOD = false;
+
+    /** Are we reappearing in the opposite side of the board when traversing the wall ? */
+    private static final boolean TRAVERSABLE_WALL = true;
 
     public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
@@ -25,12 +31,12 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         return head.getOrientation();
     }
 
-    private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) throws ExceptionCollision {
+    private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
         super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
-    public static SnakeInteger creatSnakeInteger(Plateau<Integer,Direction> plateau) {
-        Coordinate<Integer,Direction> location = plateau.getRandomCoordinate();
+    public static SnakeInteger creatSnakeInteger(PlateauInteger plateau) {
+        CoordinateInteger location = (CoordinateInteger) plateau.border.getRandomCoordinate();
         Direction dir = Direction.getRandom();
         
         try{
@@ -43,13 +49,13 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         
     }
 
-    protected void resetSnake(Coordinate<Integer,Direction> newLocation, Direction startingDirection, int nbTail) throws ExceptionCollision {
+    protected void resetSnake(CoordinateInteger newLocation, Direction startingDirection, int nbTail) throws ExceptionCollision {
         super.resetSnake(newLocation, startingDirection, 0, nbTail);
     }
 
     public static void resetSnake(SnakeInteger snake){
         try {
-            snake.resetSnake(snake.plateau.getRandomCoordinate(), Direction.getRandom(), SIZE_OF_SNAKE_BIRTH);
+            snake.resetSnake((CoordinateInteger)snake.plateau.border.getRandomCoordinate(), Direction.getRandom(), SIZE_OF_SNAKE_BIRTH);
         } catch (ExceptionCollision e) {
             resetSnake(snake);
         }
@@ -69,16 +75,29 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
         Direction newDirection = turn(currentTurning, head.getOrientation());
         SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
 
+        // We check if the snake is traversing the wall
+        if(TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
+            System.out.println("Snake is traversing the wall");
+            newHead = new SnakePartInteger(plateau.border.getOpposite(newHead.getCenter()), newDirection);
+        }
+        // We check if the snake is colliding with the wall
+        else if(!plateau.border.isInside(newHead.getCenter())){
+            if(DEATH_FOOD){
+                plateau.addDeathFood(this);
+            }
+            throw new ExceptionCollisionWithWall("Snake is colliding with the wall");
+        }
+
         this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
         this.tail.add(0, head); // We add the old head to the tail
         this.head = newHead;    // We update the head
 
         // We check if the snake is colliding with a snake, wall or itself
-        if(plateau.isCollidingWithAll(this) || ((PlateauInteger)plateau).isCollidingWithWall(this) || isCollidingWithMe()){
+        if(plateau.isCollidingWithAll(this) || isCollidingWithMe()){
             if(DEATH_FOOD){
                 plateau.addDeathFood(this);
             }
-            throw new ExceptionCollisionWithWall("Snake is colliding");
+            throw new ExceptionCollisionWithSnake("Snake is colliding with another snake or itself");
         }
 
         int foodValue = plateau.isCollidingWithFood(this);

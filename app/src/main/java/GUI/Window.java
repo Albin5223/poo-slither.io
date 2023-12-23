@@ -57,10 +57,10 @@ public class Window {
 
             KeyboardControler<Double,Angle> controler2 = (ev,snake) ->{
                 switch(ev.getCode()){
-                        case A:
+                        case Q:
                             snake.setTurning(Turning.GO_LEFT);
                             break;
-                        case E:
+                        case D:
                             snake.setTurning(Turning.GO_RIGHT);
                             break;
                         default:break;

@@ -14,7 +14,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import model.Commestible;
 import model.SnakeData;
-import model.plateau.Plateau;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
 import model.player.HumanSnakePlayer;
@@ -26,14 +25,14 @@ public class EngineSnake implements Engine<Integer,Direction> {
      * 
      * FAIRE EN SORTE QUE IL Y A AU MAX 60% de nourriture
      */
-    private Plateau<Integer,Direction> plateau;
+    private PlateauInteger plateau;
     ArrayList<SnakeInteger> snakes;
     ArrayList<HumanSnakePlayer> players;
     
     ArrayList<Observer> observers;
     ArrayList<Color> colors;
 
-    private EngineSnake(ArrayList<SnakeInteger> snakes, Plateau<Integer,Direction> plateau){
+    private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
         this.snakes = snakes;
         this.players = new ArrayList<HumanSnakePlayer>();
         this.plateau = plateau;
