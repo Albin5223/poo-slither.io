@@ -7,8 +7,9 @@ import exceptions.ExceptionCollision;
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static final int WIDTH_OF_SNAKE = 20;
-    private static final Integer GAP_BETWEEN_TAIL = 1;
+    private static final Integer GAP_BETWEEN_TAIL = 2;
     private static final int SIZE_OF_SNAKE_BIRTH = 10;
+    private static final int MAX_FOOD_CHARGING = 5;
 
     public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
@@ -22,7 +23,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(Coordinate<Integer,Direction> location, Plateau<Integer,Direction> plateau, Direction startingDirection) {
-        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH);
+        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
     public static SnakeInteger creatSnakeInteger(Plateau<Integer,Direction> plateau) {
@@ -75,8 +76,9 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             throw new ExceptionCollision("Snake is colliding with a wall");
         }
 
-        if (plateau.isCollidingWithFood(this) != -1) { // We check if the snake is colliding with a food
-            grow();
+        int foodValue = plateau.isCollidingWithFood(this);
+        if (foodValue != -1) { // We check if the snake is colliding with a food
+            chargeFood(foodValue);
         }
         
         plateau.update(this);   // We update the position of the snake on the board

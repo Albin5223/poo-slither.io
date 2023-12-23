@@ -15,6 +15,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     private static final Angle TURNING_FORCE = new Angle(5);
     private static final double GAP_BETWEEN_TAIL = 1;
     private static final int SIZE_OF_SNAKE_BIRTH = 50;
+    private static final int MAX_FOOD_CHARGING = 10;
 
     //private int size = 2;
 
@@ -28,7 +29,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     private SnakeDouble(Coordinate<Double,Angle> location, Plateau<Double,Angle> plateau, Angle startingDirection) {
-        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SIZE_OF_SNAKE_BIRTH);
+        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
     }
 
     public static SnakeDouble createSnakeDouble(Plateau<Double,Angle> plateau) {
@@ -80,7 +81,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
         }
         int value = plateau.isCollidingWithFood(this);
         if(value != -1){ // We check if the snake is colliding with a food
-            grow(value);
+            chargeFood(value);
         }
         
         plateau.update(this);   // We update the position of the snake on the board

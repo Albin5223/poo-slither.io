@@ -15,6 +15,12 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
 
     private final Type GAP_BETWEEN_TAIL;
 
+    /** The amount of food that the snake needs to eat before growing */
+    private final int maxFoodCharging;
+    
+    /** The amount of food that the snake has eaten */
+    private int foodCharging = 0;
+
     public sealed class SnakePart implements Collisable<SnakePart>, Cloneable permits SnakeInteger.SnakePartInteger, SnakeDouble.SnakePartDouble{
 
         /** The coordinate center of the snake part */
@@ -73,8 +79,9 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail){
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging){
         this.GAP_BETWEEN_TAIL = gap_between_tail;
+        this.maxFoodCharging = maxFoodCharging;
         this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
         this.tail = new ArrayList<SnakePart>();
 
@@ -173,14 +180,21 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         return false;
     }
 
-    public void grow(){
+    protected void chargeFood(int value){
+        foodCharging += value;
+        int nbGrowth = foodCharging / maxFoodCharging;
+        foodCharging = foodCharging % maxFoodCharging;
+        grow(nbGrowth);
+    }
+
+    protected void grow(){
         SnakePart lastTail = tail.get(tail.size() - 1);
         O direction = lastTail.getOrientation();
         SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, lastTail.getHitboxRadius());
         tail.add(newTail);
     }
 
-    public void grow(int nb) {
+    protected void grow(int nb) {
         for (int i = 0; i < nb; i++) {
             grow();
         }
