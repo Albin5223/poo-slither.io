@@ -5,14 +5,13 @@ import exceptions.ExceptionCollisionWithWall;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
 import model.coordinate.CoordinateDouble;
-import model.plateau.SnakeInteger.SnakePartInteger;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 
     /*
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
-    private static final Angle TURNING_FORCE = new Angle(5);
+    private static final Angle TURNING_FORCE = new Angle(2);
     private static final double GAP_BETWEEN_TAIL = 1;
     private static final int SIZE_OF_SNAKE_BIRTH = 50;
     private static final int MAX_FOOD_CHARGING = 10;

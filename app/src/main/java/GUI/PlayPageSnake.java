@@ -6,7 +6,7 @@ import interfaces.Coordinate;
 import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
-import interfaces.Orientation;
+import interfaces.Orientation.Direction;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 import model.plateau.SnakeInteger;
 import javafx.scene.paint.Color;
 
-public class PlayPageSnake extends Pane implements Observer{
+public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
     
     Window window;
     Court court;
@@ -62,10 +62,10 @@ public class PlayPageSnake extends Pane implements Observer{
 
 
     @Override
-    public void update(Data<? extends Number, ? extends Orientation<?>> data) {
+    public void update(Data<Integer,Direction> data) {
         this.getChildren().clear();
 
-        for (Coordinate<? extends Number, ? extends Orientation<?>> coord : data.getAllFood().keySet()) {
+        for (Coordinate<Integer,Direction> coord : data.getAllFood().keySet()) {
             int x = D_X +SnakeInteger.WIDTH_OF_SNAKE*coord.getX().intValue();
             int y = D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().intValue();
             int radius = SnakeInteger.WIDTH_OF_SNAKE/2;
@@ -73,7 +73,7 @@ public class PlayPageSnake extends Pane implements Observer{
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
-        for(SnakeData<? extends Number, ? extends Orientation<?>> snakeData : data.getAllSnake()){
+        for(SnakeData<Integer,Direction> snakeData : data.getAllSnake()){
             int x_head = D_X +SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getX().intValue();
             int y_head = D_Y + SnakeInteger.WIDTH_OF_SNAKE*snakeData.getHead().getY().intValue();
             int witdh = SnakeInteger.WIDTH_OF_SNAKE;
@@ -82,7 +82,7 @@ public class PlayPageSnake extends Pane implements Observer{
             head.setFill(Color.BLACK);
             this.getChildren().add(head);
 
-            for(Coordinate<? extends Number, ? extends Orientation<?>> coord : snakeData.getTail()){
+            for(Coordinate<Integer,Direction> coord : snakeData.getTail()){
                 int x = D_X +SnakeInteger.WIDTH_OF_SNAKE*coord.getX().intValue();
                 int y = D_Y + SnakeInteger.WIDTH_OF_SNAKE*coord.getY().intValue();
                 Rectangle black_back = new Rectangle(x,y,witdh,witdh);

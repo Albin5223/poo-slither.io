@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import model.Commestible;
 import model.SnakeData;
+import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
 import model.player.HumanSnakePlayer;
@@ -29,7 +30,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
     ArrayList<SnakeInteger> snakes;
     ArrayList<HumanSnakePlayer> players;
     
-    ArrayList<Observer> observers;
+    ArrayList<Observer<Integer,Direction>> observers;
     ArrayList<Color> colors;
 
     private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
@@ -37,7 +38,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
         this.players = new ArrayList<HumanSnakePlayer>();
         this.plateau = plateau;
         this.colors = new ArrayList<Color>();
-        this.observers = new ArrayList<Observer>();
+        this.observers = new ArrayList<Observer<Integer,Direction>>();
     }
 
     public static EngineSnake createSnake(int width, int height){
@@ -47,18 +48,18 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public void addObserver(Observer o) {
+    public void addObserver(Observer<Integer,Direction> o) {
         observers.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Observer<Integer,Direction> o) {
         observers.remove(o);
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
+        for (Observer<Integer,Direction> observer : observers) {
             observer.update(this);
         }
     }
@@ -91,6 +92,11 @@ public class EngineSnake implements Engine<Integer,Direction> {
             copie.put(coord, plateau.getNourritures().get(coord));
         }
         return copie;
+    }
+
+    @Override
+    public BorderInteger getGameBorder() {
+        return (BorderInteger) plateau.getBorder();
     }
     
     public ArrayList<HumanSnakePlayer> getPlayers() {

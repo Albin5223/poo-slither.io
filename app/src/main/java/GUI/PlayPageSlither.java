@@ -5,16 +5,17 @@ import interfaces.Coordinate;
 import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
-import interfaces.Orientation;
+import interfaces.Orientation.Angle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Commestible;
-import model.SnakeData; 
+import model.SnakeData;
+import model.plateau.PlateauDouble.BorderDouble; 
 
-public class PlayPageSlither extends Pane implements Observer{
+public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     
     Window window;
     Court court;
@@ -53,21 +54,21 @@ public class PlayPageSlither extends Pane implements Observer{
 
 
     @Override
-    public void update(Data<? extends Number,? extends Orientation<?>> data) {
+    public void update(Data<Double,Angle> data) {
         this.getChildren().clear();
 
-        for (Coordinate<? extends Number, ? extends Orientation<?>> coord : data.getAllFood().keySet()) {
+        for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
             Commestible commestible = data.getAllFood().get(coord);
             Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRange());
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
 
-        for(SnakeData<? extends Number, ? extends Orientation<?>> snakeData : data.getAllSnake()){
+        for(SnakeData<Double,Angle> snakeData : data.getAllSnake()){
             double x_head = D_X + snakeData.getHead().getX().intValue();
             double y_head = D_Y + snakeData.getHead().getY().intValue();
 
-            for(Coordinate<? extends Number, ? extends Orientation<?>> coord : snakeData.getTail()){
+            for(Coordinate<Double,Angle> coord : snakeData.getTail()){
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
 
@@ -81,6 +82,9 @@ public class PlayPageSlither extends Pane implements Observer{
             this.getChildren().add(head);
         }
 
-
-        
+        BorderDouble border = (BorderDouble) data.getGameBorder();
+        Circle c = new Circle(D_X + border.getCenter().getX().doubleValue(), D_Y + border.getCenter().getY().doubleValue(), border.getRadius());
+        c.setFill(Color.TRANSPARENT);
+        c.setStroke(Color.BLACK);
+        this.getChildren().add(c);
     }}

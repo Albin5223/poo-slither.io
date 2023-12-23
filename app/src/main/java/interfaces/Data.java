@@ -10,4 +10,5 @@ public interface Data<Type extends Number, O extends Orientation<O>> {
     public void move(); 
     public double getRadius();
     public HashMap<Coordinate<Type, O>, Commestible> getAllFood();
+    public GameBorder<Type,O> getGameBorder();
 }

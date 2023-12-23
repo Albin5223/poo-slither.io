@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface Observer {
-    public void update(Data<? extends Number,? extends Orientation<?>> data);
+public interface Observer<Type extends Number, O extends Orientation<O>> {
+    public void update(Data<Type,O> data);
 }

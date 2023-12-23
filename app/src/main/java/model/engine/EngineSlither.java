@@ -15,6 +15,7 @@ import model.Commestible;
 import model.SnakeData;
 import model.plateau.PlateauDouble;
 import model.plateau.SnakeDouble;
+import model.plateau.PlateauDouble.BorderDouble;
 import model.player.HumanSlitherPlayer;
 
 
@@ -23,13 +24,13 @@ public class EngineSlither implements Engine<Double,Angle>{
     private PlateauDouble plateau;
     ArrayList<SnakeDouble> snakes;
     ArrayList<Color> colors; 
-    ArrayList<Observer> observers;
+    ArrayList<Observer<Double,Angle>> observers;
     ArrayList<HumanSlitherPlayer> players;
 
     private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakes = snakes;
         this.plateau = plateau;
-        this.observers = new ArrayList<Observer>();
+        this.observers = new ArrayList<Observer<Double,Angle>>();
         this.colors = new ArrayList<Color>();
         this.players = new ArrayList<HumanSlitherPlayer>();
     }
@@ -51,20 +52,20 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public void addObserver(Observer o) {
+    public void addObserver(Observer<Double,Angle> o) {
         observers.add(o);
     }
 
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Observer<Double,Angle> o) {
         observers.remove(o);
     }
 
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
+        for (Observer<Double,Angle> observer : observers) {
             observer.update(this);
         }
     }
@@ -95,6 +96,11 @@ public class EngineSlither implements Engine<Double,Angle>{
             copie.put(coord, plateau.getNourritures().get(coord));
         }
         return copie;
+    }
+
+    @Override
+    public BorderDouble getGameBorder() {
+        return (BorderDouble) plateau.getBorder();
     }
 
    

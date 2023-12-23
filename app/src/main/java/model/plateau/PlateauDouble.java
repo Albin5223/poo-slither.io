@@ -11,6 +11,9 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public class BorderDouble implements GameBorder<Double,Angle> {
 
+        /* The ratio of the random coordinate to be inside the map */
+        private static final double RANDOM_RATIO = 0.9;
+
         private CoordinateDouble map_center;
         private double map_radius;
 
@@ -38,12 +41,19 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
         @Override
         public Coordinate<Double, Angle> getRandomCoordinate() {
-            int bound = 300;
-            int r = new Random().nextInt(2);
-            double x = r == 1 ? new Random().nextInt(bound) : -1*new Random().nextInt(bound);
-            r = new Random().nextInt(2);
-            double y = r == 1 ? new Random().nextInt(bound) : -1*new Random().nextInt(bound);
-            return new CoordinateDouble(x,y);
+            double angle = new Random().nextDouble() * 2 * Math.PI;
+            double radius = map_radius * Math.sqrt(new Random().nextDouble()) * RANDOM_RATIO;
+            double x = map_center.getX() + radius * Math.cos(angle);
+            double y = map_center.getY() + radius * Math.sin(angle);
+            return new CoordinateDouble(x, y);
+        }
+
+        public CoordinateDouble getCenter() {
+            return map_center;
+        }
+
+        public double getRadius() {
+            return map_radius;
         }
     }
 

@@ -37,6 +37,10 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         return nourritures;
     }
 
+    public GameBorder<Type,O> getBorder() {
+        return border;
+    }
+
     protected boolean isSnakeOnBoard(Snake<Type,O> snake){
         for (Snake<Type,O> s : plateau.values()) {
             if(snake == s){ // We check if the snake is on the board
