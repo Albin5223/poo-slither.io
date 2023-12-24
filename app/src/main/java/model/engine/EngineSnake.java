@@ -8,6 +8,7 @@ import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Engine;
+import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
@@ -120,14 +121,24 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public void makePressed(KeyEvent ev) {
-        for(HumanSnakePlayer player : players){
-            player.execute(ev);
+    public void makePressed(KeyEvent ev, HumanPlayer player) {
+        for(HumanSnakePlayer p : players){
+            if(p == player){
+                p.keyPressed(ev);
+                return;
+            }
         }
     }
 
     @Override
-    public void makeReleased(KeyEvent ev) {
+    public void makeReleased(KeyEvent ev, HumanPlayer player) {
+        for(HumanSnakePlayer p : players){
+            if(p == player){
+                p.keyReleased(ev);
+                return;
+            }
+        }
+        
     }
 
     @Override

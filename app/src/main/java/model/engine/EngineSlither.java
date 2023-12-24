@@ -2,11 +2,13 @@ package model.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Engine;
+import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.scene.input.KeyEvent;
@@ -45,7 +47,11 @@ public class EngineSlither implements Engine<Double,Angle>{
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
         HumanSlitherPlayer newPlayer = new HumanSlitherPlayer(newSnake, snakeControler);
         players.add(newPlayer);
-        Color newColor = Color.DARKBLUE;
+        Random rand = new Random();
+        int red = rand.nextInt(255);
+        int green = rand.nextInt(255);
+        int blue = rand.nextInt(255);
+        Color newColor = Color.rgb(red, green, blue);
         colors.add(newColor);
         snakes.add(newSnake);
         notifyObservers();
@@ -103,6 +109,10 @@ public class EngineSlither implements Engine<Double,Angle>{
         return (BorderDouble) plateau.getBorder();
     }
 
+    public ArrayList<HumanSlitherPlayer> getPlayers() {
+        return players;
+    }
+
    
     @Override
     public ArrayList<SnakeData<Double, Angle>> getAllSnake() {
@@ -114,16 +124,22 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public void makePressed(KeyEvent ev) {
-        for(HumanSlitherPlayer player : players){
-            player.execute(ev);
+    public void makePressed(KeyEvent ev, HumanPlayer player) {
+        for(HumanSlitherPlayer p : players){
+            if(p == player){
+                p.keyPressed(ev);
+                return;
+            }
         }
     }
 
     @Override
-    public void makeReleased(KeyEvent ev) {
-        for(HumanSlitherPlayer player : players){
-            player.released(ev);
+    public void makeReleased(KeyEvent ev, HumanPlayer player) {
+        for(HumanSlitherPlayer p : players){
+            if(p == player){
+                p.keyReleased(ev);
+                return;
+            }
         }
     }
 

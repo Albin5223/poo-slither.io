@@ -7,5 +7,6 @@ import model.plateau.Snake;
 
 //Interface fonctionnelle
 public interface KeyboardControler<Type extends Number,O extends Orientation<O>>{
-    public void handle(KeyEvent ev,Snake<Type,O> snake);
+    public void keyPressed(KeyEvent ev,Snake<Type,O> snake);
+    public void keyReleased(KeyEvent ev,Snake<Type,O> snake);
 }

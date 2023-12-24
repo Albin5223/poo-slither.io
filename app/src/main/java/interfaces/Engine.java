@@ -6,12 +6,11 @@ public interface Engine<Type extends Number, O extends Orientation<O>> extends O
 
     public default void update() {
         move();
-    } 
+    }
 
+    public void makePressed(KeyEvent ev, HumanPlayer player);
 
-    public void makePressed(KeyEvent ev);
-
-    public void makeReleased(KeyEvent ev);
+    public void makeReleased(KeyEvent ev, HumanPlayer player);
 
 
 }

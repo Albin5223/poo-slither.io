@@ -10,9 +10,12 @@ import exceptions.ExceptionCollisionWithWall;
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static final int WIDTH_OF_SNAKE = 20;
-    private static final Integer GAP_BETWEEN_TAIL = 1;
-    private static final int SIZE_OF_SNAKE_BIRTH = 10;
-    private static final int MAX_FOOD_CHARGING = 5;
+    private static final Integer SNAKE_GAP_BETWEEN_TAIL = 1;
+    private static final int SNAKE_BIRTH_LENGTH = 10;
+    private static final int SNAKE_MAX_FOOD_CHARGING = 5;
+
+    private static final int SNAKE_DEFAULT_SPEED = 1;
+    private static final int SNAKE_BOOST_SPEED = 2;
 
     /** Do we want to add food behind a dead snake ? */
     private static final boolean DEATH_FOOD = false;
@@ -32,7 +35,8 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,GAP_BETWEEN_TAIL, 0, SIZE_OF_SNAKE_BIRTH, MAX_FOOD_CHARGING);
+        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, 0, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED);
+        this.currentSpeed = SNAKE_DEFAULT_SPEED;
     }
 
     public static SnakeInteger creatSnakeInteger(PlateauInteger plateau) {
@@ -55,7 +59,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static void resetSnake(SnakeInteger snake){
         try {
-            snake.resetSnake((CoordinateInteger)snake.plateau.border.getRandomCoordinate(), Direction.getRandom(), SIZE_OF_SNAKE_BIRTH);
+            snake.resetSnake((CoordinateInteger)snake.plateau.border.getRandomCoordinate(), Direction.getRandom(), SNAKE_BIRTH_LENGTH);
         } catch (ExceptionCollision e) {
             resetSnake(snake);
         }
@@ -73,7 +77,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Direction newDirection = turn(currentTurning, head.getOrientation());
-        SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
+        SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,SNAKE_GAP_BETWEEN_TAIL), newDirection);
 
         // We check if the snake is traversing the wall
         if(TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){

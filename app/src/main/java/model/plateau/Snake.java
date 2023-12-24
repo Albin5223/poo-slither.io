@@ -15,6 +15,9 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
 
+    /** The current speed of the snake */
+    protected int currentSpeed = 0;
+
     private final Type GAP_BETWEEN_TAIL;
 
     /** The amount of food that the snake needs to eat before growing */
@@ -81,9 +84,10 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging) throws ExceptionCollision {
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.MAX_FOOD_CHARGING = maxFoodCharging;
+        this.currentSpeed = defaultSpeed;
         this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
         this.tail = new ArrayList<SnakePart>();
 
@@ -217,5 +221,13 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
 
     public void setTurning(Turning turning) {
         this.currentTurning = turning;
+    }
+
+    public void setSpeed(int speed) {
+        this.currentSpeed = speed;
+    }
+
+    public int getCurrentSpeed() {
+        return currentSpeed;
     }
 }

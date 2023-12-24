@@ -17,8 +17,15 @@ public class HumanSnakePlayer implements HumanPlayer{
         this.controler = controler;
     }
 
+
     @Override
-    public void execute(KeyEvent ev) {
-        controler.handle(ev, snake);
+    public void keyPressed(KeyEvent ev) {
+        controler.keyPressed(ev, snake);
+    }
+
+
+    @Override
+    public void keyReleased(KeyEvent ev) {
+        controler.keyReleased(ev, snake);
     }
 }

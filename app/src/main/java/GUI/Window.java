@@ -1,17 +1,20 @@
 package GUI;
 
+import controleur.ControlerSlither;
+import controleur.ControlerSnake;
 import controleur.KeyboardControler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
+import interfaces.HumanPlayer;
 import interfaces.Orientation.Angle;
 import interfaces.Orientation.Direction;
-import interfaces.Turnable.Turning;
 
 public class Window {
 
@@ -35,40 +38,24 @@ public class Window {
             
 
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
-            gameScene.setOnKeyPressed(ev ->{
-                engine.makePressed(ev);
-            });
 
-            gameScene.setOnKeyReleased(ev ->{
-                engine.makeReleased(ev);
-            });
-
-            KeyboardControler<Double,Angle> controler1 = (ev,snake) ->{
-                switch(ev.getCode()){
-                        case LEFT:
-                            snake.setTurning(Turning.GO_LEFT);
-                            break;
-                        case RIGHT:
-                            snake.setTurning(Turning.GO_RIGHT);
-                            break;
-                        default:break;
-                    }
-            };
-
-            KeyboardControler<Double,Angle> controler2 = (ev,snake) ->{
-                switch(ev.getCode()){
-                        case Q:
-                            snake.setTurning(Turning.GO_LEFT);
-                            break;
-                        case D:
-                            snake.setTurning(Turning.GO_RIGHT);
-                            break;
-                        default:break;
-                    }
-            };
+            KeyboardControler<Double,Angle> controler1 = new ControlerSlither(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.SPACE);
+            KeyboardControler<Double,Angle> controler2 = new ControlerSlither(KeyCode.Q, KeyCode.D, KeyCode.Z);
             
             engine.addPlayer(controler1);
             engine.addPlayer(controler2);
+
+            gameScene.setOnKeyPressed( ev -> {
+                for (HumanPlayer p : engine.getPlayers()) {
+                    p.keyPressed(ev);
+                }
+            });
+
+            gameScene.setOnKeyReleased( ev -> {
+                for (HumanPlayer p : engine.getPlayers()) {
+                    p.keyReleased(ev);
+                }
+            });
             
             playPage.setCourt(engine);
             engine.addObserver(playPage);
@@ -92,101 +79,24 @@ public class Window {
             
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
             gameScene.setOnKeyTyped(null);
-            gameScene.setOnKeyPressed(ev ->{
-                engine.makePressed(ev);
-            });
             
-            KeyboardControler<Integer,Direction> controler = (ev,snake)-> {
-                switch(ev.getCode()){
-                        case LEFT:
-                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
-                                if(snake.getDirection() == Direction.UP){
-                                    snake.setTurning(Turning.GO_LEFT);
-                                }
-                                else{
-                                    snake.setTurning(Turning.GO_RIGHT);
-                                }
-                            }
-                            break;
-                        case RIGHT:
-                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
-                                if(snake.getDirection() == Direction.UP){
-                                    snake.setTurning(Turning.GO_RIGHT);
-                                }
-                                else{
-                                    snake.setTurning(Turning.GO_LEFT);
-                                }
-                            }
-                            break;
-                        case UP : if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
-                                    if(snake.getDirection() == Direction.LEFT){
-                                        snake.setTurning(Turning.GO_RIGHT);
-                                    }
-                                    else{
-                                        snake.setTurning(Turning.GO_LEFT);
-                                    }
-                                }
-                                break;
-                        case DOWN:
-                                if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
-                                    if(snake.getDirection() == Direction.LEFT){
-                                        snake.setTurning(Turning.GO_LEFT);
-                                    }
-                                    else{
-                                        snake.setTurning(Turning.GO_RIGHT);
-                                    }
-                                }
-                                break;
-                        default:break;
-                    }
-            };
-            KeyboardControler<Integer,Direction> controler1 = (ev,snake)-> {
-                switch(ev.getCode()){
-                        case Q:
-                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
-                                if(snake.getDirection() == Direction.UP){
-                                    snake.setTurning(Turning.GO_LEFT);
-                                }
-                                else{
-                                    snake.setTurning(Turning.GO_RIGHT);
-                                }
-                            }
-                            break;
-                        case D:
-                            if(snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT){
-                                if(snake.getDirection() == Direction.UP){
-                                    snake.setTurning(Turning.GO_RIGHT);
-                                }
-                                else{
-                                    snake.setTurning(Turning.GO_LEFT);
-                                }
-                            }
-                            break;
-                        case Z : if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
-                                    if(snake.getDirection() == Direction.LEFT){
-                                        snake.setTurning(Turning.GO_RIGHT);
-                                    }
-                                    else{
-                                        snake.setTurning(Turning.GO_LEFT);
-                                    }
-                                }
-                                break;
-                        case S:
-                                if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN){
-                                    if(snake.getDirection() == Direction.LEFT){
-                                        snake.setTurning(Turning.GO_LEFT);
-                                    }
-                                    else{
-                                        snake.setTurning(Turning.GO_RIGHT);
-                                    }
-                                }
-                                break;
-                        default:break;
-                    }
-            };
+            KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, null);
+            KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, null);
             
-            engine.addPlayer(controler);
             engine.addPlayer(controler1);
+            engine.addPlayer(controler2);
+
+            gameScene.setOnKeyPressed( ev -> {
+                for (HumanPlayer p : engine.getPlayers()) {
+                    p.keyPressed(ev);
+                }
+            });
+
+            gameScene.setOnKeyReleased( ev -> {
+                for (HumanPlayer p : engine.getPlayers()) {
+                    p.keyReleased(ev);
+                }
+            });
             
 
             playPage.setCourt(engine);

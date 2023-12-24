@@ -3,7 +3,6 @@ package model.player;
 import controleur.KeyboardControler;
 import interfaces.HumanPlayer;
 import interfaces.Orientation.Angle;
-import interfaces.Turnable.Turning;
 import javafx.scene.input.KeyEvent;
 import model.plateau.Snake;
 
@@ -19,12 +18,14 @@ public class HumanSlitherPlayer implements HumanPlayer{
 
 
     @Override
-    public void execute(KeyEvent ev) {
-        controler.handle(ev, snake);
+    public void keyPressed(KeyEvent ev) {
+        controler.keyPressed(ev, snake);
     }
 
-    public void released(KeyEvent ev) {
-        snake.setTurning(Turning.FORWARD);
+
+    @Override
+    public void keyReleased(KeyEvent ev) {
+        controler.keyReleased(ev, snake);
     }
     
 }
