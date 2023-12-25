@@ -11,13 +11,14 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     /*
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
-    private static final Angle SLITHER_TURNING_FORCE = new Angle(2);
-    private static final double SLITHER_GAP_BETWEEN_TAIL = 1;
+    private static final Angle SLITHER_TURNING_FORCE = new Angle(4);
+    private static final double SLITHER_GAP_BETWEEN_TAIL = 4;
     private static final int SLITHER_BIRTH_LENGTH = 50;
     private static final int SLITHER_MAX_FOOD_CHARGING = 10;
+    private static final double SLITHER_BIRTH_HITBOX_RADIUS = 10;
 
-    private static final int SLITHER_DEFAULT_SPEED = 1;
-    private static final int SLITHER_BOOST_SPEED = 2;
+    private static final int SLITHER_DEFAULT_SPEED = 100;
+    private static final int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 2;
 
     /** Do we want to add food behind a dead snake ? */
     private static final boolean IS_DEATH_FOOD = true;
@@ -26,22 +27,20 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     private static final boolean IS_TRAVERSABLE_WALL = true;
 
     public final class SnakePartDouble extends Snake<Double,Angle>.SnakePart {
-
-        public static final double HITBOX_RADIUS_BIRTH = 10;
             
         private SnakePartDouble(Coordinate<Double,Angle> center, Angle direction) {
-            super(center, direction, HITBOX_RADIUS_BIRTH);
+            super(center, direction, SLITHER_BIRTH_HITBOX_RADIUS);
         }
     }
 
     private SnakeDouble(CoordinateDouble location, PlateauDouble plateau, Angle startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,SLITHER_GAP_BETWEEN_TAIL, SnakePartDouble.HITBOX_RADIUS_BIRTH, SLITHER_BIRTH_LENGTH, SLITHER_MAX_FOOD_CHARGING, SLITHER_DEFAULT_SPEED);
+        super(location,plateau,startingDirection,SLITHER_GAP_BETWEEN_TAIL, SLITHER_BIRTH_HITBOX_RADIUS, SLITHER_BIRTH_LENGTH, SLITHER_MAX_FOOD_CHARGING, SLITHER_DEFAULT_SPEED, SLITHER_BOOST_SPEED);
         this.currentSpeed = SLITHER_DEFAULT_SPEED;
     }
 
     public static SnakeDouble createSnakeDouble(PlateauDouble plateau) {
         CoordinateDouble location = (CoordinateDouble) plateau.border.getRandomCoordinate();
-        Angle angle = Angle.getRandom();
+        Angle angle = new Angle(0).getRandom();
         
         try{
             SnakeDouble snake = new SnakeDouble(location, plateau, angle);
@@ -51,18 +50,6 @@ public final class SnakeDouble extends Snake<Double,Angle> {
             return createSnakeDouble(plateau);
         }
         
-    }
-
-    protected void resetSnake(CoordinateDouble newLocation, Angle startingDirection, int nbTail) throws ExceptionCollision {
-        super.resetSnake(newLocation, startingDirection, SnakePartDouble.HITBOX_RADIUS_BIRTH, nbTail);
-    }
-
-    public static void resetSnake(SnakeDouble snake){
-        try {
-            snake.resetSnake((CoordinateDouble)snake.plateau.border.getRandomCoordinate(), Angle.getRandom(), SLITHER_BIRTH_LENGTH);
-        } catch (ExceptionCollision e) {
-            resetSnake(snake);
-        }
     }
 
     @Override

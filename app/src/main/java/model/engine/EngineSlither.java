@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import controleur.KeyboardControler;
-import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -24,13 +23,16 @@ import model.player.HumanSlitherPlayer;
 public class EngineSlither implements Engine<Double,Angle>{
     
     private PlateauDouble plateau;
-    ArrayList<SnakeDouble> snakes;
+    ArrayList<SnakeMover<Double,Angle>> snakeMovers;
     ArrayList<Color> colors; 
     ArrayList<Observer<Double,Angle>> observers;
     ArrayList<HumanSlitherPlayer> players;
 
     private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
-        this.snakes = snakes;
+        this.snakeMovers = new ArrayList<SnakeMover<Double,Angle>>();
+        for(SnakeDouble snake : snakes){
+            this.snakeMovers.add(new SnakeMover<Double,Angle>(snake,this));
+        }
         this.plateau = plateau;
         this.observers = new ArrayList<Observer<Double,Angle>>();
         this.colors = new ArrayList<Color>();
@@ -53,7 +55,7 @@ public class EngineSlither implements Engine<Double,Angle>{
         int blue = rand.nextInt(255);
         Color newColor = Color.rgb(red, green, blue);
         colors.add(newColor);
-        snakes.add(newSnake);
+        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this));
         notifyObservers();
     }
 
@@ -76,23 +78,9 @@ public class EngineSlither implements Engine<Double,Angle>{
         }
     }
 
-
-    @Override
-    public void move() {
-        for (SnakeDouble snake : snakes) {
-            try {
-                snake.move();
-            } catch (ExceptionCollision e ) {
-                SnakeDouble.resetSnake(snake);
-            }
-        }
-        notifyObservers();
-    }
-
-
     @Override
     public double getRadius() {
-        return snakes.get(0).getRadius();
+        return snakeMovers.get(0).getSnake().getRadius();
     }
 
     @Override
@@ -117,8 +105,8 @@ public class EngineSlither implements Engine<Double,Angle>{
     @Override
     public ArrayList<SnakeData<Double, Angle>> getAllSnake() {
         ArrayList<SnakeData<Double, Angle>> allSnake = new ArrayList<SnakeData<Double, Angle>>();
-        for(int i = 0; i < snakes.size(); i++){
-            allSnake.add(new SnakeData<Double, Angle>(snakes.get(i), colors.get(i)));
+        for(int i = 0; i < snakeMovers.size(); i++){
+            allSnake.add(new SnakeData<Double, Angle>(snakeMovers.get(i).getSnake(), colors.get(i)));
         }
         return allSnake;
     }
@@ -140,6 +128,20 @@ public class EngineSlither implements Engine<Double,Angle>{
                 p.keyReleased(ev);
                 return;
             }
+        }
+    }
+
+    @Override
+    public void run() {
+        for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
+            snakeMover.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
+            snakeMover.stop();
         }
     }
 

@@ -5,13 +5,14 @@ import interfaces.Turnable.Turning;
 public sealed interface Orientation<O extends Orientation<O>> {
 
     public O opposite();
+    public O getRandom();
     
     public final class Angle implements Orientation<Angle> {
 
         private double angle;
 
         public Angle(double angle) {
-            this.angle = angle;
+            this.angle = angle % 360;
         }
 
         public double getAngle() {
@@ -26,13 +27,14 @@ public sealed interface Orientation<O extends Orientation<O>> {
 
         public Angle changeAngleWithTurn(Turning turning, Angle step) {
             switch (turning) {
-                case GO_LEFT : return new Angle((this.angle - step.getAngle() + 360) % 360);
+                case GO_LEFT : return new Angle((this.angle - (step.getAngle()%360) + 360) % 360);
                 case GO_RIGHT : return new Angle((this.angle + step.getAngle()) % 360);
                 default :return this;
             }       
         }
 
-        public static Angle getRandom(){
+        @Override
+        public Angle getRandom(){
             return new Angle(Math.random() * 360);
         }
 
@@ -64,7 +66,8 @@ public sealed interface Orientation<O extends Orientation<O>> {
             }
         }  
         
-        public static Direction getRandom(){
+        @Override
+        public Direction getRandom(){
             int r = (int) (Math.random() * 4);
             switch (r) {
                 case 0: return Direction.UP;

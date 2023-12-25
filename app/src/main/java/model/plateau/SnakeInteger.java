@@ -14,8 +14,8 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     private static final int SNAKE_BIRTH_LENGTH = 10;
     private static final int SNAKE_MAX_FOOD_CHARGING = 5;
 
-    private static final int SNAKE_DEFAULT_SPEED = 1;
-    private static final int SNAKE_BOOST_SPEED = 2;
+    private static final int SNAKE_DEFAULT_SPEED = 10;
+    private static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
 
     /** Do we want to add food behind a dead snake ? */
     private static final boolean DEATH_FOOD = false;
@@ -35,34 +35,22 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, 0, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED);
+        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, 0, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED, SNAKE_BOOST_SPEED);
         this.currentSpeed = SNAKE_DEFAULT_SPEED;
     }
 
-    public static SnakeInteger creatSnakeInteger(PlateauInteger plateau) {
+    public static SnakeInteger createSnakeInteger(PlateauInteger plateau) {
         CoordinateInteger location = (CoordinateInteger) plateau.border.getRandomCoordinate();
-        Direction dir = Direction.getRandom();
+        Direction dir = Direction.UP.getRandom();
         
         try{
             SnakeInteger snake = new SnakeInteger(location, plateau, dir);
             return snake;
         }
         catch(ExceptionCollision e){
-            return creatSnakeInteger(plateau);
+            return createSnakeInteger(plateau);
         }
         
-    }
-
-    protected void resetSnake(CoordinateInteger newLocation, Direction startingDirection, int nbTail) throws ExceptionCollision {
-        super.resetSnake(newLocation, startingDirection, 0, nbTail);
-    }
-
-    public static void resetSnake(SnakeInteger snake){
-        try {
-            snake.resetSnake((CoordinateInteger)snake.plateau.border.getRandomCoordinate(), Direction.getRandom(), SNAKE_BIRTH_LENGTH);
-        } catch (ExceptionCollision e) {
-            resetSnake(snake);
-        }
     }
 
     @Override

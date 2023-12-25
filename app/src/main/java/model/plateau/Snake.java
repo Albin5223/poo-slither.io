@@ -2,7 +2,6 @@ package model.plateau;
 
 import java.util.ArrayList;
 import exceptions.ExceptionCollision;
-import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
 import interfaces.Collisable;
 import interfaces.Coordinate;
@@ -17,11 +16,15 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
 
     /** The current speed of the snake */
     protected int currentSpeed = 0;
+    protected boolean isBoosting = false;
 
     private final Type GAP_BETWEEN_TAIL;
-
+    private final double BIRTH_HITBOX_RADIUS;
+    private final int BIRTH_LENGTH;
     /** The amount of food that the snake needs to eat before growing */
     private final int MAX_FOOD_CHARGING;
+    private final int DEFAULT_SPEED;
+    private final int BOOST_SPEED;
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
@@ -84,15 +87,19 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed) throws ExceptionCollision {
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
+        this.BIRTH_HITBOX_RADIUS = hitboxRadius;
+        this.BIRTH_LENGTH = nbTail;
         this.MAX_FOOD_CHARGING = maxFoodCharging;
+        this.DEFAULT_SPEED = defaultSpeed;
+        this.BOOST_SPEED = boostSpeed;
         this.currentSpeed = defaultSpeed;
-        this.head = new SnakePart(location.clone(), startingDirection, hitboxRadius);
+        this.head = new SnakePart(location.clone(), startingDirection, BIRTH_HITBOX_RADIUS);
         this.tail = new ArrayList<SnakePart>();
 
         O direction = head.getOrientation();
-        for (int i = 0; i < nbTail; i++) {
+        for (int i = 0; i < BIRTH_LENGTH; i++) {
             SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
             tail.add(tail1);
         }
@@ -110,7 +117,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         return head.getOrientation();
     }
 
-    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollisionWithSnake, ExceptionCollisionWithFood {
+    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollisionWithSnake{
         
         this.plateau.removeSnake(this); // We remove the snake from the board
 
@@ -127,7 +134,17 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
         }
 
+        this.currentSpeed = DEFAULT_SPEED;
+
         this.plateau.addSnake(this);
+    }
+
+    public void reset(){
+        try {
+            resetSnake(plateau.border.getRandomCoordinate(), head.getOrientation().getRandom(), BIRTH_HITBOX_RADIUS, BIRTH_LENGTH);
+        } catch (ExceptionCollisionWithSnake e) {
+            reset();
+        }
     }
 
     /**
@@ -223,11 +240,25 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         this.currentTurning = turning;
     }
 
-    public void setSpeed(int speed) {
-        this.currentSpeed = speed;
+    public void setBoosting(boolean isBoosting) {
+        this.isBoosting = isBoosting;
+        if(isBoosting){
+            this.currentSpeed = BOOST_SPEED;
+        }
+        else{
+            this.currentSpeed = DEFAULT_SPEED;
+        }
+    }
+
+    public boolean isBoosting() {
+        return isBoosting;
     }
 
     public int getCurrentSpeed() {
         return currentSpeed;
+    }
+
+    public int getBoostSpeed() {
+        return BOOST_SPEED;
     }
 }

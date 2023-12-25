@@ -2,28 +2,25 @@ package GUI;
 
 
 import interfaces.Coordinate;
-import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
-import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Commestible;
 import model.SnakeData;
+import model.engine.EngineSlither;
 import model.plateau.PlateauDouble.BorderDouble; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     
     Window window;
-    Court court;
+    EngineSlither engine;
 
     private int D_X;
     private int D_Y;
-
-    AnimationTimer aTimer;
 
     public PlayPageSlither(Window window, int D_X, int D_Y) {
         this.window = window;
@@ -32,26 +29,9 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         
     }
 
-    public void setCourt(Court court){
-        this.court = court;
+    public void setEngine(EngineSlither court){
+        this.engine = court;
     }
-
-    
-    public void animate(){
-        aTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                court.update();
-            }
-    		
-    	};
-    	aTimer.start();
-    }
-
-    public void stopAnimate(){
-        aTimer.stop();
-    }
-
 
     @Override
     public void update(Data<Double,Angle> data) {

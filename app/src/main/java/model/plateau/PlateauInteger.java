@@ -87,7 +87,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         for(Coordinate<Integer, Direction> c : nourritures.keySet()){
             if(c.equals(snake.getHead().getCenter())){
                 int value = nourritures.get(c).getValue();
-                nourritures.remove(c);
+                if(!nourritures.get(c).getRespawn()){
+                    removeFood(c);
+                    return value;
+                }
+                removeFood(c);
                 addOneFood();
                 return value;
             }

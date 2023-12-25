@@ -1,13 +1,11 @@
 package GUI;
 
 import model.SnakeData;
-
+import model.engine.EngineSnake;
 import interfaces.Coordinate;
-import interfaces.Court;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
-import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -18,14 +16,10 @@ import javafx.scene.paint.Color;
 public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
     
     Window window;
-    Court court;
+    EngineSnake engine;
 
     private int D_X;
     private int D_Y;
-
-    AnimationTimer aTimer;
-    //private static final double UPDATE_INTERVAL = 0.05e9; // Interval en nanosecondes (0.05 seconde)
-    private static final double UPDATE_INTERVAL = 0.1e9;
 
     public PlayPageSnake(Window window, int D_X, int D_Y) {
         this.window = window;
@@ -34,32 +28,9 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         
     }
 
-    public void setCourt(Court court){
-        this.court = court;
+    public void setEngine(EngineSnake engine){
+        this.engine = engine;
     }
-
-    
-    public void animate(){
-        aTimer = new AnimationTimer() {
-
-            private long lastUpdate = 0;
-
-            @Override
-            public void handle(long now) {
-                if (now - lastUpdate >= UPDATE_INTERVAL) {
-                    court.update();
-                    lastUpdate = now;
-                }
-            }
-    		
-    	};
-    	aTimer.start();
-    }
-
-    public void stopAnimate(){
-        aTimer.stop();
-    }
-
 
     @Override
     public void update(Data<Integer,Direction> data) {

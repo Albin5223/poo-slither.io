@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import controleur.KeyboardControler;
-import exceptions.ExceptionCollision;
 import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -28,14 +27,17 @@ public class EngineSnake implements Engine<Integer,Direction> {
      * FAIRE EN SORTE QUE IL Y A AU MAX 60% de nourriture
      */
     private PlateauInteger plateau;
-    ArrayList<SnakeInteger> snakes;
+    ArrayList<SnakeMover<Integer,Direction>> snakeMovers;
     ArrayList<HumanSnakePlayer> players;
     
     ArrayList<Observer<Integer,Direction>> observers;
     ArrayList<Color> colors;
 
     private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
-        this.snakes = snakes;
+        this.snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
+        for(SnakeInteger snake : snakes){
+            this.snakeMovers.add(new SnakeMover<Integer,Direction>(snake,this));
+        }
         this.players = new ArrayList<HumanSnakePlayer>();
         this.plateau = plateau;
         this.colors = new ArrayList<Color>();
@@ -66,22 +68,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public void move() {
-        for(SnakeInteger snake : snakes){
-            try {
-                snake.move();
-            } catch (ExceptionCollision e) {
-                SnakeInteger.resetSnake(snake);
-            }
-        }
-        Random r = new Random();
-        if(r.nextInt(100) < 50){
-            ((PlateauInteger) plateau).addOneFood();
-        }
-        notifyObservers();
-    }
-
-    @Override
     public double getRadius() {
         return 0;
     }
@@ -106,7 +92,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
 
     public void addPlayer(KeyboardControler<Integer,Direction> snakeControler){
-        SnakeInteger newSnake = SnakeInteger.creatSnakeInteger(plateau);
+        SnakeInteger newSnake = SnakeInteger.createSnakeInteger(plateau);
         HumanSnakePlayer newPlayer = new HumanSnakePlayer(newSnake, snakeControler);
         players.add(newPlayer);
         Random rand = new Random();
@@ -115,7 +101,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
         int blue = rand.nextInt(255);
         Color newColor = Color.rgb(red, green, blue);
         colors.add(newColor);
-        snakes.add(newSnake);
+        snakeMovers.add(new SnakeMover<Integer,Direction>(newSnake,this));
         notifyObservers();
         
     }
@@ -143,11 +129,24 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public ArrayList<SnakeData<Integer, Direction>> getAllSnake() {
-        ArrayList<SnakeData<Integer, Direction>> snakesData = new ArrayList<SnakeData<Integer, Direction>>();
-        for(int i = 0; i < snakes.size(); i++){
-            snakesData.add(new SnakeData<Integer, Direction>(snakes.get(i), colors.get(i)));
+        ArrayList<SnakeData<Integer, Direction>> allSnake = new ArrayList<SnakeData<Integer, Direction>>();
+        for(int i = 0; i < snakeMovers.size(); i++){
+            allSnake.add(new SnakeData<Integer, Direction>(snakeMovers.get(i).getSnake(), colors.get(i)));
         }
-        return snakesData;
+        return allSnake;
+    }
+
+    @Override
+    public void run() {
+        for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
+            snakeMover.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'stop'");
     }
 
     

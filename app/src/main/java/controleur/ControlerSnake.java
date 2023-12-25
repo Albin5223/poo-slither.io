@@ -58,7 +58,7 @@ public class ControlerSnake implements KeyboardControler<Integer,Direction>{
             }
         }
         else if(ev.getCode() == this.BOOST){
-            //TODO : snake.setBoosting(true);
+            snake.setBoosting(true);
         }
     };
 
@@ -67,7 +67,7 @@ public class ControlerSnake implements KeyboardControler<Integer,Direction>{
         if (ev.getCode() == this.LEFT || ev.getCode() == this.RIGHT) {
             snake.setTurning(Turning.FORWARD);
         } else if (ev.getCode() == this.BOOST) {
-            //TODO : snake.setBoosting(false);
+            snake.setBoosting(false);
         }
     }
     

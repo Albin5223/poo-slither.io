@@ -57,7 +57,7 @@ public class Window {
                 }
             });
             
-            playPage.setCourt(engine);
+            playPage.setEngine(engine);
             engine.addObserver(playPage);
             engine.notifyObservers();
 
@@ -67,7 +67,7 @@ public class Window {
             playPage.setFocusTraversable(true);
             playPage.requestFocus();
 
-            playPage.animate();
+            playPage.engine.run();
         });
 
 
@@ -80,8 +80,8 @@ public class Window {
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
             gameScene.setOnKeyTyped(null);
             
-            KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, null);
-            KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, null);
+            KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.ENTER);
+            KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, KeyCode.SPACE);
             
             engine.addPlayer(controler1);
             engine.addPlayer(controler2);
@@ -99,7 +99,7 @@ public class Window {
             });
             
 
-            playPage.setCourt(engine);
+            playPage.setEngine(engine);
             engine.addObserver(playPage);
             engine.notifyObservers();
 
@@ -110,7 +110,7 @@ public class Window {
             playPage.requestFocus();
 
             
-            playPage.animate();
+            playPage.engine.run();
         });
 
         optionsButton.setOnAction(e -> {
