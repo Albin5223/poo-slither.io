@@ -1,5 +1,7 @@
 package model.plateau;
 
+import java.util.ArrayList;
+
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithWall;
 import interfaces.Coordinate;
@@ -89,9 +91,11 @@ public final class SnakeDouble extends Snake<Double,Angle> {
             }
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
-        FoodHolder<Double> foodHolder = plateau.isCollidingWithFood(this);
-        if(foodHolder != null){ // We check if the snake is colliding with a food
-            foodHolder.getFood().actOnSnake(this);
+        ArrayList<FoodHolder<Double>> foodHolders = plateau.isCollidingWithFood(this);
+        if(foodHolders.size() != 0){ // We check if the snake is colliding with foods
+            for(FoodHolder<Double> foodHolder : foodHolders){
+                foodHolder.getFood().actOnSnake(this);
+            }
         }
         
         plateau.addSnake(this);   // We update the position of the snake on the board

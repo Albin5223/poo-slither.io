@@ -1,5 +1,7 @@
 package model.plateau;
 
+import java.util.ArrayList;
+
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
 import model.coordinate.CoordinateInteger;
@@ -101,9 +103,11 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake or itself");
         }
 
-        FoodHolder<Integer> foodHolder = plateau.isCollidingWithFood(this);
-        if(foodHolder != null){ // We check if the snake is colliding with a food
-            foodHolder.getFood().actOnSnake(this);
+        ArrayList<FoodHolder<Integer>> foodHolders = plateau.isCollidingWithFood(this);
+        if(foodHolders.size() != 0){ // We check if the snake is colliding with foods
+            for(FoodHolder<Integer> foodHolder : foodHolders){
+                foodHolder.getFood().actOnSnake(this);
+            }
         }
         
         plateau.addSnake(this);   // We update the position of the snake on the board

@@ -2,6 +2,9 @@ package model.plateau;
 
 import java.util.HashMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
@@ -113,7 +116,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
             // TODO : comment mettre la radius de la nourriture ?
-            addFood(c, new FoodHolder<Type>(food,c,10));
+            addFood(c, new FoodHolder<Type>(food,c,15));
         } catch (ExceptionCollision e) {
             //Si la nourriture est présente alors on ne fait rien
         }
@@ -140,20 +143,32 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         return false;
     }
 
-    public FoodHolder<Type> isCollidingWithFood(Snake<Type, O> snake) {
+    public ArrayList<FoodHolder<Type>> isCollidingWithFood(Snake<Type, O> snake) {
+
+        ArrayList<FoodHolder<Type>> foodHolders = new ArrayList<FoodHolder<Type>>();
+        List<Coordinate<Type, O>> keysToRemove = new ArrayList<>();
+        List<Food<Type>> foodsToAdd = new ArrayList<>(); // We use this list to avoid ConcurrentModificationException
+    
         for(Coordinate<Type, O> c : nourritures.keySet()){
             double distance = c.distanceTo(snake.getHead().getCenter());
             if(distance<=snake.getRadius()+nourritures.get(c).getRadius()){
                 FoodHolder<Type> foodHolder = nourritures.get(c);
-                if(!foodHolder.getFood().isRespawnable()){
-                    removeFood(c);
-                    return foodHolder;
+                keysToRemove.add(c);
+                if(foodHolder.getFood().isRespawnable()){
+                    foodsToAdd.add(foodHolder.getFood());
                 }
-                removeFood(c);
-                addOneFood(foodHolder.getFood());
-                return foodHolder;
+                foodHolders.add(foodHolder);
             }
         }
-        return null;
-    }    
+    
+        for(Coordinate<Type, O> key : keysToRemove) {
+            removeFood(key);
+        }
+    
+        for(Food<Type> food : foodsToAdd) {
+            addOneFood(food);
+        }
+    
+        return foodHolders;
+    }
 }

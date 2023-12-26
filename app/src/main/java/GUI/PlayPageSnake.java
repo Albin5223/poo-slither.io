@@ -6,13 +6,11 @@ import model.foods.FoodHolder;
 import interfaces.Coordinate;
 import interfaces.Data;
 import interfaces.Observer;
-import interfaces.Orientation.Angle;
 import interfaces.Orientation.Direction;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import model.plateau.SnakeInteger;
 import model.plateau.PlateauInteger.BorderInteger;
 import javafx.scene.paint.Color;
 
