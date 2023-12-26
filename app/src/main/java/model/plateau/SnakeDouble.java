@@ -5,6 +5,7 @@ import exceptions.ExceptionCollisionWithWall;
 import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
 import model.coordinate.CoordinateDouble;
+import model.foods.FoodHolder;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 
@@ -68,7 +69,6 @@ public final class SnakeDouble extends Snake<Double,Angle> {
 
         // We check if the snake is traversing the wall
         if(IS_TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
-            System.out.println("Snake is traversing the wall");
             newHead = new SnakePartDouble(plateau.border.getOpposite(newHead.getCenter()), newDirection);
         }
         // We check if the snake is colliding with the wall
@@ -89,9 +89,9 @@ public final class SnakeDouble extends Snake<Double,Angle> {
             }
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
-        int value = plateau.isCollidingWithFood(this);
-        if(value != -1){ // We check if the snake is colliding with a food
-            chargeFood(value);
+        FoodHolder<Double> foodHolder = plateau.isCollidingWithFood(this);
+        if(foodHolder != null){ // We check if the snake is colliding with a food
+            foodHolder.getFood().actOnSnake(this);
         }
         
         plateau.addSnake(this);   // We update the position of the snake on the board

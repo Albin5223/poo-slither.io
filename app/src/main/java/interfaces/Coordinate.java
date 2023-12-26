@@ -5,7 +5,7 @@ public interface Coordinate<Type extends Number, O extends Orientation<O>> exten
     public Type getX();
     public Type getY();
     public Coordinate<Type,O> clone();
-    public double distanceTo(Coordinate<Type,O> other);
+    public double distanceTo(Coordinate<Type,?> other);
     public int hashCode();
     public String toString();
     public boolean equals(Object obj);

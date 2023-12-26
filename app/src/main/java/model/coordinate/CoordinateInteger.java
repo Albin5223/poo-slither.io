@@ -36,7 +36,7 @@ public class CoordinateInteger implements Coordinate<Integer,Direction> {
     }
 
     @Override
-    public double distanceTo(Coordinate<Integer,Direction> other) {
+    public double distanceTo(Coordinate<Integer,?> other) {
         return Math.sqrt(Math.pow(this.x - other.getX(), 2) + Math.pow(this.y - other.getY(), 2));
     }
 

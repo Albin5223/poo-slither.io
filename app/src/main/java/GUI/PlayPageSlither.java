@@ -9,9 +9,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import model.Commestible;
 import model.SnakeData;
 import model.engine.EngineSlither;
+import model.foods.FoodHolder;
 import model.plateau.PlateauDouble.BorderDouble; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
@@ -38,8 +38,8 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         this.getChildren().clear();
 
         for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
-            Commestible commestible = data.getAllFood().get(coord);
-            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRange());
+            FoodHolder<Double> commestible = data.getAllFood().get(coord);
+            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);
         }
@@ -52,12 +52,13 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
 
-                Circle r = new Circle(x,y,data.getRadius());
+                Circle r = new Circle(x,y,snakeData.getRadius());
                 r.setFill(snakeData.getColor());
+
                 this.getChildren().add(r);
             }
 
-            Circle head = new Circle(x_head,y_head,data.getRadius());
+            Circle head = new Circle(x_head,y_head,snakeData.getRadius());
             head.setFill(Color.BLACK);
             this.getChildren().add(head);
         }

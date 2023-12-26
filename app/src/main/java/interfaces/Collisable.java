@@ -5,6 +5,6 @@ package interfaces;
  */
 public interface Collisable<T> {
     
-    public boolean isColliding(T other);
+    public boolean isCollidingWith(T other);
 
 }

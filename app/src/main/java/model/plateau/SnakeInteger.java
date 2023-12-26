@@ -3,16 +3,17 @@ package model.plateau;
 import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
 import model.coordinate.CoordinateInteger;
+import model.foods.FoodHolder;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithSnake;
 import exceptions.ExceptionCollisionWithWall;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
-    public static final int WIDTH_OF_SNAKE = 20;
-    private static final Integer SNAKE_GAP_BETWEEN_TAIL = 1;
     private static final int SNAKE_BIRTH_LENGTH = 10;
     private static final int SNAKE_MAX_FOOD_CHARGING = 5;
+    public static final int SNAKE_BIRTH_HITBOX_RADIUS = 10;
+    public static final Integer SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
 
     private static final int SNAKE_DEFAULT_SPEED = 10;
     private static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
@@ -26,7 +27,16 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
         private SnakePartInteger(Coordinate<Integer,Direction> center, Direction direction) {
-            super(center, direction,0);
+            super(center, direction,SNAKE_BIRTH_HITBOX_RADIUS);
+        }
+
+        /**
+         * We block this function for the SnakePartInteger because the hitbox radius of a snake part is constant
+         * @param hitboxRadius the new hitbox radius
+         */
+        @Override
+        public void setHitboxRadius(double hitboxRadius) {
+            // We do nothing because the hitbox radius of a snake part is constant
         }
     }
 
@@ -35,7 +45,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, 0, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED, SNAKE_BOOST_SPEED);
+        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, SNAKE_BIRTH_HITBOX_RADIUS, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED, SNAKE_BOOST_SPEED);
         this.currentSpeed = SNAKE_DEFAULT_SPEED;
     }
 
@@ -69,7 +79,6 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
         // We check if the snake is traversing the wall
         if(TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
-            System.out.println("Snake is traversing the wall");
             newHead = new SnakePartInteger(plateau.border.getOpposite(newHead.getCenter()), newDirection);
         }
         // We check if the snake is colliding with the wall
@@ -92,9 +101,9 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake or itself");
         }
 
-        int foodValue = plateau.isCollidingWithFood(this);
-        if (foodValue != -1) { // We check if the snake is colliding with a food
-            chargeFood(foodValue);
+        FoodHolder<Integer> foodHolder = plateau.isCollidingWithFood(this);
+        if(foodHolder != null){ // We check if the snake is colliding with a food
+            foodHolder.getFood().actOnSnake(this);
         }
         
         plateau.addSnake(this);   // We update the position of the snake on the board

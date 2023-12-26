@@ -12,8 +12,8 @@ import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import model.Commestible;
 import model.SnakeData;
+import model.foods.FoodHolder;
 import model.plateau.PlateauDouble;
 import model.plateau.SnakeDouble;
 import model.plateau.PlateauDouble.BorderDouble;
@@ -79,13 +79,8 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public double getRadius() {
-        return snakeMovers.get(0).getSnake().getRadius();
-    }
-
-    @Override
-    public HashMap<Coordinate<Double,Angle>, Commestible> getAllFood() {
-        HashMap<Coordinate<Double,Angle>, Commestible> copie = new HashMap<Coordinate<Double,Angle>, Commestible>();
+    public HashMap<Coordinate<Double,Angle>, FoodHolder<Double>> getAllFood() {
+        HashMap<Coordinate<Double,Angle>, FoodHolder<Double>> copie = new HashMap<Coordinate<Double,Angle>, FoodHolder<Double>>();
         for(Coordinate<Double,Angle> coord : plateau.getNourritures().keySet()){
             copie.put(coord, plateau.getNourritures().get(coord));
         }

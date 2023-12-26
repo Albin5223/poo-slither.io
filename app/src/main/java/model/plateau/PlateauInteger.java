@@ -7,11 +7,11 @@ import model.coordinate.CoordinateInteger;
 
 import java.util.Random;
 
-import exceptions.ExceptionCollisionWithSnake;
-
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public class BorderInteger implements GameBorder<Integer,Direction> {
+
+        private static final boolean IS_ALIGN_WITH_SNAKE = true;
 
         private int xMin;
         private int xMax;
@@ -25,6 +25,19 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
             this.yMin = yMin;
             this.yMax = yMax;
+        }
+
+        public int getxMin() {
+            return xMin;
+        }
+        public int getxMax() {
+            return xMax;
+        }
+        public int getyMin() {
+            return yMin;
+        }
+        public int getyMax() {
+            return yMax;
         }
 
         @Override
@@ -51,11 +64,31 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
             return new CoordinateInteger(x,y);
         }
 
+        private Coordinate<Integer, Direction> getRandomCoordinateAlignWithSnake(){
+            int stepSize = SnakeInteger.SNAKE_GAP_BETWEEN_TAIL;
+
+            int xRange = (xMax - xMin) / stepSize;
+            int yRange = (yMax - yMin) / stepSize;
+
+            int x = (new Random().nextInt(xRange) * stepSize) + xMin;
+            int y = (new Random().nextInt(yRange) * stepSize) + yMin;
+            return new CoordinateInteger(x,y);
+        }
+
+        private Coordinate<Integer, Direction> getRandomCoordinateNotAlignWithSnake(){
+            int x = (new Random().nextInt(xMax - xMin) + xMin);
+            int y = (new Random().nextInt(yMax - yMin) + yMin);
+            return new CoordinateInteger(x,y);
+        }
+
         @Override
         public Coordinate<Integer, Direction> getRandomCoordinate() {
-            int x = new Random().nextInt(xMax - xMin) + xMin;
-            int y = new Random().nextInt(yMax - yMin) + yMin;
-            return new CoordinateInteger(x,y);
+            if(IS_ALIGN_WITH_SNAKE){
+                return getRandomCoordinateAlignWithSnake();
+            }
+            else{
+                return getRandomCoordinateNotAlignWithSnake();
+            }
         }
     }
 
@@ -64,10 +97,10 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
     public PlateauInteger(int width, int height) {
         super(NB_FOOD);
         this.border = new BorderInteger(
-            -1*width/(2*SnakeInteger.WIDTH_OF_SNAKE),
-            width/(2*SnakeInteger.WIDTH_OF_SNAKE), 
-            -1*height/(2*SnakeInteger.WIDTH_OF_SNAKE), 
-            height/(2*SnakeInteger.WIDTH_OF_SNAKE)
+            -4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS),
+            4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
+            -4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
+            4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS)
         );
     }
 
@@ -75,27 +108,5 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         PlateauInteger plateau = new PlateauInteger(width,height);
         plateau.addAllFood();
         return plateau;
-    }
-
-    @Override
-    public void addSnake(Snake<Integer, Direction> snake) throws ExceptionCollisionWithSnake {
-        super.addSnake(snake);
-    }
-
-    @Override
-    public int isCollidingWithFood(Snake<Integer, Direction> snake) {
-        for(Coordinate<Integer, Direction> c : nourritures.keySet()){
-            if(c.equals(snake.getHead().getCenter())){
-                int value = nourritures.get(c).getValue();
-                if(!nourritures.get(c).getRespawn()){
-                    removeFood(c);
-                    return value;
-                }
-                removeFood(c);
-                addOneFood();
-                return value;
-            }
-        }
-        return -1;
     }
 }

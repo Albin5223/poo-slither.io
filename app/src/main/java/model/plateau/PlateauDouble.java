@@ -69,22 +69,4 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         plateau.addAllFood();
         return plateau;
     }
-
-    @Override
-    public int isCollidingWithFood(Snake<Double, Angle> snake) {
-        for(Coordinate<Double, Angle> c : nourritures.keySet()){
-            double distance = c.distanceTo(snake.getHead().getCenter());
-            if(distance<=snake.getRadius()+nourritures.get(c).getRange()){
-                int value = nourritures.get(c).getValue();
-                if(!nourritures.get(c).getRespawn()){
-                    removeFood(c);
-                    return value;
-                }
-                removeFood(c);
-                addOneFood();
-                return value;
-            }
-        }
-        return -1;
-    }    
 }

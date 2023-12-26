@@ -12,8 +12,8 @@ import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import model.Commestible;
 import model.SnakeData;
+import model.foods.FoodHolder;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
@@ -68,13 +68,8 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public double getRadius() {
-        return 0;
-    }
-
-    @Override
-    public HashMap<Coordinate<Integer,Direction>, Commestible> getAllFood() {
-        HashMap<Coordinate<Integer,Direction>, Commestible> copie = new HashMap<Coordinate<Integer,Direction>, Commestible>();
+    public HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>> getAllFood() {
+        HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>> copie = new HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>>();
         for(Coordinate<Integer,Direction> coord : plateau.getNourritures().keySet()){
             copie.put(coord, plateau.getNourritures().get(coord));
         }

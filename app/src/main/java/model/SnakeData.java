@@ -20,6 +20,10 @@ public class SnakeData<Type extends Number, O extends Orientation<O>> {
         return snake.getHead().getCenter();
     }
 
+    public double getRadius() {
+        return snake.getHead().getHitboxRadius();
+    }
+
     public Color getColor() {
         return color;
     }

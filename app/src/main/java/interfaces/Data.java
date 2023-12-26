@@ -2,12 +2,11 @@ package interfaces;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import model.Commestible;
 import model.SnakeData;
+import model.foods.FoodHolder;
 
 public interface Data<Type extends Number, O extends Orientation<O>> {
     public ArrayList<SnakeData<Type, O>> getAllSnake();
-    public double getRadius();
-    public HashMap<Coordinate<Type, O>, Commestible> getAllFood();
+    public HashMap<Coordinate<Type, O>, FoodHolder<Type>> getAllFood();
     public GameBorder<Type,O> getGameBorder();
 }

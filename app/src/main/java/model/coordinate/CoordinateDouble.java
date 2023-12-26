@@ -36,7 +36,7 @@ public class CoordinateDouble implements Coordinate<Double,Angle> {
     }
 
     @Override
-    public double distanceTo(Coordinate<Double,Angle> other) {
+    public double distanceTo(Coordinate<Double,?> other) {
         return Math.sqrt(Math.pow(this.x - other.getX(), 2) + Math.pow(this.y - other.getY(), 2));
     }
 
