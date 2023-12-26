@@ -1,9 +1,9 @@
 package GUI;
 
 import model.SnakeData;
+import model.coordinate.Coordinate;
 import model.engine.EngineSnake;
 import model.foods.FoodHolder;
-import interfaces.Coordinate;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;

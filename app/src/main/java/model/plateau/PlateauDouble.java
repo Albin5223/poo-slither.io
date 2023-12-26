@@ -2,9 +2,9 @@ package model.plateau;
 
 import java.util.Random;
 
-import interfaces.Coordinate;
 import interfaces.GameBorder;
 import interfaces.Orientation.Angle;
+import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
@@ -61,7 +61,7 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public PlateauDouble() {
         super(NB_FOOD);
-        this.border = new BorderDouble(new CoordinateDouble(0,0), 400);
+        this.border = new BorderDouble(new CoordinateDouble(0.0,0.0), 400);
     }
 
     public static PlateauDouble createPlateauSlitherio(){

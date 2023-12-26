@@ -8,9 +8,9 @@ import java.util.List;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
-import interfaces.Coordinate;
 import interfaces.GameBorder;
 import interfaces.Orientation;
+import model.coordinate.Coordinate;
 import model.foods.AllFood;
 import model.foods.Food;
 import model.foods.FoodHolder;
@@ -116,7 +116,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
             // TODO : comment mettre la radius de la nourriture ?
-            addFood(c, new FoodHolder<Type>(food,c,15));
+            addFood(c, new FoodHolder<Type>(food,c,9));
         } catch (ExceptionCollision e) {
             //Si la nourriture est présente alors on ne fait rien
         }

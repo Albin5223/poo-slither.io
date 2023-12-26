@@ -1,7 +1,6 @@
 package GUI;
 
 
-import interfaces.Coordinate;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
@@ -10,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.SnakeData;
+import model.coordinate.Coordinate;
 import model.engine.EngineSlither;
 import model.foods.FoodHolder;
 import model.plateau.PlateauDouble.BorderDouble; 

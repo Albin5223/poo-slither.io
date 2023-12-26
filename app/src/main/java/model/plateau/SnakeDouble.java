@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithWall;
-import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
+import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.foods.FoodHolder;
 

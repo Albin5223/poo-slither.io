@@ -2,8 +2,8 @@ package model.plateau;
 
 import java.util.ArrayList;
 
-import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
+import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
 import model.foods.FoodHolder;
 import exceptions.ExceptionCollision;

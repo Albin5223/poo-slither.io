@@ -1,8 +1,8 @@
 package model;
 
-import interfaces.Coordinate;
 import interfaces.Orientation;
 import javafx.scene.paint.Color;
+import model.coordinate.Coordinate;
 import model.plateau.Snake;
 import java.util.ArrayList;
 

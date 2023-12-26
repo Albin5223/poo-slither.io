@@ -1,5 +1,7 @@
 package interfaces;
 
+import model.coordinate.Coordinate;
+
 public interface GameBorder<Type extends Number, O extends Orientation<O>> {
     
     public boolean isInside(Coordinate<Type,O> c);

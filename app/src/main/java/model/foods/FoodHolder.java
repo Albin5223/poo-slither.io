@@ -1,6 +1,6 @@
 package model.foods;
 
-import interfaces.Coordinate;
+import model.coordinate.Coordinate;
 
 public class FoodHolder<Type extends Number> {
     

@@ -3,9 +3,9 @@ package model.plateau;
 import java.util.ArrayList;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithSnake;
-import interfaces.Coordinate;
 import interfaces.Orientation;
 import interfaces.Turnable;
+import model.coordinate.Coordinate;
 import model.foods.FoodHolder;
 
 

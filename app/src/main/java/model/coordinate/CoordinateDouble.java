@@ -1,52 +1,11 @@
 package model.coordinate;
 
-import java.util.Objects;
-
-import interfaces.Coordinate;
 import interfaces.Orientation.Angle;
 
-public class CoordinateDouble implements Coordinate<Double,Angle> {
+public class CoordinateDouble extends Coordinate<Double,Angle> {
 
-    protected double x;
-    protected double y;
-
-    public CoordinateDouble(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public Double getX() {
-        return x;
-    }
-
-    @Override
-    public Double getY() {
-        return y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.x, this.y);
-    }
-
-    @Override
-    public String toString() {
-        return "(" + this.x + "," + this.y + ")";
-    }
-
-    @Override
-    public double distanceTo(Coordinate<Double,?> other) {
-        return Math.sqrt(Math.pow(this.x - other.getX(), 2) + Math.pow(this.y - other.getY(), 2));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CoordinateDouble) {
-            CoordinateDouble other = (CoordinateDouble) obj;
-            return this.x == other.getX() && this.y == other.y;
-        }
-        return false;
+    public CoordinateDouble(Double x, Double y) {
+        super(x, y);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package model.plateau;
 
 import interfaces.GameBorder;
-import interfaces.Coordinate;
 import interfaces.Orientation.Direction;
+import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
 
 import java.util.Random;

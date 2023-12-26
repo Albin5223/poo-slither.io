@@ -3,6 +3,7 @@ package interfaces;
 import java.util.HashMap;
 import java.util.ArrayList;
 import model.SnakeData;
+import model.coordinate.Coordinate;
 import model.foods.FoodHolder;
 
 public interface Data<Type extends Number, O extends Orientation<O>> {

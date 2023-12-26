@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import controleur.KeyboardControler;
-import interfaces.Coordinate;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
 import interfaces.Observer;
@@ -13,6 +12,7 @@ import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import model.SnakeData;
+import model.coordinate.Coordinate;
 import model.foods.FoodHolder;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.PlateauInteger;
