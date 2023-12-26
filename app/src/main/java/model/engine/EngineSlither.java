@@ -18,6 +18,7 @@ import model.plateau.PlateauDouble;
 import model.plateau.SnakeDouble;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.player.HumanSlitherPlayer;
+import model.player.Bot.BotSlitherPlayer;
 
 
 public class EngineSlither implements Engine<Double,Angle>{
@@ -27,13 +28,15 @@ public class EngineSlither implements Engine<Double,Angle>{
     ArrayList<Color> colors; 
     ArrayList<Observer<Double,Angle>> observers;
     ArrayList<HumanSlitherPlayer> players;
+    ArrayList<BotSlitherPlayer> bots;
 
     private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakeMovers = new ArrayList<SnakeMover<Double,Angle>>();
         for(SnakeDouble snake : snakes){
-            this.snakeMovers.add(new SnakeMover<Double,Angle>(snake,this));
+            this.snakeMovers.add(new SnakeMover<Double,Angle>(snake,this,null));
         }
         this.plateau = plateau;
+        this.bots = new ArrayList<BotSlitherPlayer>();
         this.observers = new ArrayList<Observer<Double,Angle>>();
         this.colors = new ArrayList<Color>();
         this.players = new ArrayList<HumanSlitherPlayer>();
@@ -43,6 +46,20 @@ public class EngineSlither implements Engine<Double,Angle>{
         ArrayList<SnakeDouble> s = new ArrayList<>();
         PlateauDouble p = PlateauDouble.createPlateauSlitherio();
         return new EngineSlither(s,p);
+    }
+
+    public void addBot(){
+        SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
+        BotSlitherPlayer newBot = new BotSlitherPlayer(newSnake, plateau);
+        Random rand = new Random();
+        int red = rand.nextInt(255);
+        int green = rand.nextInt(255);
+        int blue = rand.nextInt(255);
+        Color newColor = Color.rgb(red, green, blue);
+        colors.add(newColor);
+        bots.add(newBot);
+        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,newBot));
+        
     }
 
     public void addPlayer(KeyboardControler<Double,Angle> snakeControler){
@@ -55,7 +72,7 @@ public class EngineSlither implements Engine<Double,Angle>{
         int blue = rand.nextInt(255);
         Color newColor = Color.rgb(red, green, blue);
         colors.add(newColor);
-        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this));
+        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,null));
         notifyObservers();
     }
 

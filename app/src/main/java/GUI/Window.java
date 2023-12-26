@@ -40,10 +40,14 @@ public class Window {
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
 
             KeyboardControler<Double,Angle> controler1 = new ControlerSlither(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.SPACE);
-            KeyboardControler<Double,Angle> controler2 = new ControlerSlither(KeyCode.Q, KeyCode.D, KeyCode.Z);
+            //KeyboardControler<Double,Angle> controler2 = new ControlerSlither(KeyCode.Q, KeyCode.D, KeyCode.Z);
             
             engine.addPlayer(controler1);
-            engine.addPlayer(controler2);
+            //engine.addPlayer(controler2);
+            engine.addBot();
+            engine.addBot();
+            engine.addBot();
+            
 
             gameScene.setOnKeyPressed( ev -> {
                 for (HumanPlayer p : engine.getPlayers()) {
@@ -81,10 +85,13 @@ public class Window {
             gameScene.setOnKeyTyped(null);
             
             KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.ENTER);
-            KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, KeyCode.SPACE);
+            //KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, KeyCode.SPACE);
             
             engine.addPlayer(controler1);
-            engine.addPlayer(controler2);
+            //engine.addPlayer(controler2);
+            engine.addBot();
+            engine.addBot();
+            engine.addBot();
 
             gameScene.setOnKeyPressed( ev -> {
                 for (HumanPlayer p : engine.getPlayers()) {
