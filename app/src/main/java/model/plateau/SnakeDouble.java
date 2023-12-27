@@ -7,7 +7,7 @@ import exceptions.ExceptionCollisionWithWall;
 import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
-import model.foods.FoodHolder;
+import model.foods.Food;
 
 public final class SnakeDouble extends Snake<Double,Angle> {
 
@@ -91,10 +91,10 @@ public final class SnakeDouble extends Snake<Double,Angle> {
             }
             throw new ExceptionCollision("Snake is colliding with another snake");
         }
-        ArrayList<FoodHolder<Double>> foodHolders = plateau.isCollidingWithFood(this);
-        if(foodHolders.size() != 0){ // We check if the snake is colliding with foods
-            for(FoodHolder<Double> foodHolder : foodHolders){
-                foodHolder.getFood().actOnSnake(this);
+        ArrayList<Food<Double,Angle>> collidingFoods = plateau.isCollidingWithFoods(this);
+        if(collidingFoods.size() != 0){ // We check if the snake is colliding with foods
+            for(Food<Double,Angle> food : collidingFoods){
+                food.actOnSnake(this);
             }
         }
         

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
-import model.foods.FoodHolder;
+import model.foods.Food;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithSnake;
 import exceptions.ExceptionCollisionWithWall;
@@ -103,10 +103,10 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake or itself");
         }
 
-        ArrayList<FoodHolder<Integer>> foodHolders = plateau.isCollidingWithFood(this);
-        if(foodHolders.size() != 0){ // We check if the snake is colliding with foods
-            for(FoodHolder<Integer> foodHolder : foodHolders){
-                foodHolder.getFood().actOnSnake(this);
+        ArrayList<Food<Integer,Direction>> collidingFoods = plateau.isCollidingWithFoods(this);
+        if(collidingFoods.size() != 0){ // We check if the snake is colliding with foods
+            for(Food<Integer,Direction> food : collidingFoods){
+                food.actOnSnake(this);
             }
         }
         

@@ -6,7 +6,7 @@ import model.coordinate.Coordinate;
 import model.plateau.Snake;
 import java.util.ArrayList;
 
-public class SnakeData<Type extends Number, O extends Orientation<O>> {
+public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     private Snake<Type, O> snake;
     private Color color;

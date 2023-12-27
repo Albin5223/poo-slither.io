@@ -3,7 +3,7 @@ package GUI;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.engine.EngineSnake;
-import model.foods.FoodHolder;
+import model.foods.Food;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
@@ -38,7 +38,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         this.getChildren().clear();
 
         for (Coordinate<Integer,Direction> coord : data.getAllFood().keySet()) {
-            FoodHolder<Integer> commestible = data.getAllFood().get(coord);
+            Food<Integer,Direction> commestible = data.getAllFood().get(coord);
             Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);

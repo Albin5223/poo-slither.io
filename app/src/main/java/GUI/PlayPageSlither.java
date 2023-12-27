@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.engine.EngineSlither;
-import model.foods.FoodHolder;
+import model.foods.Food;
 import model.plateau.PlateauDouble.BorderDouble; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
@@ -38,7 +38,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         this.getChildren().clear();
 
         for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
-            FoodHolder<Double> commestible = data.getAllFood().get(coord);
+            Food<Double,Angle> commestible = data.getAllFood().get(coord);
             Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
             c.setFill(Paint.valueOf("#FA8072"));
             this.getChildren().add(c);

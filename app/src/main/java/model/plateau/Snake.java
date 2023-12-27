@@ -6,10 +6,9 @@ import exceptions.ExceptionCollisionWithSnake;
 import interfaces.Orientation;
 import interfaces.Turnable;
 import model.coordinate.Coordinate;
-import model.foods.FoodHolder;
+import model.foods.Food;
 
-
-public sealed abstract class Snake<Type extends Number, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
+public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
 
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
@@ -80,8 +79,8 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
             return center.distanceTo(other.center) <= other.hitboxRadius;
         }
 
-        public boolean isCollidingWith(FoodHolder<Type> other) {
-            return center.distanceTo(other.getLocation()) <= this.hitboxRadius + other.getRadius();
+        public boolean isCollidingWith(Food<Type,O> other) {
+            return center.distanceTo(other.getCenter()) <= this.hitboxRadius + other.getRadius();
         }
     }
 
@@ -210,7 +209,7 @@ public sealed abstract class Snake<Type extends Number, O extends Orientation<O>
         return false;
     }
 
-    public boolean isCollidingWith(FoodHolder<Type> other) {
+    public boolean isCollidingWith(Food<Type,O> other) {
         return head.isCollidingWith(other);
     }
 

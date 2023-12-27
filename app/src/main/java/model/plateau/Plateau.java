@@ -3,7 +3,6 @@ package model.plateau;
 import java.util.HashMap;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
@@ -11,16 +10,14 @@ import exceptions.ExceptionCollisionWithSnake;
 import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
-import model.foods.AllFood;
+import model.coordinate.CoordinateTree;
 import model.foods.Food;
-import model.foods.FoodHolder;
+import model.foods.GrowingFood;
 
-public abstract sealed class Plateau<Type extends Number, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
+public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
-    protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau;
-    protected HashMap<Coordinate<Type,O>, FoodHolder<Type>> nourritures;
-
-    protected AllFood<Type> allFood = new AllFood<Type>();
+    protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
+    protected CoordinateTree<Type, O, Food<Type,O>> foodTree = new CoordinateTree<Type, O, Food<Type,O>>();
 
     protected GameBorder<Type,O> border;
 
@@ -36,12 +33,10 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
 
     protected Plateau(int nbFood) {
         this.NB_FOOD = nbFood;
-        this.plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
-        this.nourritures = new HashMap<Coordinate<Type,O>, FoodHolder<Type>>();
     }
 
-    public HashMap<Coordinate<Type, O>, FoodHolder<Type>> getNourritures() {
-        return nourritures;
+    public CoordinateTree<Type, O, Food<Type,O>> getFoodTree() {
+        return foodTree;
     }
 
     public GameBorder<Type,O> getBorder() {
@@ -83,12 +78,12 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         }
     }
 
-    protected void addFood(Coordinate<Type,O> c,FoodHolder<Type> food) throws ExceptionCollisionWithFood {
+    protected void addFood(Coordinate<Type,O> c,Food<Type,O> food) throws ExceptionCollisionWithFood {
         synchronized(lock) {
-            if(nourritures.containsKey(c)){
+            if(foodTree.contains(c)){
                 throw new ExceptionCollisionWithFood("Food added in another food");
             }
-            nourritures.put(c,food);
+            foodTree.add(c,food);
         }
     }
 
@@ -106,17 +101,17 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
 
     public void removeFood(Coordinate<Type,O> c) throws IllegalArgumentException {
         synchronized(lock) {
-            if(nourritures.remove(c) == null){
+            if(!foodTree.remove(c)){
                 throw new IllegalArgumentException("Food not found");
             }
         }
     }
 
-    public void addOneFood(Food<Type> food){
+    public void addOneFood(){
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
             // TODO : comment mettre la radius de la nourriture ?
-            addFood(c, new FoodHolder<Type>(food,c,9));
+            addFood(c, new GrowingFood<Type,O>(c));
         } catch (ExceptionCollision e) {
             //Si la nourriture est présente alors on ne fait rien
         }
@@ -124,7 +119,7 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
 
     protected void addAllFood() {
         for(int i = 0; i < NB_FOOD; i++){
-            addOneFood(allFood.getRandomRespawnableFood());
+            addOneFood();
         }
     }
 
@@ -143,32 +138,36 @@ public abstract sealed class Plateau<Type extends Number, O extends Orientation<
         return false;
     }
 
-    public ArrayList<FoodHolder<Type>> isCollidingWithFood(Snake<Type, O> snake) {
+    public ArrayList<Food<Type,O>> isCollidingWithFoods(Snake<Type,O> snake){
 
-        ArrayList<FoodHolder<Type>> foodHolders = new ArrayList<FoodHolder<Type>>();
-        List<Coordinate<Type, O>> keysToRemove = new ArrayList<>();
-        List<Food<Type>> foodsToAdd = new ArrayList<>(); // We use this list to avoid ConcurrentModificationException
-    
-        for(Coordinate<Type, O> c : nourritures.keySet()){
-            double distance = c.distanceTo(snake.getHead().getCenter());
-            if(distance<=snake.getRadius()+nourritures.get(c).getRadius()){
-                FoodHolder<Type> foodHolder = nourritures.get(c);
-                keysToRemove.add(c);
-                if(foodHolder.getFood().isRespawnable()){
-                    foodsToAdd.add(foodHolder.getFood());
+        ArrayList<Food<Type,O>> collidingFoods = new ArrayList<Food<Type,O>>();
+        int foodsToAdd = 0;
+
+        while (true) {
+            Coordinate<Type,O> closestCoordinate = foodTree.getClosest(snake.getHead().getCenter());
+            if (closestCoordinate == null) {
+                break;
+            }
+
+            Food<Type,O> closestFood = foodTree.get(closestCoordinate);
+
+            double distance = closestFood.getCenter().distanceTo(snake.getHead().getCenter());
+            if (distance <= snake.getRadius() + closestFood.getRadius()) {
+                removeFood(closestCoordinate);
+                if (closestFood.isRespawnable()) {
+                    foodsToAdd += 1;
                 }
-                foodHolders.add(foodHolder);
+                collidingFoods.add(closestFood);
+            } else {
+                break;
             }
         }
-    
-        for(Coordinate<Type, O> key : keysToRemove) {
-            removeFood(key);
+
+        // We add the new foods at the end to avoid the fact that the snake can eat the food it just added
+        for(int i = 0; i < foodsToAdd; i++){
+            addOneFood();
         }
-    
-        for(Food<Type> food : foodsToAdd) {
-            addOneFood(food);
-        }
-    
-        return foodHolders;
+
+        return collidingFoods;
     }
 }

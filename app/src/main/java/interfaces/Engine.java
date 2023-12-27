@@ -2,7 +2,7 @@ package interfaces;
 
 import javafx.scene.input.KeyEvent;
 
-public interface Engine<Type extends Number, O extends Orientation<O>> extends Observable<Type,O>, Data<Type,O> {
+public interface Engine<Type extends Number & Comparable<Type>, O extends Orientation<O>> extends Observable<Type,O>, Data<Type,O> {
 
     public void run();
 

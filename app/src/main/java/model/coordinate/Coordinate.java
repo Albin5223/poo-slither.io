@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import interfaces.Orientation;
 
-public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable {
+public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable, Comparable<Coordinate<Type,?>> {
     
     protected Type x;
     protected Type y;
@@ -40,6 +40,14 @@ public abstract class Coordinate<Type extends Number, O extends Orientation<O>> 
             return this.x.equals(other.getX()) && this.y.equals(other.getY());
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Coordinate<Type,?> other) {
+        if (this.x.equals(other.getX())) {
+            return Double.compare(this.y.doubleValue(), other.getY().doubleValue());
+        }
+        return Double.compare(this.x.doubleValue(), other.getX().doubleValue());
     }
 
     public abstract Coordinate<Type,O> clone();

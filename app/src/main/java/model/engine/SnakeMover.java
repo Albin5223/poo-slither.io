@@ -7,7 +7,7 @@ import javafx.animation.AnimationTimer;
 import model.plateau.Snake;
 import model.player.Bot.BotPlayer;
 
-public class SnakeMover<Type extends Number, O extends Orientation<O>> {
+public class SnakeMover<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     private final Snake<Type,O> snake;
     private final Engine<Type,O> engine;

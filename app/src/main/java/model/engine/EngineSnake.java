@@ -13,7 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.FoodHolder;
+import model.foods.Food;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
@@ -71,10 +71,10 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>> getAllFood() {
-        HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>> copie = new HashMap<Coordinate<Integer,Direction>, FoodHolder<Integer>>();
-        for(Coordinate<Integer,Direction> coord : plateau.getNourritures().keySet()){
-            copie.put(coord, plateau.getNourritures().get(coord));
+    public HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>> getAllFood() {
+        HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>> copie = new HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>>();
+        for(Food<Integer,Direction> food : plateau.getFoodTree().valuesCollection()){
+            copie.put(food.getCenter(), food);
         }
         return copie;
     }
