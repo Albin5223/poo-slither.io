@@ -1,11 +1,14 @@
 package model.foods;
 
 import interfaces.Orientation;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
 
 public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+
+    protected Image image;
 
     protected Coordinate<Type, O> coordinate;
     protected final double radius;
@@ -33,6 +36,10 @@ public abstract class Food<Type extends Number & Comparable<Type>, O extends Ori
 
     public int getProbability() {
         return probability;
+    }
+
+    public Image getImage(){
+        return image;
     }
 
     public abstract FoodType getFoodType();

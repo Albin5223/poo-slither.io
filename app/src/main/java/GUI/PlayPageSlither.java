@@ -4,6 +4,8 @@ package GUI;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -37,10 +39,22 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         this.getChildren().clear();
 
         for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
-            Food<Double,Angle> commestible = data.getAllFood().get(coord);
-            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
-            c.setFill(commestible.getFoodType().getColor());
-            this.getChildren().add(c);
+            Food<Double,Angle> food = data.getAllFood().get(coord);
+            Image image = food.getImage();
+            if(image != null){
+                ImageView imageView = new ImageView(image);
+                imageView.setX(D_X + coord.getX().doubleValue() - food.getRadius());
+                imageView.setY(D_Y + coord.getY().doubleValue() - food.getRadius());
+                imageView.setFitHeight(food.getRadius()*2);
+                imageView.setFitWidth(food.getRadius()*2);
+                this.getChildren().add(imageView);
+            }
+            else{
+                System.out.println("image null");
+                Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
+                c.setFill(Color.BLACK);
+                this.getChildren().add(c);
+            }
         }
 
         for(SnakeData<Double,Angle> snakeData : data.getAllSnake()){

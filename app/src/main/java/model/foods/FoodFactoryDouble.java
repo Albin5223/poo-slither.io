@@ -3,7 +3,9 @@ package model.foods;
 import java.util.ArrayList;
 import java.util.Random;
 
+import GUI.OurColors;
 import interfaces.Orientation.Angle;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.Snake;
@@ -48,6 +50,9 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public GrowingFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -70,6 +75,9 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public GrowingBigFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -91,6 +99,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);
+            String name = "skull";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -110,6 +120,9 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public DeathFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
     }
     

@@ -1,7 +1,10 @@
 package model.foods;
 
 import java.util.ArrayList;
+
+import GUI.OurColors;
 import interfaces.Orientation.Direction;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 
@@ -45,6 +48,9 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public GrowingFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -67,6 +73,9 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public GrowingBigFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -88,6 +97,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            String name = "skull";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -107,6 +118,9 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public DeathFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
     }
 
