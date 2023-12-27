@@ -20,8 +20,8 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     private static final int SLITHER_MAX_FOOD_CHARGING = 10;
     private static final double SLITHER_BIRTH_HITBOX_RADIUS = 10;
 
-    private static final int SLITHER_DEFAULT_SPEED = 100;
-    private static final int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 2;
+    private static final int SLITHER_DEFAULT_SPEED = 60;
+    private static final int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
 
     /** Do we want to add food behind a dead snake ? */
     private static final boolean IS_DEATH_FOOD = true;

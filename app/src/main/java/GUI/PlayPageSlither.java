@@ -6,7 +6,6 @@ import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.SnakeData;
 import model.coordinate.Coordinate;
@@ -40,7 +39,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
             Food<Double,Angle> commestible = data.getAllFood().get(coord);
             Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
-            c.setFill(Paint.valueOf("#FA8072"));
+            c.setFill(commestible.getFoodType().getColor());
             this.getChildren().add(c);
         }
 

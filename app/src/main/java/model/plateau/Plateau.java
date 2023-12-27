@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
+import exceptions.ExceptionTooManyFoods;
 import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
@@ -82,10 +83,13 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         }
     }
 
-    protected void addFood(Coordinate<Type,O> c,Food<Type,O> food) throws ExceptionCollisionWithFood {
+    protected void addFood(Coordinate<Type,O> c,Food<Type,O> food) throws ExceptionCollisionWithFood,ExceptionTooManyFoods {
         synchronized(lock) {
             if(foodTree.contains(c)){
                 throw new ExceptionCollisionWithFood("Food added in another food");
+            }
+            if(foodTree.size() > 3*NB_FOOD){
+                throw new ExceptionTooManyFoods("Too many foods on the board");
             }
             foodTree.add(c,food);
         }
@@ -97,7 +101,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
             for(DeathFood<Type,O> food : deathFoods){
                 try {
                     addFood(food.getCenter(), food);
-                } catch (ExceptionCollisionWithFood e) {
+                } catch ( ExceptionCollisionWithFood | ExceptionTooManyFoods e ) {
                     // If the food is already present then we do nothing
                 }
             }
@@ -116,7 +120,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
             addFood(c, foodFactory.getRandomFood(c));
-        } catch (ExceptionCollision e) {
+        } catch (ExceptionCollision | ExceptionTooManyFoods e) {
             // If the food is already present then we do nothing
         }
     }

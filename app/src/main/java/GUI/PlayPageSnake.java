@@ -8,7 +8,6 @@ import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.plateau.PlateauInteger.BorderInteger;
@@ -40,7 +39,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         for (Coordinate<Integer,Direction> coord : data.getAllFood().keySet()) {
             Food<Integer,Direction> commestible = data.getAllFood().get(coord);
             Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
-            c.setFill(Paint.valueOf("#FA8072"));
+            c.setFill(commestible.getFoodType().getColor());
             this.getChildren().add(c);
         }
 

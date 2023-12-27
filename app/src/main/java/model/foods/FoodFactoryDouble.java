@@ -87,7 +87,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         private static final double radius = 10;
         private static final boolean respawn = false;
-        private static final int probability = 1;
+        private static final int probability = 2;
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);

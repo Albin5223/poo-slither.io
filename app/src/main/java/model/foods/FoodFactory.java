@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import interfaces.Orientation;
+import javafx.scene.paint.Color;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 
@@ -14,6 +15,22 @@ public abstract class FoodFactory<Type extends Number & Comparable<Type>, O exte
         GROWING_BIG_FOOD,
         KILLER_FOOD,
         DEATH_FOOD;
+
+
+        public Color getColor() {
+            switch (this) {
+                case GROWING_FOOD:
+                    return Color.GREEN;
+                case GROWING_BIG_FOOD:
+                    return Color.BLUE;
+                case KILLER_FOOD:
+                    return Color.RED;
+                case DEATH_FOOD:
+                    return Color.BLACK;
+                default:
+                    throw new IllegalArgumentException("FoodType not recognized");
+            }
+        }
     }
 
     public static abstract class FoodBuilder<Type extends Number & Comparable<Type>, O extends Orientation<O>> {

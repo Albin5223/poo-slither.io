@@ -23,7 +23,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private final double BIRTH_HITBOX_RADIUS;
     private final int BIRTH_LENGTH;
     /** The amount of food that the snake needs to eat before growing */
-    private final int MAX_FOOD_CHARGING;
+    public final int MAX_FOOD_CHARGING;
     private final int DEFAULT_SPEED;
     private final int BOOST_SPEED;
 

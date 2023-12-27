@@ -63,4 +63,8 @@ public class CoordinateTree<Type extends Number & Comparable<Type>,O extends Ori
             return Double.compare(distance1, distance2);
         }
     }
+
+    public int size() {
+        return map.size();
+    }
 }
