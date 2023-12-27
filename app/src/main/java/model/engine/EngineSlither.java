@@ -42,9 +42,9 @@ public class EngineSlither implements Engine<Double,Angle>{
         this.players = new ArrayList<HumanSlitherPlayer>();
     }
 
-    public static EngineSlither createSnake(int n){
+    public static EngineSlither createGame(int radius){
         ArrayList<SnakeDouble> s = new ArrayList<>();
-        PlateauDouble p = PlateauDouble.createPlateauSlitherio();
+        PlateauDouble p = PlateauDouble.createPlateauSlitherio(radius);
         return new EngineSlither(s,p);
     }
 

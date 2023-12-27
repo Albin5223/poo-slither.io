@@ -11,17 +11,18 @@ import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateTree;
+import model.foods.DeathFood;
 import model.foods.Food;
-import model.foods.GrowingFood;
+import model.foods.FoodFactory;
 
 public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
     protected CoordinateTree<Type, O, Food<Type,O>> foodTree = new CoordinateTree<Type, O, Food<Type,O>>();
-
-    protected GameBorder<Type,O> border;
-
-    private final int NB_FOOD;
+    
+    protected final FoodFactory<Type,O> foodFactory;
+    protected final GameBorder<Type,O> border;
+    protected final int NB_FOOD;
 
     /**
      * The lock used to synchronize the access to the board.
@@ -31,8 +32,11 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     private Object lock = new Object();
 
 
-    protected Plateau(int nbFood) {
+    protected Plateau(int nbFood, FoodFactory<Type,O> foodFactory, GameBorder<Type,O> border) {
         this.NB_FOOD = nbFood;
+        this.foodFactory = foodFactory;
+        this.border = border;
+        this.addAllFood();
     }
 
     public CoordinateTree<Type, O, Food<Type,O>> getFoodTree() {
@@ -89,12 +93,13 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
 
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
-            for(Snake<Type,O>.SnakePart c : snake.getTail()){   // We add a death food for each part of the snake (except the head)
-                //try {
-                    //TODO : addFood(c.getCenter(), Commestible.DEATH_FOOD);
-                //} catch (ExceptionCollisionWithFood e) {
-                //    System.out.println("Death food added in another food");
-                //}
+            ArrayList<DeathFood<Type,O>> deathFoods = foodFactory.getDeathFoods(snake);
+            for(DeathFood<Type,O> food : deathFoods){
+                try {
+                    addFood(food.getCenter(), food);
+                } catch (ExceptionCollisionWithFood e) {
+                    // If the food is already present then we do nothing
+                }
             }
         }
     }
@@ -110,14 +115,13 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     public void addOneFood(){
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
-            // TODO : comment mettre la radius de la nourriture ?
-            addFood(c, new GrowingFood<Type,O>(c));
+            addFood(c, foodFactory.getRandomFood(c));
         } catch (ExceptionCollision e) {
-            //Si la nourriture est présente alors on ne fait rien
+            // If the food is already present then we do nothing
         }
     }
 
-    protected void addAllFood() {
+    private void addAllFood() {
         for(int i = 0; i < NB_FOOD; i++){
             addOneFood();
         }

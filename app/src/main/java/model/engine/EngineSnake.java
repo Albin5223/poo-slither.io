@@ -47,7 +47,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
         this.observers = new ArrayList<Observer<Integer,Direction>>();
     }
 
-    public static EngineSnake createSnake(int width, int height){
+    public static EngineSnake createGame(int width, int height){
         ArrayList<SnakeInteger> s = new ArrayList<SnakeInteger>();
         PlateauInteger p = PlateauInteger.createPlateauSnake(width, height);
         return new EngineSnake(s,p);

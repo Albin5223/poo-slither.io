@@ -26,6 +26,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private final int MAX_FOOD_CHARGING;
     private final int DEFAULT_SPEED;
     private final int BOOST_SPEED;
+
+    public final int DEATH_FOOD_PER_SEGMENT;
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
@@ -91,7 +93,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed) throws ExceptionCollision {
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.BIRTH_HITBOX_RADIUS = hitboxRadius;
         this.BIRTH_LENGTH = nbTail;
@@ -99,6 +101,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.DEFAULT_SPEED = defaultSpeed;
         this.BOOST_SPEED = boostSpeed;
         this.currentSpeed = defaultSpeed;
+        this.DEATH_FOOD_PER_SEGMENT = death_food_per_segment;
         this.head = new SnakePart(location.clone(), startingDirection, BIRTH_HITBOX_RADIUS);
         this.tail = new ArrayList<SnakePart>();
 

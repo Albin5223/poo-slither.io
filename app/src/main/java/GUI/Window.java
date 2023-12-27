@@ -34,7 +34,7 @@ public class Window {
 
         playButtonSlither.setOnAction(e -> {
             PlayPageSlither playPage = new PlayPageSlither(this,WITDH/2,HEIGHT/2);
-            EngineSlither engine = (EngineSlither) EngineSlither.createSnake(2);
+            EngineSlither engine = EngineSlither.createGame(400);
             
 
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
@@ -79,7 +79,7 @@ public class Window {
 
         playButtonSnake.setOnAction(e -> {
             PlayPageSnake playPage = new PlayPageSnake(this,WITDH/2,HEIGHT/2);
-            EngineSnake engine = EngineSnake.createSnake(WITDH,HEIGHT);
+            EngineSnake engine = EngineSnake.createGame(WITDH,HEIGHT);
             
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
             gameScene.setOnKeyTyped(null);

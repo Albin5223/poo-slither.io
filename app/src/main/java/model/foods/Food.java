@@ -2,16 +2,20 @@ package model.foods;
 
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
+import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
 
 public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     protected Coordinate<Type, O> coordinate;
-    protected double radius = 9;
-    protected boolean respawn;
+    protected final double radius;
+    protected final boolean respawn;
+    protected final int probability;
 
-    public Food(boolean respawn, Coordinate<Type, O> coordinate) {
+    public Food(Coordinate<Type, O> coordinate, double radius, boolean respawn, int probability) {
         this.respawn = respawn;
+        this.radius = radius;
+        this.probability = probability;
         this.coordinate = coordinate;
     }
 
@@ -27,5 +31,11 @@ public abstract class Food<Type extends Number & Comparable<Type>, O extends Ori
         return respawn;
     }
 
-    public abstract void actOnSnake(Snake<Type,?> snake);
+    public int getProbability() {
+        return probability;
+    }
+
+    public abstract FoodType getFoodType();
+
+    public abstract void actOnSnake(Snake<Type,O> snake);
 }

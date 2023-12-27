@@ -4,12 +4,13 @@ import interfaces.GameBorder;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
+import model.foods.FoodFactoryInteger;
 
 import java.util.Random;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
-    public class BorderInteger implements GameBorder<Integer,Direction> {
+    public static class BorderInteger implements GameBorder<Integer,Direction> {
 
         private static final boolean IS_ALIGN_WITH_SNAKE = true;
 
@@ -94,19 +95,19 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     private final static int NB_FOOD = 50;
 
-    public PlateauInteger(int width, int height) {
-        super(NB_FOOD);
-        this.border = new BorderInteger(
+    public PlateauInteger(int nbFood, FoodFactoryInteger foodFactory, BorderInteger border) {
+        super(nbFood, foodFactory, border);
+    }
+
+    public static PlateauInteger createPlateauSnake(int width, int height){
+        BorderInteger border = new BorderInteger(
             -4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS),
             4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
             -4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
             4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS)
         );
-    }
 
-    public static PlateauInteger createPlateauSnake(int width, int height){
-        PlateauInteger plateau = new PlateauInteger(width,height);
-        plateau.addAllFood();
+        PlateauInteger plateau = new PlateauInteger(NB_FOOD, FoodFactoryInteger.build(), border);
         return plateau;
     }
 }

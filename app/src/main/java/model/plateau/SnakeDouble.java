@@ -25,6 +25,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
 
     /** Do we want to add food behind a dead snake ? */
     private static final boolean IS_DEATH_FOOD = true;
+    private static final int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
     private static final boolean IS_TRAVERSABLE_WALL = true;
@@ -37,7 +38,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
     }
 
     private SnakeDouble(CoordinateDouble location, PlateauDouble plateau, Angle startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,SLITHER_GAP_BETWEEN_TAIL, SLITHER_BIRTH_HITBOX_RADIUS, SLITHER_BIRTH_LENGTH, SLITHER_MAX_FOOD_CHARGING, SLITHER_DEFAULT_SPEED, SLITHER_BOOST_SPEED);
+        super(location,plateau,startingDirection,SLITHER_GAP_BETWEEN_TAIL, SLITHER_BIRTH_HITBOX_RADIUS, SLITHER_BIRTH_LENGTH, SLITHER_MAX_FOOD_CHARGING, SLITHER_DEFAULT_SPEED, SLITHER_BOOST_SPEED, DEATH_FOOD_PER_SEGMENT);
         this.currentSpeed = SLITHER_DEFAULT_SPEED;
     }
 

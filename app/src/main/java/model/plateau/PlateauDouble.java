@@ -6,10 +6,11 @@ import interfaces.GameBorder;
 import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
+import model.foods.FoodFactoryDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
 
-    public class BorderDouble implements GameBorder<Double,Angle> {
+    public static class BorderDouble implements GameBorder<Double,Angle> {
 
         /* The ratio of the random coordinate to be inside the map */
         private static final double RANDOM_RATIO = 0.9;
@@ -59,14 +60,13 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     private final static int NB_FOOD = 100;
 
-    public PlateauDouble() {
-        super(NB_FOOD);
-        this.border = new BorderDouble(new CoordinateDouble(0.0,0.0), 400);
+    public PlateauDouble(int nbFood, FoodFactoryDouble foodFactory, BorderDouble border) {
+        super(nbFood, foodFactory, border);
     }
 
-    public static PlateauDouble createPlateauSlitherio(){
-        PlateauDouble plateau = new PlateauDouble();
-        plateau.addAllFood();
+    public static PlateauDouble createPlateauSlitherio(int radius){
+        BorderDouble border = new BorderDouble(new CoordinateDouble(0.0,0.0), radius);
+        PlateauDouble plateau = new PlateauDouble(NB_FOOD, FoodFactoryDouble.build(), border);
         return plateau;
     }
 }
