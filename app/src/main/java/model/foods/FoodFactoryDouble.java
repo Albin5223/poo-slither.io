@@ -25,6 +25,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
                     return new KillerFoodDouble(coordinate);
                 case DEATH_FOOD:
                     return new DeathFoodDouble(coordinate);
+                case POISON_FOOD:
+                    return new PoisonFoodDouble(coordinate);
                 default:
                     throw new IllegalArgumentException("FoodType not recognized");
             }
@@ -80,6 +82,27 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         @Override
         public FoodType getFoodType() {
             return FoodType.GROWING_BIG_FOOD;
+        }
+    }
+
+    public static class PoisonFoodDouble extends Food<Double,Angle> {
+
+        private static final double radius = 5;
+        private static final boolean respawn = true;
+        private static final int probability = 10;
+
+        public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
+            super(coordinate, radius, respawn, probability);
+        }
+
+        @Override
+        public void actOnSnake(Snake<Double, Angle> snake) {
+            snake.shrink();
+        }
+
+        @Override
+        public FoodType getFoodType() {
+            return FoodType.POISON_FOOD;
         }
     }
 

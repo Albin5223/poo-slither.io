@@ -14,6 +14,7 @@ public abstract class FoodFactory<Type extends Number & Comparable<Type>, O exte
         GROWING_FOOD,
         GROWING_BIG_FOOD,
         KILLER_FOOD,
+        POISON_FOOD,
         DEATH_FOOD;
 
 
@@ -27,6 +28,8 @@ public abstract class FoodFactory<Type extends Number & Comparable<Type>, O exte
                     return Color.RED;
                 case DEATH_FOOD:
                     return Color.BLACK;
+                case POISON_FOOD:
+                    return Color.PURPLE;
                 default:
                     throw new IllegalArgumentException("FoodType not recognized");
             }

@@ -212,6 +212,12 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return false;
     }
 
+    public void shrink(){
+        if(tail.size() > 0){
+            tail.remove(tail.size() - 1);
+        }
+    }
+
     public boolean isCollidingWith(Food<Type,O> other) {
         return head.isCollidingWith(other);
     }

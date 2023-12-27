@@ -1,6 +1,7 @@
 package model.foods;
 
 import java.util.ArrayList;
+
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
@@ -22,6 +23,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
                     return new KillerFoodInteger(coordinate);
                 case DEATH_FOOD:
                     return new DeathFoodInteger(coordinate);
+                case POISON_FOOD:
+                    return new PoisonFoodInteger(coordinate);
                 default:
                     throw new IllegalArgumentException("FoodType not recognized");
             }
@@ -98,6 +101,28 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         @Override
         public FoodType getFoodType() {
             return FoodType.KILLER_FOOD;
+        }
+    }
+
+
+    public static class PoisonFoodInteger extends Food<Integer,Direction> {
+
+        private static final double radius = 5;
+        private static final boolean respawn = true;
+        private static final int probability = 10;
+
+        public PoisonFoodInteger(Coordinate<Integer, Direction> coordinate) {
+            super(coordinate, radius, respawn, probability);
+        }
+
+        @Override
+        public void actOnSnake(Snake<Integer, Direction> snake) {
+            snake.shrink();
+        }
+
+        @Override
+        public FoodType getFoodType() {
+            return FoodType.POISON_FOOD;
         }
     }
 

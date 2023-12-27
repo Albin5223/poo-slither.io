@@ -7,13 +7,12 @@ import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.foods.FoodFactoryDouble;
+import configuration.Configuration;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public static class BorderDouble implements GameBorder<Double,Angle> {
 
-        /* The ratio of the random coordinate to be inside the map */
-        private static final double RANDOM_RATIO = 0.9;
 
         private CoordinateDouble map_center;
         private double map_radius;
@@ -43,7 +42,7 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         @Override
         public Coordinate<Double, Angle> getRandomCoordinate() {
             double angle = new Random().nextDouble() * 2 * Math.PI;
-            double radius = map_radius * Math.sqrt(new Random().nextDouble()) * RANDOM_RATIO;
+            double radius = map_radius * Math.sqrt(new Random().nextDouble()) * Configuration.RANDOM_RATIO;
             double x = map_center.getX() + radius * Math.cos(angle);
             double y = map_center.getY() + radius * Math.sin(angle);
             return new CoordinateDouble(x, y);
