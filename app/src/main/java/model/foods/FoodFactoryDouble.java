@@ -3,10 +3,10 @@ package model.foods;
 import java.util.ArrayList;
 import java.util.Random;
 
-import GUI.OurColors;
 import configuration.ConfigurationFood;
+import externData.ImageBank;
+import externData.OurColors;
 import interfaces.Orientation.Angle;
-import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.Snake;
@@ -49,8 +49,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         public GrowingFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFood.GROWING_FOOD_RADIUS, ConfigurationFood.GROWING_FOOD_RESPAWN, ConfigurationFood.GROWING_FOOD_PROBABILITY);
             OurColors color = OurColors.getRandomColor();
-            String name = OurColors.toString(color);
-            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
+            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -69,8 +68,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         public GrowingBigFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate,ConfigurationFood.GROWING_BIG_FOOD_RADIUS, ConfigurationFood.GROWING_BIG_FOOD_RESPAWN, ConfigurationFood.GROWING_BIG_FOOD_PROBABILITY);
             OurColors color = OurColors.getRandomColor();
-            String name = OurColors.toString(color);
-            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
+            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -89,8 +87,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         
         public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFood.POISON_FOOD_RADIUS, ConfigurationFood.POISON_FOOD_RESPAWN, ConfigurationFood.POISON_FOOD_PROBABILITY);
-            String name = "poison";
-            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
+            image = ImageBank.getSpecialImage("poison");
         
         }
 
@@ -109,8 +106,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFood.KILLER_FOOD_RADIUS, ConfigurationFood.KILLER_FOOD_RESPAWN, ConfigurationFood.KILLER_FOOD_PROBABILITY);
-            String name = "skull";
-            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
+            image = ImageBank.getSpecialImage("skull");
         }
 
         @Override
@@ -128,9 +124,6 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public DeathFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFood.DEATH_FOOD_RADIUS);
-            OurColors color = OurColors.getRandomColor();
-            String name = OurColors.toString(color);
-            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
     }
     

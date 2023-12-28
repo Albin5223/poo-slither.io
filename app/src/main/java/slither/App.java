@@ -4,6 +4,7 @@
 package slither;
 
 import GUI.Window;
+import externData.ImageBank;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,6 +12,14 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage){
+
+        try {
+            new ImageBank().loadImages();
+        } catch (NullPointerException e) {
+            System.out.println("Error while loading images");
+            e.printStackTrace();
+        }
+
         Window window = new Window(primaryStage);
         
         primaryStage.setTitle("Slither");

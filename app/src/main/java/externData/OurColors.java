@@ -1,4 +1,4 @@
-package GUI;
+package externData;
 
 public enum OurColors {
     RED, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, BROWN;
@@ -8,8 +8,8 @@ public enum OurColors {
         return OurColors.values()[random];
     }
 
-    public static String toString(OurColors color){
-        return color.toString().toLowerCase();
+    public String toString(){
+        return this.name().toLowerCase();
     }
     
 }

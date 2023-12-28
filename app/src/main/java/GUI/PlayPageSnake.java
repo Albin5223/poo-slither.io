@@ -50,7 +50,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
                 this.getChildren().add(imageView);
             }
             else{
-                System.out.println("image null");
+                //System.out.println("image null");
                 Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
                 c.setFill(Color.BLACK);
                 this.getChildren().add(c);
