@@ -9,28 +9,15 @@ import model.foods.Food;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithSnake;
 import exceptions.ExceptionCollisionWithWall;
+import configuration.ConfigurationSnakeInteger;
 
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
-    private static final int SNAKE_BIRTH_LENGTH = 10;
-    private static final int SNAKE_MAX_FOOD_CHARGING = 5;
-    public static final int SNAKE_BIRTH_HITBOX_RADIUS = 10;
-    public static final Integer SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
-
-    private static final int SNAKE_DEFAULT_SPEED = 10;
-    private static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
-
-    /** Do we want to add food behind a dead snake ? */
-    private static final boolean DEATH_FOOD = true;
-    private static final int DEATH_FOOD_PER_SEGMENT = 1;
-
-    /** Are we reappearing in the opposite side of the board when traversing the wall ? */
-    private static final boolean TRAVERSABLE_WALL = true;
-
+    
     public final class SnakePartInteger extends Snake<Integer,Direction>.SnakePart {
 
         private SnakePartInteger(Coordinate<Integer,Direction> center, Direction direction) {
-            super(center, direction,SNAKE_BIRTH_HITBOX_RADIUS);
+            super(center, direction,ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS);
         }
 
         /**
@@ -48,8 +35,8 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
     }
 
     private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
-        super(location,plateau,startingDirection,SNAKE_GAP_BETWEEN_TAIL, SNAKE_BIRTH_HITBOX_RADIUS, SNAKE_BIRTH_LENGTH, SNAKE_MAX_FOOD_CHARGING, SNAKE_DEFAULT_SPEED, SNAKE_BOOST_SPEED, DEATH_FOOD_PER_SEGMENT);
-        this.currentSpeed = SNAKE_DEFAULT_SPEED;
+        super(location,plateau,startingDirection,ConfigurationSnakeInteger.SNAKE_GAP_BETWEEN_TAIL, ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS, ConfigurationSnakeInteger.SNAKE_BIRTH_LENGTH, ConfigurationSnakeInteger.SNAKE_MAX_FOOD_CHARGING, ConfigurationSnakeInteger.SNAKE_DEFAULT_SPEED, ConfigurationSnakeInteger.SNAKE_BOOST_SPEED, ConfigurationSnakeInteger.DEATH_FOOD_PER_SEGMENT);
+        this.currentSpeed = ConfigurationSnakeInteger.SNAKE_DEFAULT_SPEED;
     }
 
     public static SnakeInteger createSnakeInteger(PlateauInteger plateau) {
@@ -78,15 +65,15 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
         // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
         Direction newDirection = turn(currentTurning, head.getOrientation());
-        SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,SNAKE_GAP_BETWEEN_TAIL), newDirection);
+        SnakePartInteger newHead = new SnakePartInteger(head.getCenter().placeCoordinateFrom(newDirection,ConfigurationSnakeInteger.SNAKE_GAP_BETWEEN_TAIL), newDirection);
 
         // We check if the snake is traversing the wall
-        if(TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
+        if(ConfigurationSnakeInteger.TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
             newHead = new SnakePartInteger(plateau.border.getOpposite(newHead.getCenter()), newDirection);
         }
         // We check if the snake is colliding with the wall
         else if(!plateau.border.isInside(newHead.getCenter())){
-            if(DEATH_FOOD){
+            if(ConfigurationSnakeInteger.DEATH_FOOD){
                 plateau.addDeathFood(this);
             }
             throw new ExceptionCollisionWithWall("Snake is colliding with the wall");
@@ -98,7 +85,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
         // We check if the snake is colliding with a snake, wall or itself
         if(plateau.isCollidingWithAll(this) || isCollidingWithMe()){
-            if(DEATH_FOOD){
+            if(ConfigurationSnakeInteger.DEATH_FOOD){
                 plateau.addDeathFood(this);
             }
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake or itself");

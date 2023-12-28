@@ -8,11 +8,11 @@ import model.foods.FoodFactoryInteger;
 
 import java.util.Random;
 
+import configuration.ConfigurationSnakeInteger;
+
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public static class BorderInteger implements GameBorder<Integer,Direction> {
-
-        private static final boolean IS_ALIGN_WITH_SNAKE = true;
 
         private int xMin;
         private int xMax;
@@ -66,7 +66,7 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
 
         private Coordinate<Integer, Direction> getRandomCoordinateAlignWithSnake(){
-            int stepSize = SnakeInteger.SNAKE_GAP_BETWEEN_TAIL;
+            int stepSize = ConfigurationSnakeInteger.SNAKE_GAP_BETWEEN_TAIL;
 
             int xRange = (xMax - xMin) / stepSize;
             int yRange = (yMax - yMin) / stepSize;
@@ -84,7 +84,7 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
         @Override
         public Coordinate<Integer, Direction> getRandomCoordinate() {
-            if(IS_ALIGN_WITH_SNAKE){
+            if(ConfigurationSnakeInteger.IS_ALIGN_WITH_SNAKE){
                 return getRandomCoordinateAlignWithSnake();
             }
             else{
@@ -101,10 +101,10 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public static PlateauInteger createPlateauSnake(int width, int height){
         BorderInteger border = new BorderInteger(
-            -4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS),
-            4*width/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
-            -4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
-            4*height/(SnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS)
+            -4*width/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS),
+            4*width/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
+            -4*height/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
+            4*height/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS)
         );
 
         PlateauInteger plateau = new PlateauInteger(NB_FOOD, FoodFactoryInteger.build(), border);
