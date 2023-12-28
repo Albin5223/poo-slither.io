@@ -27,6 +27,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private final int DEFAULT_SPEED;
     private final int BOOST_SPEED;
 
+    private int TIME_OF_POISON = 0;
+
     public final int DEATH_FOOD_PER_SEGMENT;
     
     /** The amount of food that the snake has eaten */
@@ -168,6 +170,15 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return new ArrayList<>(tail);
     }
 
+
+    public void setPoisoned(int TIME) {
+        TIME_OF_POISON = TIME;
+    }
+
+    public boolean isPoisoned() {
+        return TIME_OF_POISON > 0;
+    }
+
     /**
      * @return a copy of {@link #head} and {@link #tail}
      */
@@ -213,8 +224,11 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     }
 
     public void shrink(){
-        if(tail.size() > 0){
+        if(tail.size() > 3){
             tail.remove(tail.size() - 1);
+        }
+        else{
+            TIME_OF_POISON = 0;
         }
     }
 

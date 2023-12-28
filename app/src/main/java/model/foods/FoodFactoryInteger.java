@@ -2,7 +2,10 @@ package model.foods;
 
 import java.util.ArrayList;
 
+import GUI.OurColors;
+import configuration.Configuration;
 import interfaces.Orientation.Direction;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 
@@ -44,10 +47,13 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         private static final int value = 5;
         private static final int radius = 5;
         private static final boolean respawn = true;
-        private static final int probability = 10;
+        private static final int probability = 0;
 
         public GrowingFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -70,6 +76,9 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public GrowingBigFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -87,10 +96,12 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         private static final int radius = 10;
         private static final boolean respawn = false;
-        private static final int probability = 1;
+        private static final int probability = 0;
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius, respawn, probability);
+            String name = "skull";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -107,17 +118,15 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
     public static class PoisonFoodInteger extends Food<Integer,Direction> {
 
-        private static final double radius = 5;
-        private static final boolean respawn = true;
-        private static final int probability = 10;
-
         public PoisonFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, radius, respawn, probability);
+            super(coordinate, Configuration.POISON_FOOD_RADIUS, Configuration.POISON_FOOD_RESPAWN, Configuration.POISON_FOOD_PROBABILITY);
+            String name = "poison";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.shrink();
+            snake.setPoisoned(Configuration.POISON_VALUE);
         }
 
         @Override
@@ -132,6 +141,9 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public DeathFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, radius);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
     }
 

@@ -3,7 +3,10 @@ package model.foods;
 import java.util.ArrayList;
 import java.util.Random;
 
+import GUI.OurColors;
+import configuration.Configuration;
 import interfaces.Orientation.Angle;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.Snake;
@@ -50,6 +53,9 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public GrowingFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -65,18 +71,18 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
     public static class GrowingBigFoodDouble extends Food<Double,Angle> {
 
-        private static final int value = 10;
-        private static final double radius = 10;
-        private static final boolean respawn = true;
-        private static final int probability = 10;
+        
 
         public GrowingBigFoodDouble(Coordinate<Double, Angle> coordinate) {
-            super(coordinate, radius, respawn, probability);
+            super(coordinate,Configuration.GROWING_BIG_FOOD_RADIUS, Configuration.GROWING_BIG_FOOD_RESPAWN, Configuration.GROWING_BIG_FOOD_PROBABILITY);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
         public void actOnSnake(Snake<Double, Angle> snake) {
-            snake.chargeFood(value);
+            snake.chargeFood(Configuration.GROWING_BIG_FOOD_VALUE);
         }
 
         @Override
@@ -87,17 +93,17 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
     public static class PoisonFoodDouble extends Food<Double,Angle> {
 
-        private static final double radius = 5;
-        private static final boolean respawn = true;
-        private static final int probability = 10;
-
+        
         public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
-            super(coordinate, radius, respawn, probability);
+            super(coordinate, Configuration.POISON_FOOD_RADIUS, Configuration.POISON_FOOD_RESPAWN, Configuration.POISON_FOOD_PROBABILITY);
+            String name = "poison";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
+        
         }
 
         @Override
         public void actOnSnake(Snake<Double, Angle> snake) {
-            snake.shrink();
+            snake.setPoisoned(Configuration.POISON_VALUE);
         }
 
         @Override
@@ -110,10 +116,12 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         private static final double radius = 10;
         private static final boolean respawn = false;
-        private static final int probability = 2;
+        private static final int probability = 0;
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius, respawn, probability);
+            String name = "skull";
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
 
         @Override
@@ -133,6 +141,9 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public DeathFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, radius);
+            OurColors color = OurColors.getRandomColor();
+            String name = OurColors.toString(color);
+            image = new Image("file:src/main/resources/foods/"+name+".png", radius * 2, radius * 2, false, false);
         }
     }
     

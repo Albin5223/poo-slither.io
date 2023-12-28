@@ -10,6 +10,7 @@ import exceptions.ExceptionCollisionWithSnake;
 import exceptions.ExceptionTooManyFoods;
 import interfaces.GameBorder;
 import interfaces.Orientation;
+import javafx.animation.AnimationTimer;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateTree;
 import model.foods.DeathFood;
@@ -23,6 +24,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     
     protected final FoodFactory<Type,O> foodFactory;
     protected final GameBorder<Type,O> border;
+
+    protected final int MAX_FOOD_COEF = 3;
     protected final int NB_FOOD;
 
     /**
@@ -32,12 +35,35 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      */
     private Object lock = new Object();
 
+    private AnimationTimer animation;
+    private long lastUpdate = 0;
+
 
     protected Plateau(int nbFood, FoodFactory<Type,O> foodFactory, GameBorder<Type,O> border) {
         this.NB_FOOD = nbFood;
         this.foodFactory = foodFactory;
         this.border = border;
+        animation = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                
+                if((now-lastUpdate) >= 1_000_000_000){
+                    System.out.println("Update");
+                    for(Snake<Type,O> snake : plateau.values()){
+                        if(snake.isPoisoned()){
+                            snake.shrink();
+                        }
+                    }
+                    lastUpdate = now;
+                }
+                
+            }
+        };
         this.addAllFood();
+    }
+
+    public void startAnimation(){
+        animation.start();
     }
 
     public CoordinateTree<Type, O, Food<Type,O>> getFoodTree() {
@@ -88,9 +114,6 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
             if(foodTree.contains(c)){
                 throw new ExceptionCollisionWithFood("Food added in another food");
             }
-            if(foodTree.size() > 3*NB_FOOD){
-                throw new ExceptionTooManyFoods("Too many foods on the board");
-            }
             foodTree.add(c,food);
         }
     }
@@ -98,6 +121,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
             ArrayList<DeathFood<Type,O>> deathFoods = foodFactory.getDeathFoods(snake);
+            if(foodTree.size() > MAX_FOOD_COEF*NB_FOOD){return;}
             for(DeathFood<Type,O> food : deathFoods){
                 try {
                     addFood(food.getCenter(), food);

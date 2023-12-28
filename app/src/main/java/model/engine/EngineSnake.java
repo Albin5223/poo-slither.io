@@ -149,6 +149,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public void run() {
+        plateau.startAnimation();
         for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
             snakeMover.start();
         }

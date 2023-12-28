@@ -7,6 +7,8 @@ import model.foods.Food;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -37,10 +39,22 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         this.getChildren().clear();
 
         for (Coordinate<Integer,Direction> coord : data.getAllFood().keySet()) {
-            Food<Integer,Direction> commestible = data.getAllFood().get(coord);
-            Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), commestible.getRadius());
-            c.setFill(commestible.getFoodType().getColor());
-            this.getChildren().add(c);
+            Food<Integer,Direction> food = data.getAllFood().get(coord);
+            Image image = food.getImage();
+            if(image != null){
+                ImageView imageView = new ImageView(image);
+                imageView.setX(D_X + coord.getX().doubleValue() - food.getRadius());
+                imageView.setY(D_Y + coord.getY().doubleValue() - food.getRadius());
+                imageView.setFitHeight(food.getRadius()*2);
+                imageView.setFitWidth(food.getRadius()*2);
+                this.getChildren().add(imageView);
+            }
+            else{
+                System.out.println("image null");
+                Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
+                c.setFill(Color.BLACK);
+                this.getChildren().add(c);
+            }
         }
 
         for(SnakeData<Integer,Direction> snakeData : data.getAllSnake()){

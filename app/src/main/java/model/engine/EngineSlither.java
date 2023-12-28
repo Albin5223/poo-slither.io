@@ -145,6 +145,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void run() {
+        plateau.startAnimation();
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.start();
         }
