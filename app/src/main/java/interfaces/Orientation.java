@@ -22,7 +22,7 @@ public sealed interface Orientation<O extends Orientation<O>> {
         @Override
         public Angle opposite() {
             if(this.angle < 0 || this.angle > 360){System.out.println("ANGLE bug : "+angle);throw new IllegalArgumentException("Angle must be between 0 and 360");}
-            return new Angle((this.angle + 180) % 360);
+            return new Angle(this.angle + 180);
         }
 
         public Angle changeAngleWithTurn(Turning turning, Angle step) {
@@ -86,9 +86,9 @@ public sealed interface Orientation<O extends Orientation<O>> {
 
         public int getAngle() {
             switch (this) {
-                case UP: return 90;   
-                case DOWN: return 270;
+                case DOWN: return 90; 
                 case LEFT: return 180;
+                case UP: return 270;  
                 case RIGHT: return 0;
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + this);
