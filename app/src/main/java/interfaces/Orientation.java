@@ -83,6 +83,17 @@ public sealed interface Orientation<O extends Orientation<O>> {
         public String toString() {
             return "Direction [name=" + this.name() + "]";
         }
+
+        public int getAngle() {
+            switch (this) {
+                case UP: return 90;   
+                case DOWN: return 270;
+                case LEFT: return 180;
+                case RIGHT: return 0;
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + this);
+            }
+        }
     }
 
 }

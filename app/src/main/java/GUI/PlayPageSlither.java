@@ -55,7 +55,6 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
                 this.getChildren().add(imageView);
             }
             else{
-                System.out.println("image null");
                 Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
                 c.setFill(Color.BLACK);
                 this.getChildren().add(c);
@@ -69,7 +68,6 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             int tail_pattern_size = tail_pattern.size();
 
             int i = 0;
-
             for(Coordinate<Double,Angle> coord : snakeData.getTail().reversed()){
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
@@ -88,6 +86,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
                     c.setFill(snakeData.getColor());
                     this.getChildren().add(c);
                 }
+                i++;
             }
 
             double x_head = D_X + snakeData.getHead().getX().intValue();
