@@ -2,15 +2,12 @@ package model.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.foods.Food;
@@ -32,7 +29,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
     ArrayList<HumanSnakePlayer> players;
     
     ArrayList<Observer<Integer,Direction>> observers;
-    ArrayList<Color> colors;
     ArrayList<BotSnakePlayer> bots;
 
     private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
@@ -42,7 +38,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
         }
         this.players = new ArrayList<HumanSnakePlayer>();
         this.plateau = plateau;
-        this.colors = new ArrayList<Color>();
         this.bots = new ArrayList<BotSnakePlayer>();
         this.observers = new ArrayList<Observer<Integer,Direction>>();
     }
@@ -91,12 +86,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
     public void addBot(){
         SnakeInteger newSnake = SnakeInteger.createSnakeInteger(plateau);
         BotSnakePlayer newBot = new BotSnakePlayer(newSnake,plateau);
-        Random rand = new Random();
-        int red = rand.nextInt(255);
-        int green = rand.nextInt(255);
-        int blue = rand.nextInt(255);
-        Color newColor = Color.rgb(red, green, blue);
-        colors.add(newColor);
         bots.add(newBot);
         snakeMovers.add(new SnakeMover<Integer,Direction>(newSnake,this,newBot));
     }
@@ -106,12 +95,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
         SnakeInteger newSnake = SnakeInteger.createSnakeInteger(plateau);
         HumanSnakePlayer newPlayer = new HumanSnakePlayer(newSnake, snakeControler);
         players.add(newPlayer);
-        Random rand = new Random();
-        int red = rand.nextInt(255);
-        int green = rand.nextInt(255);
-        int blue = rand.nextInt(255);
-        Color newColor = Color.rgb(red, green, blue);
-        colors.add(newColor);
         snakeMovers.add(new SnakeMover<Integer,Direction>(newSnake,this,null));
         notifyObservers();
         
@@ -142,7 +125,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
     public ArrayList<SnakeData<Integer, Direction>> getAllSnake() {
         ArrayList<SnakeData<Integer, Direction>> allSnake = new ArrayList<SnakeData<Integer, Direction>>();
         for(int i = 0; i < snakeMovers.size(); i++){
-            allSnake.add(new SnakeData<Integer, Direction>(snakeMovers.get(i).getSnake(), colors.get(i)));
+            allSnake.add(new SnakeData<Integer, Direction>(snakeMovers.get(i).getSnake()));
         }
         return allSnake;
     }

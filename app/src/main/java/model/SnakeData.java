@@ -1,7 +1,6 @@
 package model;
 
 import interfaces.Orientation;
-import javafx.scene.paint.Color;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 import model.skins.Skin;
@@ -11,11 +10,9 @@ import java.util.ArrayList;
 public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     private Snake<Type, O> snake;
-    private Color color;
 
-    public SnakeData(Snake<Type, O> snake, Color color) {
+    public SnakeData(Snake<Type, O> snake) {
         this.snake = snake;
-        this.color = color;
     }
 
     public Skin<Type, O> getSkin() {
@@ -32,10 +29,6 @@ public class SnakeData<Type extends Number & Comparable<Type>, O extends Orienta
 
     public double getRadius() {
         return snake.getHead().getHitboxRadius();
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     public ArrayList<Coordinate<Type, O>> getTail() {

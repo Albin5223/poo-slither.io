@@ -87,7 +87,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
                     Rectangle black_back = new Rectangle(x,y,witdh,witdh);
                     black_back.setFill(Color.BLACK);
                     Rectangle r = new Rectangle(x+1,y+1,witdh-2,witdh-2);
-                    r.setFill(snakeData.getColor());
+                    r.setFill(tail_pattern.get(i%tail_pattern_size).toColorJavaFX());
                     this.getChildren().add(black_back);
                     this.getChildren().add(r);
                 }

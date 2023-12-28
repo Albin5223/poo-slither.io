@@ -2,15 +2,12 @@ package model.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.foods.Food;
@@ -25,7 +22,6 @@ public class EngineSlither implements Engine<Double,Angle>{
     
     private PlateauDouble plateau;
     ArrayList<SnakeMover<Double,Angle>> snakeMovers;
-    ArrayList<Color> colors; 
     ArrayList<Observer<Double,Angle>> observers;
     ArrayList<HumanSlitherPlayer> players;
     ArrayList<BotSlitherPlayer> bots;
@@ -38,7 +34,6 @@ public class EngineSlither implements Engine<Double,Angle>{
         this.plateau = plateau;
         this.bots = new ArrayList<BotSlitherPlayer>();
         this.observers = new ArrayList<Observer<Double,Angle>>();
-        this.colors = new ArrayList<Color>();
         this.players = new ArrayList<HumanSlitherPlayer>();
     }
 
@@ -51,12 +46,6 @@ public class EngineSlither implements Engine<Double,Angle>{
     public void addBot(){
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
         BotSlitherPlayer newBot = new BotSlitherPlayer(newSnake, plateau);
-        Random rand = new Random();
-        int red = rand.nextInt(255);
-        int green = rand.nextInt(255);
-        int blue = rand.nextInt(255);
-        Color newColor = Color.rgb(red, green, blue);
-        colors.add(newColor);
         bots.add(newBot);
         snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,newBot));
         
@@ -66,12 +55,6 @@ public class EngineSlither implements Engine<Double,Angle>{
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
         HumanSlitherPlayer newPlayer = new HumanSlitherPlayer(newSnake, snakeControler);
         players.add(newPlayer);
-        Random rand = new Random();
-        int red = rand.nextInt(255);
-        int green = rand.nextInt(255);
-        int blue = rand.nextInt(255);
-        Color newColor = Color.rgb(red, green, blue);
-        colors.add(newColor);
         snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,null));
         notifyObservers();
     }
@@ -118,7 +101,7 @@ public class EngineSlither implements Engine<Double,Angle>{
     public ArrayList<SnakeData<Double, Angle>> getAllSnake() {
         ArrayList<SnakeData<Double, Angle>> allSnake = new ArrayList<SnakeData<Double, Angle>>();
         for(int i = 0; i < snakeMovers.size(); i++){
-            allSnake.add(new SnakeData<Double, Angle>(snakeMovers.get(i).getSnake(), colors.get(i)));
+            allSnake.add(new SnakeData<Double, Angle>(snakeMovers.get(i).getSnake()));
         }
         return allSnake;
     }

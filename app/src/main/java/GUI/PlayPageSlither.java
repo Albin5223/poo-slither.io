@@ -83,7 +83,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
                 }
                 else{
                     Circle c = new Circle(x,y,snakeData.getRadius());
-                    c.setFill(snakeData.getColor());
+                    c.setFill(tail_pattern.get(i%tail_pattern_size).toColorJavaFX());
                     this.getChildren().add(c);
                 }
                 i++;

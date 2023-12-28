@@ -1,7 +1,6 @@
 package configuration;
 
-public class ConfigurationFood {
-
+public class ConfigurationFoodDouble {
 
     /*Configuration for poison food */
     public static final int POISON_VALUE = 5;
@@ -39,5 +38,4 @@ public class ConfigurationFood {
     public static final int SHIELD_VALUE = 5;
     public static final boolean SHIELD_FOOD_RESPAWN = true;
     public static final int SHIELD_FOOD_PROBABILITY = 10;
-    
 }

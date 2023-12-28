@@ -1,6 +1,5 @@
 package model.foods;
 
-import configuration.ConfigurationFood;
 import externData.ImageBank;
 import externData.OurColors;
 import interfaces.Orientation;
@@ -10,15 +9,18 @@ import model.plateau.Snake;
 
 public abstract class DeathFood<Type extends Number & Comparable<Type>, O extends Orientation<O>> extends Food<Type,O> {
 
-    public DeathFood(Coordinate<Type, O> coordinate, double radius) {
-        super(coordinate, radius, ConfigurationFood.DEATH_FOOD_RESPAWN, ConfigurationFood.DEATH_FOOD_PROBABILITY);
+    private final int value;
+
+    public DeathFood(Coordinate<Type, O> coordinate, double radius, int value) {
+        super(coordinate, radius, false, 0);
+        this.value = value;
         OurColors color = OurColors.getRandomColor();
         image = ImageBank.getCircleImage(color);
     }
 
     @Override
     public final void actOnSnake(Snake<Type,O> snake){
-        snake.chargeFood(ConfigurationFood.DEATH_FOOD_VALUE);
+        snake.chargeFood(value);
     }
 
     @Override

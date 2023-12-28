@@ -2,7 +2,7 @@ package model.foods;
 
 import java.util.ArrayList;
 
-import configuration.ConfigurationFood;
+import configuration.ConfigurationFoodInteger;
 import externData.ImageBank;
 import externData.OurColors;
 import interfaces.Orientation.Direction;
@@ -47,14 +47,14 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
     public static class GrowingFoodInteger extends Food<Integer,Direction> {
 
         public GrowingFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, ConfigurationFood.GROWING_FOOD_RADIUS, ConfigurationFood.GROWING_FOOD_RESPAWN, ConfigurationFood.GROWING_FOOD_PROBABILITY);
+            super(coordinate, ConfigurationFoodInteger.GROWING_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_FOOD_PROBABILITY);
             OurColors color = OurColors.getRandomColor();
             image = ImageBank.getCircleImage(color);
         }
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.chargeFood(ConfigurationFood.GROWING_FOOD_VALUE);
+            snake.chargeFood(ConfigurationFoodInteger.GROWING_FOOD_VALUE);
         }
 
         @Override
@@ -66,13 +66,13 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
     public static class ShieldFoodInteger extends Food<Integer,Direction> {
 
         public ShieldFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, ConfigurationFood.SHIELD_FOOD_RADIUS, ConfigurationFood.SHIELD_FOOD_RESPAWN, ConfigurationFood.SHIELD_FOOD_PROBABILITY);
+            super(coordinate, ConfigurationFoodInteger.SHIELD_FOOD_RADIUS, ConfigurationFoodInteger.SHIELD_FOOD_RESPAWN, ConfigurationFoodInteger.SHIELD_FOOD_PROBABILITY);
             image = ImageBank.getSpecialImage("shield");
         }
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.setShielded(ConfigurationFood.SHIELD_VALUE);
+            snake.setShielded(ConfigurationFoodInteger.SHIELD_VALUE);
         }
 
         @Override
@@ -84,14 +84,14 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
     public static class GrowingBigFoodInteger extends Food<Integer,Direction> {
 
         public GrowingBigFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate,ConfigurationFood.GROWING_BIG_FOOD_RADIUS, ConfigurationFood.GROWING_BIG_FOOD_RESPAWN, ConfigurationFood.GROWING_BIG_FOOD_PROBABILITY);
+            super(coordinate,ConfigurationFoodInteger.GROWING_BIG_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_BIG_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_BIG_FOOD_PROBABILITY);
             OurColors color = OurColors.getRandomColor();
             image = ImageBank.getCircleImage(color);
         }
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.chargeFood(ConfigurationFood.GROWING_BIG_FOOD_VALUE);
+            snake.chargeFood(ConfigurationFoodInteger.GROWING_BIG_FOOD_VALUE);
         }
 
         @Override
@@ -105,7 +105,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, ConfigurationFood.KILLER_FOOD_RADIUS, ConfigurationFood.KILLER_FOOD_RESPAWN, ConfigurationFood.KILLER_FOOD_PROBABILITY);
+            super(coordinate, ConfigurationFoodInteger.KILLER_FOOD_RADIUS, ConfigurationFoodInteger.KILLER_FOOD_RESPAWN, ConfigurationFoodInteger.KILLER_FOOD_PROBABILITY);
             image = ImageBank.getSpecialImage("skull");
         }
 
@@ -124,13 +124,13 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
     public static class PoisonFoodInteger extends Food<Integer,Direction> {
 
         public PoisonFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, ConfigurationFood.POISON_FOOD_RADIUS, ConfigurationFood.POISON_FOOD_RESPAWN, ConfigurationFood.POISON_FOOD_PROBABILITY);
+            super(coordinate, ConfigurationFoodInteger.POISON_FOOD_RADIUS, ConfigurationFoodInteger.POISON_FOOD_RESPAWN, ConfigurationFoodInteger.POISON_FOOD_PROBABILITY);
             image = ImageBank.getSpecialImage("poison");
         }
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.setPoisoned(ConfigurationFood.POISON_VALUE);
+            snake.setPoisoned(ConfigurationFoodInteger.POISON_VALUE);
         }
 
         @Override
@@ -142,7 +142,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
     public static class DeathFoodInteger extends DeathFood<Integer,Direction> {
 
         public DeathFoodInteger(Coordinate<Integer, Direction> coordinate) {
-            super(coordinate, ConfigurationFood.DEATH_FOOD_RADIUS);
+            super(coordinate, ConfigurationFoodInteger.DEATH_FOOD_RADIUS, ConfigurationFoodInteger.DEATH_FOOD_VALUE);
         }
     }
 
