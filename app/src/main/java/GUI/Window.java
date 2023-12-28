@@ -50,6 +50,11 @@ public class Window {
             
 
             gameScene.setOnKeyPressed( ev -> {
+                if(ev.getCode() == KeyCode.ESCAPE){
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                    engine.stop();
+                }
                 for (HumanPlayer p : engine.getPlayers()) {
                     p.keyPressed(ev);
                 }
@@ -94,6 +99,11 @@ public class Window {
             engine.addBot();
 
             gameScene.setOnKeyPressed( ev -> {
+                if(ev.getCode() == KeyCode.ESCAPE){
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                    engine.stop();
+                }
                 for (HumanPlayer p : engine.getPlayers()) {
                     p.keyPressed(ev);
                 }

@@ -157,8 +157,10 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stop'");
+        plateau.stopAnimation();
+        for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
+            snakeMover.stop();
+        }
     }
 
     

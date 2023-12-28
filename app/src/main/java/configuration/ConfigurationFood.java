@@ -32,5 +32,12 @@ public class ConfigurationFood {
     public static final int DEATH_FOOD_VALUE = 1;
     public static final boolean DEATH_FOOD_RESPAWN = false;
     public static final int DEATH_FOOD_PROBABILITY = 0;
+
+
+    /*Configuration for shield food */
+    public static final double SHIELD_FOOD_RADIUS = 5;
+    public static final int SHIELD_VALUE = 5;
+    public static final boolean SHIELD_FOOD_RESPAWN = true;
+    public static final int SHIELD_FOOD_PROBABILITY = 10;
     
 }

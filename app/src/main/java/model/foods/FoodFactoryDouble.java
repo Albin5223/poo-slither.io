@@ -30,6 +30,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
                     return new DeathFoodDouble(coordinate);
                 case POISON_FOOD:
                     return new PoisonFoodDouble(coordinate);
+                case SHIELD_FOOD:
+                    return new ShieldFoodDouble(coordinate);
                 default:
                     throw new IllegalArgumentException("FoodType not recognized");
             }
@@ -148,5 +150,24 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
             }
         }
         return deathFoods;
-    }    
+    }
+
+
+     public static class ShieldFoodDouble extends Food<Double,Angle> {
+
+        public ShieldFoodDouble(Coordinate<Double, Angle> coordinate) {
+            super(coordinate, ConfigurationFood.SHIELD_FOOD_RADIUS, ConfigurationFood.SHIELD_FOOD_RESPAWN, ConfigurationFood.SHIELD_FOOD_PROBABILITY);
+            image = ImageBank.getSpecialImage("shield");
+        }
+
+        @Override
+        public void actOnSnake(Snake<Double, Angle> snake) {
+            snake.setShielded(ConfigurationFood.SHIELD_VALUE);
+        }
+
+        @Override
+        public FoodType getFoodType() {
+            return FoodType.SHIELD_FOOD;
+        }
+    }
 }

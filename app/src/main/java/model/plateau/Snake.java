@@ -33,6 +33,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private final int BOOST_SPEED;
 
     private int TIME_OF_POISON = 0;
+    private int TIME_OF_SHIELD = 0;
 
     public final int DEATH_FOOD_PER_SEGMENT;
     
@@ -185,11 +186,44 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
 
     public void setPoisoned(int TIME) {
-        TIME_OF_POISON = TIME;
+        if(isShielded()){
+            TIME_OF_SHIELD = 0;
+        }
+        else{
+            TIME_OF_POISON = TIME;
+        }
+    }
+
+    public boolean underEffect(){
+        return isPoisoned() || isShielded();
     }
 
     public boolean isPoisoned() {
         return TIME_OF_POISON > 0;
+    }
+
+    public boolean isShielded() {
+        return TIME_OF_SHIELD > 0;
+    }
+
+    public void setShielded(int TIME) {
+        if(isPoisoned()){
+            TIME_OF_POISON = 0;
+        }
+        else{
+            TIME_OF_SHIELD = TIME;
+        }
+    }
+
+
+    public void applyEffect(){
+        if(isPoisoned()){
+            shrink();
+            TIME_OF_POISON--;
+        }
+        if(isShielded()){
+            TIME_OF_SHIELD--;
+        }
     }
 
     /**

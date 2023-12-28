@@ -50,8 +50,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
                 if((now-lastUpdate) >= 1_000_000_000){
                     System.out.println("Update");
                     for(Snake<Type,O> snake : plateau.values()){
-                        if(snake.isPoisoned()){
-                            snake.shrink();
+                        if(snake.underEffect()){
+                            snake.applyEffect();
                         }
                     }
                     lastUpdate = now;
@@ -64,6 +64,10 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
 
     public void startAnimation(){
         animation.start();
+    }
+
+    public void stopAnimation(){
+        animation.stop();
     }
 
     public CoordinateTree<Type, O, Food<Type,O>> getFoodTree() {

@@ -28,6 +28,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
                     return new DeathFoodInteger(coordinate);
                 case POISON_FOOD:
                     return new PoisonFoodInteger(coordinate);
+                case SHIELD_FOOD:
+                    return new ShieldFoodInteger(coordinate);
                 default:
                     throw new IllegalArgumentException("FoodType not recognized");
             }
@@ -58,6 +60,24 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         @Override
         public FoodType getFoodType() {
             return FoodType.GROWING_FOOD;
+        }
+    }
+
+    public static class ShieldFoodInteger extends Food<Integer,Direction> {
+
+        public ShieldFoodInteger(Coordinate<Integer, Direction> coordinate) {
+            super(coordinate, ConfigurationFood.SHIELD_FOOD_RADIUS, ConfigurationFood.SHIELD_FOOD_RESPAWN, ConfigurationFood.SHIELD_FOOD_PROBABILITY);
+            image = ImageBank.getSpecialImage("shield");
+        }
+
+        @Override
+        public void actOnSnake(Snake<Integer, Direction> snake) {
+            snake.setShielded(ConfigurationFood.SHIELD_VALUE);
+        }
+
+        @Override
+        public FoodType getFoodType() {
+            return FoodType.SHIELD_FOOD;
         }
     }
 

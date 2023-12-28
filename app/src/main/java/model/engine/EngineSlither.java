@@ -153,6 +153,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void stop() {
+        plateau.stopAnimation();
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.stop();
         }

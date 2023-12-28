@@ -14,7 +14,8 @@ public abstract class FoodFactory<Type extends Number & Comparable<Type>, O exte
         GROWING_BIG_FOOD,
         KILLER_FOOD,
         POISON_FOOD,
-        DEATH_FOOD;
+        DEATH_FOOD,
+        SHIELD_FOOD;
     }
 
     public static abstract class FoodBuilder<Type extends Number & Comparable<Type>, O extends Orientation<O>> {

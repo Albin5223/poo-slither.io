@@ -15,7 +15,7 @@ public class Server implements Runnable{
     private ArrayList<ConnexionHandle> clients;
     private boolean done;
     private ServerSocket server;
-    public final static int port = 9999;
+    public final static int port = 3000;
 
     private ExecutorService pool;
 
@@ -97,6 +97,8 @@ public class Server implements Runnable{
     public void run() {
         try {
             server = new ServerSocket(port);
+            
+            
             pool = Executors.newCachedThreadPool();
             while(!done){
                 Socket client = server.accept();
