@@ -17,7 +17,6 @@ public class App extends Application{
             new ImageBank().loadImages();
         } catch (NullPointerException e) {
             System.out.println("Error while loading images");
-            e.printStackTrace();
         }
 
         Window window = new Window(primaryStage);
