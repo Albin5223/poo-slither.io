@@ -7,8 +7,13 @@ import interfaces.Orientation;
 import interfaces.Turnable;
 import model.coordinate.Coordinate;
 import model.foods.Food;
+import model.skins.Skin;
+import model.skins.SkinRandom;
 
 public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
+
+    /** The skin of the snake, by default it's random */
+    protected Skin<Type,O> skin = SkinRandom.build();
 
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
@@ -116,6 +121,14 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.plateau = plateau;
 
         plateau.addSnake(this);
+    }
+
+    public void setSkin(Skin<Type,O> skin) {
+        this.skin = skin;
+    }
+
+    public Skin<Type,O> getSkin() {
+        return skin;
     }
 
     public double getRadius(){

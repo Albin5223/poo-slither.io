@@ -5,7 +5,7 @@ public class ConfigurationFood {
 
     /*Configuration for poison food */
     public static final int POISON_VALUE = 5;
-    public static final double POISON_FOOD_RADIUS = 5;
+    public static final double POISON_FOOD_RADIUS = 10;
     public static final boolean POISON_FOOD_RESPAWN = true;
     public static final int POISON_FOOD_PROBABILITY = 0;
 

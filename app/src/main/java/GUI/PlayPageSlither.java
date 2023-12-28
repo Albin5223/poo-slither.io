@@ -1,6 +1,10 @@
 package GUI;
 
 
+import java.util.ArrayList;
+
+import externData.ImageBank;
+import externData.OurColors;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
@@ -13,7 +17,8 @@ import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.engine.EngineSlither;
 import model.foods.Food;
-import model.plateau.PlateauDouble.BorderDouble; 
+import model.plateau.PlateauDouble.BorderDouble;
+import model.skins.Skin; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     
@@ -58,22 +63,55 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         }
 
         for(SnakeData<Double,Angle> snakeData : data.getAllSnake()){
-            double x_head = D_X + snakeData.getHead().getX().intValue();
-            double y_head = D_Y + snakeData.getHead().getY().intValue();
 
-            for(Coordinate<Double,Angle> coord : snakeData.getTail()){
+            Skin<Double,Angle> skin = snakeData.getSkin();
+            ArrayList<OurColors> tail_pattern = skin.getTailPattern();
+            int tail_pattern_size = tail_pattern.size();
+
+            int i = 0;
+
+            for(Coordinate<Double,Angle> coord : snakeData.getTail().reversed()){
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
 
-                Circle r = new Circle(x,y,snakeData.getRadius());
-                r.setFill(snakeData.getColor());
-
-                this.getChildren().add(r);
+                Image image = ImageBank.getCircleImage(tail_pattern.get(i%tail_pattern_size));
+                if(image != null){
+                    ImageView imageView = new ImageView(image);
+                    imageView.setX(x - snakeData.getRadius());
+                    imageView.setY(y - snakeData.getRadius());
+                    imageView.setFitHeight(snakeData.getRadius()*2);
+                    imageView.setFitWidth(snakeData.getRadius()*2);
+                    this.getChildren().add(imageView);
+                }
+                else{
+                    Circle c = new Circle(x,y,snakeData.getRadius());
+                    c.setFill(snakeData.getColor());
+                    this.getChildren().add(c);
+                }
             }
 
-            Circle head = new Circle(x_head,y_head,snakeData.getRadius());
-            head.setFill(Color.BLACK);
-            this.getChildren().add(head);
+            double x_head = D_X + snakeData.getHead().getX().intValue();
+            double y_head = D_Y + snakeData.getHead().getY().intValue();
+
+            OurColors head_color = snakeData.getSkin().getHeadColor();
+            Image image = ImageBank.getCircleEyesImage(head_color);
+            if(image != null){
+                ImageView imageView = new ImageView(image);
+                imageView.setX(x_head - snakeData.getRadius());
+                imageView.setY(y_head - snakeData.getRadius());
+                imageView.setFitHeight(snakeData.getRadius()*2);
+                imageView.setFitWidth(snakeData.getRadius()*2);
+
+                Angle orientation = snakeData.getOrientation();
+                imageView.setRotate(orientation.getAngle());
+
+                this.getChildren().add(imageView);
+            }
+            else{
+                Circle head = new Circle(x_head,y_head,snakeData.getRadius());
+                head.setFill(Color.BLACK);
+                this.getChildren().add(head);
+            }
         }
 
         BorderDouble border = (BorderDouble) data.getGameBorder();
