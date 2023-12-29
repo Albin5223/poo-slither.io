@@ -48,7 +48,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
             public void handle(long now) {
                 
                 if((now-lastUpdate) >= 1_000_000_000){
-                    System.out.println("Update");
+                    //System.out.println("Update");
                     for(Snake<Type,O> snake : plateau.values()){
                         if(snake.underEffect()){
                             snake.applyEffect();
@@ -160,13 +160,13 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     }
 
     /**
-     * Check if the snake is colliding with another snake already on the board
+     * Check if the snake is colliding with another snake already on the board (or maybe itself)
      * @param snake the snake to check
      * @return true if the snake is colliding with another snake already on the board, false otherwise
      */
     public boolean isCollidingWithAll(Snake<Type,O> snake){
         for (Snake<Type,O> s : plateau.values()) {
-            if(snake != s && snake.isCollidingWith(s)){ // We check if the snake is colliding with another snake already on the board (except itself)
+            if(snake.isCollidingWith(s)){ // We check if the snake is colliding with another snake already on the board
                 System.out.println("Collision with " + s.head.getCenter().toString()+ " at " + snake.getHead().getCenter().toString());
                 return true;
             }

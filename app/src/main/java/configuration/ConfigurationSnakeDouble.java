@@ -5,9 +5,6 @@ import interfaces.Orientation.Angle;
 public class ConfigurationSnakeDouble {
     /* The ratio of the random coordinate to be inside the map */
     public static final double RANDOM_RATIO = 0.9;
-
-
-
     /*
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
@@ -27,4 +24,5 @@ public class ConfigurationSnakeDouble {
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
     public static final boolean IS_TRAVERSABLE_WALL = true;
 
+    public static final boolean CAN_COLLIDING_WITH_HIMSELF = false;
 }

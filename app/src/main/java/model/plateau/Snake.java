@@ -1,8 +1,10 @@
 package model.plateau;
 
 import java.util.ArrayList;
+
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithSnake;
+import exceptions.ExceptionCollisionWithWall;
 import interfaces.Orientation;
 import interfaces.Turnable;
 import model.coordinate.Coordinate;
@@ -20,6 +22,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     /** The current speed of the snake */
     protected int currentSpeed = 0;
+    protected double currentHitboxRadius;
     protected volatile boolean isBoosting = false;
 
     private final Object lock = new Object();
@@ -36,25 +39,26 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private int TIME_OF_SHIELD = 0;
 
     public final int DEATH_FOOD_PER_SEGMENT;
+    public final boolean IS_TRAVERSABLE_WALL;
+    public final boolean IS_DROPING_FOOD_ON_DEATH;
+    public final boolean CAN_COLLIDING_WITH_HIMSELF;
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
 
-    public sealed class SnakePart implements Cloneable permits SnakeInteger.SnakePartInteger, SnakeDouble.SnakePartDouble{
+    private boolean isDead = false;
+
+    public final class SnakePart implements Cloneable {
 
         /** The coordinate center of the snake part */
         protected Coordinate<Type,O> center;
 
-        /** The hitbox radius of the snake part */
-        protected double hitboxRadius;
-
         /** The direction of the snake part */
         protected O orientation;
 
-        protected SnakePart(Coordinate<Type,O> center, O direction, double hitboxRadius) {
+        protected SnakePart(Coordinate<Type,O> center, O direction) {
             this.center = center.clone(); 
             this.orientation = direction;
-            this.hitboxRadius = hitboxRadius;
         }
 
         /**
@@ -68,29 +72,13 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             return orientation;
         }
 
-        public void setHitboxRadius(double hitboxRadius) {
-            this.hitboxRadius = hitboxRadius;
-        }
-
         @Override
         public String toString() {
-            return "SnakePart [center=" + center.toString() + ", orientation=" + orientation + ", hitboxRadius=" + hitboxRadius +"]";
-        }
-
-        public double getHitboxRadius() {
-            return hitboxRadius;
+            return "SnakePart [center=" + center.toString() + ", orientation=" + orientation +"]";
         }
 
         public SnakePart clone(){
-            return new SnakePart(this.center, this.orientation, this.hitboxRadius);
-        }
-
-        public boolean isCollidingWith(SnakePart other) {
-            return center.distanceTo(other.center) <= other.hitboxRadius;
-        }
-
-        public boolean isCollidingWith(Food<Type,O> other) {
-            return center.distanceTo(other.getCenter()) <= this.hitboxRadius + other.getRadius();
+            return new SnakePart(this.center, this.orientation);
         }
     }
 
@@ -101,21 +89,25 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment) throws ExceptionCollision {
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment, boolean is_traversable_wall, boolean is_droping_food_on_death, boolean is_colliding_with_himself) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.BIRTH_HITBOX_RADIUS = hitboxRadius;
+        this.currentHitboxRadius = hitboxRadius;
         this.BIRTH_LENGTH = nbTail;
         this.MAX_FOOD_CHARGING = maxFoodCharging;
         this.DEFAULT_SPEED = defaultSpeed;
         this.BOOST_SPEED = boostSpeed;
         this.currentSpeed = defaultSpeed;
         this.DEATH_FOOD_PER_SEGMENT = death_food_per_segment;
-        this.head = new SnakePart(location.clone(), startingDirection, BIRTH_HITBOX_RADIUS);
+        this.IS_TRAVERSABLE_WALL = is_traversable_wall;
+        this.IS_DROPING_FOOD_ON_DEATH = is_droping_food_on_death;
+        this.CAN_COLLIDING_WITH_HIMSELF = is_colliding_with_himself;
+        this.head = new SnakePart(location.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart>();
 
         O direction = head.getOrientation();
         for (int i = 0; i < BIRTH_LENGTH; i++) {
-            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
+            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction);
             tail.add(tail1);
         }
 
@@ -124,32 +116,55 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         plateau.addSnake(this);
     }
 
-    public void setSkin(Skin<Type,O> skin) {
+    public void setHitboxRadius(double hitboxRadius) {
+        this.currentHitboxRadius = hitboxRadius;
+    }
+
+    public final double getHitboxRadius() {
+        return currentHitboxRadius;
+    }
+
+    public final void setSkin(Skin<Type,O> skin) {
         this.skin = skin;
     }
 
-    public Skin<Type,O> getSkin() {
+    public final Skin<Type,O> getSkin() {
         return skin;
     }
 
-    public double getRadius(){
-        return head.getHitboxRadius();
+    public final double getRadius(){
+        return currentHitboxRadius;
     }
 
-    public O getOrientation(){
+    public final O getOrientation(){
         return head.getOrientation();
     }
 
-    protected void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, double hitboxRadius, int nbTail) throws ExceptionCollisionWithSnake{
+    private void resetAttributes(){
+        this.currentHitboxRadius = BIRTH_HITBOX_RADIUS;
+        this.foodCharging = 0;
+        this.setBoosting(false);
+        this.setPoisoned(0);
+        this.setShielded(0);
+        this.isDead = false;
+    }
+
+    private final void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail) throws ExceptionCollisionWithSnake{
         
         this.plateau.removeSnake(this); // We remove the snake from the board
 
-        this.head = new SnakePart(newLocation.clone(), startingDirection, hitboxRadius);
+        if(IS_DROPING_FOOD_ON_DEATH && !isDead){
+            plateau.addDeathFood(this); // We add a death food for each part of the snake (except the head)
+        }
+
+        this.isDead = true;
+
+        this.head = new SnakePart(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart>();
 
         O direction = head.getOrientation();
         for (int i = 0; i < nbTail; i++) {
-            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, hitboxRadius);
+            SnakePart tail1 = new SnakePart(head.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction);
             tail.add(tail1);
         }
 
@@ -157,14 +172,14 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
         }
 
-        this.setBoosting(false);
+        resetAttributes();
 
         this.plateau.addSnake(this);
     }
 
-    public void reset(){
+    public final void reset(){
         try {
-            resetSnake(plateau.border.getRandomCoordinate(), head.getOrientation().getRandom(), BIRTH_HITBOX_RADIUS, BIRTH_LENGTH);
+            resetSnake(plateau.border.getRandomCoordinate(), head.getOrientation().getRandom(), BIRTH_LENGTH);
         } catch (ExceptionCollisionWithSnake e) {
             reset();
         }
@@ -173,19 +188,19 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /**
      * @return a copy of {@link #head}
      */
-    public SnakePart getHead() {
+    public final SnakePart getHead() {
         return head;
     }
 
     /**
      * @return a copy of {@link #tail}
      */
-    public ArrayList<SnakePart> getTail() {
+    public final ArrayList<SnakePart> getTail() {
         return new ArrayList<>(tail);
     }
 
 
-    public void setPoisoned(int TIME) {
+    public final void setPoisoned(int TIME) {
         if(isShielded()){
             TIME_OF_SHIELD = 0;
         }
@@ -194,19 +209,19 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
     }
 
-    public boolean underEffect(){
+    public final boolean underEffect(){
         return isPoisoned() || isShielded();
     }
 
-    public boolean isPoisoned() {
+    public final boolean isPoisoned() {
         return TIME_OF_POISON > 0;
     }
 
-    public boolean isShielded() {
+    public final boolean isShielded() {
         return TIME_OF_SHIELD > 0;
     }
 
-    public void setShielded(int TIME) {
+    public final void setShielded(int TIME) {
         if(isPoisoned()){
             TIME_OF_POISON = 0;
         }
@@ -216,20 +231,20 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     }
 
 
-    public void applyEffect(){
+    public final void applyEffect(){
         if(isPoisoned()){
             shrink();
-            TIME_OF_POISON--;
+            TIME_OF_POISON -= 1;
         }
         if(isShielded()){
-            TIME_OF_SHIELD--;
+            TIME_OF_SHIELD -= 1;
         }
     }
 
     /**
      * @return a copy of {@link #head} and {@link #tail}
      */
-    public ArrayList<SnakePart> getAllSnakePart() {
+    public final ArrayList<SnakePart> getAllSnakePart() {
         ArrayList<SnakePart> allSnakePart = new ArrayList<>();
         allSnakePart.add(head);
         allSnakePart.addAll(tail);
@@ -238,9 +253,41 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     /**
      * Update the position of the snake on the board (the snake has moved)
-     * @throws ExceptionCollision if the snake is colliding with another snake
+     * @throws ExceptionCollision if the snake is colliding something
      */
-    public abstract void move() throws ExceptionCollision;
+    public void move() throws ExceptionCollision {
+
+        this.plateau.removeSnake(this); // We remove the snake from the board
+
+        // Create the new head : distance from the old head = GAP, angle = updated head's angle considering the current turning
+        O newDirection = turn(currentTurning, head.getOrientation());
+        SnakePart newHead = new SnakePart(head.getCenter().placeCoordinateFrom(newDirection,GAP_BETWEEN_TAIL), newDirection);
+
+        // We check if the snake is traversing the wall
+        if(IS_TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
+            newHead = new SnakePart(plateau.border.getOpposite(newHead.getCenter()), newDirection);
+        }
+        // We check if the snake is colliding with the wall
+        else if(!plateau.border.isInside(newHead.getCenter())){
+            throw new ExceptionCollisionWithWall("Snake is colliding with the wall");
+        }
+
+        this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
+        this.tail.add(0, head); // We add the old head to the tail
+        this.head = newHead;    // We update the head
+
+        plateau.addSnake(this);   // We update the position of the snake on the board
+
+        if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
+            throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
+        }
+        ArrayList<Food<Type,O>> collidingFoods = plateau.isCollidingWithFoods(this);
+        if(collidingFoods.size() != 0){ // We check if the snake is colliding with foods
+            for(Food<Type,O> food : collidingFoods){
+                food.actOnSnake(this);
+            }
+        }
+    }   
 
     /**
      * Turning the snake to the left or to the right, like in a trigonometric circle (0° is on the right, 90° is on the top, 180° is on the left, 270° is on the bottom)
@@ -252,25 +299,45 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /**
      * @return the angle of the snake
      */
-    public O getDirection() {
+    public final O getDirection() {
         return head.getOrientation();
     }
 
-    public Turning getCurrentTurning() {
+    public final Turning getCurrentTurning() {
         return currentTurning;
     }
 
-    public boolean isCollidingWith(Snake<Type,O> other) {
-        ArrayList<SnakePart> allParts = other.getAllSnakePart();
-        for (SnakePart snakePart : allParts) {
-            if(head.isCollidingWith(snakePart)){
+    public final boolean isCollidingWith(Snake<Type,O> other) {
+        ArrayList<SnakePart> parts;
+        if(this == other){  // If the snake is colliding with itself, we check if the head is only colliding with his tail (excluding his head)
+            if(!CAN_COLLIDING_WITH_HIMSELF){return false;}
+            parts = getTail();
+            ArrayList<SnakePart> safeTail = new ArrayList<SnakePart>();
+            for (SnakePart snakePart : parts) {
+                if(head.center.distanceTo(snakePart.center) <= currentHitboxRadius){
+                    safeTail.add(snakePart);
+                }
+                else{
+                    break;
+                }
+            }
+            parts.removeAll(safeTail);
+        }
+        else{parts = other.getAllSnakePart();}  // If the snake is colliding with another snake, we check if the head is colliding with all the parts of the other snake
+
+        for (SnakePart snakePart : parts) {
+            if(head.center.distanceTo(snakePart.center) <= other.getHitboxRadius()){
                 return true;
             }
         }
         return false;
     }
 
-    public void shrink(){
+    public final boolean isCollidingWith(Food<Type,O> other) {
+        return head.center.distanceTo(other.getCenter()) <= this.currentHitboxRadius + other.getRadius();
+    }
+
+    public final void shrink(){
         if(tail.size() > 3){
             tail.remove(tail.size() - 1);
         }
@@ -279,25 +346,21 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
     }
 
-    public boolean isCollidingWith(Food<Type,O> other) {
-        return head.isCollidingWith(other);
-    }
-
-    public void chargeFood(int value){
+    public final void chargeFood(int value){
         foodCharging += value;
         int nbGrowth = foodCharging / MAX_FOOD_CHARGING;
         foodCharging = foodCharging % MAX_FOOD_CHARGING;
         grow(nbGrowth);
     }
 
-    private void grow(){
+    private final void grow(){
         SnakePart lastTail = tail.get(tail.size() - 1);
         O direction = lastTail.getOrientation();
-        SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction, lastTail.getHitboxRadius());
+        SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction);
         tail.add(newTail);
     }
 
-    private void grow(int nb) {
+    private final void grow(int nb) {
         for (int i = 0; i < nb; i++) {
             grow();
         }
@@ -313,11 +376,11 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return res;
     }
 
-    public void setTurning(Turning turning) {
+    public final void setTurning(Turning turning) {
         this.currentTurning = turning;
     }
 
-    public void setBoosting(boolean isBoosting) {
+    public final void setBoosting(boolean isBoosting) {
         synchronized(lock) {
             this.isBoosting = isBoosting;
             if(isBoosting){
@@ -329,17 +392,17 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
     }
 
-    public boolean isBoosting() {
+    public final boolean isBoosting() {
         return isBoosting;
     }
 
-    public int getCurrentSpeed() {
+    public final int getCurrentSpeed() {
         synchronized(lock) {
             return currentSpeed;
         }
     }
 
-    public int getBoostSpeed() {
+    public final int getBoostSpeed() {
         return BOOST_SPEED;
     }
 }

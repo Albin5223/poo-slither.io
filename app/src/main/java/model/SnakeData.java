@@ -28,7 +28,7 @@ public class SnakeData<Type extends Number & Comparable<Type>, O extends Orienta
     }
 
     public double getRadius() {
-        return snake.getHead().getHitboxRadius();
+        return snake.getHitboxRadius();
     }
 
     public ArrayList<Coordinate<Type, O>> getTail() {

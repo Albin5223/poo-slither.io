@@ -132,9 +132,10 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
     @Override
     public ArrayList<DeathFood<Double, Angle>> getDeathFoods(Snake<Double, Angle> snake) {
         ArrayList<DeathFood<Double, Angle>> deathFoods = new ArrayList<>();
+        double radius = snake.getHitboxRadius();
+        
         for (Snake<Double, Angle>.SnakePart s : snake.getAllSnakePart()) {
             Coordinate<Double, Angle> center = s.getCenter();
-            double radius = s.getHitboxRadius();
 
             for(int i = 0; i < snake.DEATH_FOOD_PER_SEGMENT; i++){
                 Random random = new Random();

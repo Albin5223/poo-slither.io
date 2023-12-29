@@ -39,7 +39,7 @@ public class Window {
 
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
 
-            KeyboardControler<Double,Angle> controler1 = new ControlerSlither(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.SPACE);
+            KeyboardControler<Double,Angle> controler1 = new ControlerSlither(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP);
             //KeyboardControler<Double,Angle> controler2 = new ControlerSlither(KeyCode.Q, KeyCode.D, KeyCode.Z);
             
             engine.addPlayer(controler1);
@@ -50,7 +50,7 @@ public class Window {
             
 
             gameScene.setOnKeyPressed( ev -> {
-                if(ev.getCode() == KeyCode.ESCAPE){
+                if(ev.getCode() == KeyCode.P){
                     primaryStage.setScene(scene);
                     primaryStage.show();
                     engine.stop();
@@ -89,7 +89,7 @@ public class Window {
             Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
             gameScene.setOnKeyTyped(null);
             
-            KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.ENTER);
+            KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.SPACE);
             //KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, KeyCode.SPACE);
             
             engine.addPlayer(controler1);
@@ -99,7 +99,7 @@ public class Window {
             engine.addBot();
 
             gameScene.setOnKeyPressed( ev -> {
-                if(ev.getCode() == KeyCode.ESCAPE){
+                if(ev.getCode() == KeyCode.P){
                     primaryStage.setScene(scene);
                     primaryStage.show();
                     engine.stop();
