@@ -96,7 +96,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         @Override
         public void actOnSnake(Snake<Double, Angle> snake) {
-            snake.setPoisoned(ConfigurationFoodDouble.POISON_VALUE);
+            snake.setPoisoned(ConfigurationFoodDouble.POISON_TIME, ConfigurationFoodDouble.POISON_POWER);
         }
 
         @Override

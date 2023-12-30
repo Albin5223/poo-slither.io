@@ -36,6 +36,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private final int BOOST_SPEED;
 
     private int TIME_OF_POISON = 0;
+    private int POWER_OF_POISON = 0;
     private int TIME_OF_SHIELD = 0;
 
     public final int DEATH_FOOD_PER_SEGMENT;
@@ -144,7 +145,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.currentHitboxRadius = BIRTH_HITBOX_RADIUS;
         this.foodCharging = 0;
         this.setBoosting(false);
-        this.setPoisoned(0);
+        this.setPoisoned(0,0);
         this.setShielded(0);
         this.isDead = false;
     }
@@ -199,12 +200,14 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return new ArrayList<>(tail);
     }
 
-    public final void setPoisoned(int TIME) {
+    public final void setPoisoned(int TIME, int POWER) {
         if(isShielded()){
             TIME_OF_SHIELD = 0;
+            POWER_OF_POISON = 0;
         }
         else{
             TIME_OF_POISON = TIME > 0 ? TIME : 0;
+            POWER_OF_POISON = POWER > 0 ? POWER : 0;
         }
     }
 
@@ -241,7 +244,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     public final void applyEffect(){
         if(isPoisoned()){
-            shrink();
+            shrink(POWER_OF_POISON);
             TIME_OF_POISON -= 1;
         }
         if(isShielded()){
@@ -345,11 +348,12 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return head.center.distanceTo(other.getCenter()) <= this.currentHitboxRadius + other.getRadius();
     }
 
-    public final void shrink(){
-        if(tail.size() > 3){
+    public final void shrink(int nb){
+        int newSize = Math.max(tail.size() - nb, 3);
+        while (tail.size() > newSize) {
             tail.remove(tail.size() - 1);
         }
-        else{
+        if(tail.size() <= 3){
             TIME_OF_POISON = 0;
         }
     }

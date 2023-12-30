@@ -3,7 +3,8 @@ package configuration;
 public class ConfigurationFoodDouble {
 
     /*Configuration for poison food */
-    public static final int POISON_VALUE = 5;
+    public static final int POISON_TIME = 5;
+    public static final int POISON_POWER = 2;
     public static final double POISON_FOOD_RADIUS = 10;
     public static final boolean POISON_FOOD_RESPAWN = true;
     public static final int POISON_FOOD_PROBABILITY = 1;

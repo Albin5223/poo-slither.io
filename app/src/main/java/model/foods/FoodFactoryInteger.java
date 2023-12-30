@@ -131,7 +131,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.setPoisoned(ConfigurationFoodInteger.POISON_VALUE);
+            snake.setPoisoned(ConfigurationFoodInteger.POISON_TIME, ConfigurationFoodInteger.POISON_POWER);
         }
 
         @Override
