@@ -114,7 +114,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         @Override
         public void actOnSnake(Snake<Double, Angle> snake) {
-            snake.reset();
+            snake.try_to_kill();
         }
 
         @Override

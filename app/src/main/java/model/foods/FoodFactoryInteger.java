@@ -112,7 +112,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         @Override
         public void actOnSnake(Snake<Integer, Direction> snake) {
-            snake.reset();
+            snake.try_to_kill();
         }
 
         @Override

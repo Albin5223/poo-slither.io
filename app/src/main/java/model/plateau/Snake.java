@@ -199,7 +199,6 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return new ArrayList<>(tail);
     }
 
-
     public final void setPoisoned(int TIME) {
         if(isShielded()){
             TIME_OF_SHIELD = 0;
@@ -227,6 +226,15 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
         else{
             TIME_OF_SHIELD = TIME;
+        }
+    }
+
+    public final void try_to_kill(){
+        if(!isShielded()){
+            this.reset();
+        }
+        else{
+            TIME_OF_SHIELD = 0;
         }
     }
 
