@@ -15,7 +15,7 @@ public class SnakeData<Type extends Number & Comparable<Type>, O extends Orienta
         this.snake = snake;
     }
 
-    public Skin<Type, O> getSkin() {
+    public Skin getSkin() {
         return snake.getSkin();
     }
 

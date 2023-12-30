@@ -3,13 +3,14 @@ package externData;
 import javafx.scene.paint.Color;
 
 public enum OurColors {
-    RED, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, BROWN;
+    RED, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, BROWN, GRAY, WHITE;
 
     public static OurColors getRandomColor(){
         int random = (int) (Math.random() * OurColors.values().length);
         return OurColors.values()[random];
     }
 
+    @Override
     public String toString(){
         return this.name().toLowerCase();
     }
@@ -32,6 +33,10 @@ public enum OurColors {
                 return Color.PINK;
             case BROWN:
                 return Color.BROWN;
+            case GRAY:
+                return Color.GRAY;
+            case WHITE:
+                return Color.WHITE;
             default:
                 return Color.BLACK;
         }

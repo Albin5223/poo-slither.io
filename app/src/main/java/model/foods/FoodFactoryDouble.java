@@ -6,6 +6,7 @@ import java.util.Random;
 import configuration.ConfigurationFoodDouble;
 import externData.ImageBank;
 import externData.OurColors;
+import externData.OurSpecials;
 import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
@@ -89,7 +90,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         
         public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.POISON_FOOD_RADIUS, ConfigurationFoodDouble.POISON_FOOD_RESPAWN, ConfigurationFoodDouble.POISON_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("poison");
+            image = ImageBank.getSpecialImage(OurSpecials.POISON);
         
         }
 
@@ -108,7 +109,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.KILLER_FOOD_RADIUS, ConfigurationFoodDouble.KILLER_FOOD_RESPAWN, ConfigurationFoodDouble.KILLER_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("skull");
+            image = ImageBank.getSpecialImage(OurSpecials.SKULL);
         }
 
         @Override
@@ -158,7 +159,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public ShieldFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.SHIELD_FOOD_RADIUS, ConfigurationFoodDouble.SHIELD_FOOD_RESPAWN, ConfigurationFoodDouble.SHIELD_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("shield");
+            image = ImageBank.getSpecialImage(OurSpecials.SHIELD);
         }
 
         @Override

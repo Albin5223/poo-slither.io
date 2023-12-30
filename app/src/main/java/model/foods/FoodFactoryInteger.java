@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import configuration.ConfigurationFoodInteger;
 import externData.ImageBank;
 import externData.OurColors;
+import externData.OurSpecials;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
@@ -67,7 +68,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public ShieldFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.SHIELD_FOOD_RADIUS, ConfigurationFoodInteger.SHIELD_FOOD_RESPAWN, ConfigurationFoodInteger.SHIELD_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("shield");
+            image = ImageBank.getSpecialImage(OurSpecials.SHIELD);
         }
 
         @Override
@@ -106,7 +107,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.KILLER_FOOD_RADIUS, ConfigurationFoodInteger.KILLER_FOOD_RESPAWN, ConfigurationFoodInteger.KILLER_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("skull");
+            image = ImageBank.getSpecialImage(OurSpecials.SKULL);
         }
 
         @Override
@@ -125,7 +126,7 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public PoisonFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.POISON_FOOD_RADIUS, ConfigurationFoodInteger.POISON_FOOD_RESPAWN, ConfigurationFoodInteger.POISON_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage("poison");
+            image = ImageBank.getSpecialImage(OurSpecials.POISON);
         }
 
         @Override

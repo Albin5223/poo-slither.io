@@ -65,7 +65,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         for(SnakeData<Integer,Direction> snakeData : data.getAllSnake()){
             int witdh = (int) (snakeData.getRadius()*2);
 
-            Skin<Integer,Direction> skin = snakeData.getSkin();
+            Skin skin = snakeData.getSkin();
             ArrayList<OurColors> tail_pattern = skin.getTailPattern();
             int tail_pattern_size = tail_pattern.size();
 

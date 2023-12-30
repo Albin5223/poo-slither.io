@@ -3,9 +3,8 @@ package model.skins;
 import java.util.ArrayList;
 
 import externData.OurColors;
-import interfaces.Orientation;
 
-public abstract class Skin<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+public abstract class Skin {
 
     private final OurColors head_color;
     private final ArrayList<OurColors> tail_pattern;

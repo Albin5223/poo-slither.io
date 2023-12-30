@@ -10,12 +10,12 @@ public class ConfigurationFoodInteger {
 
     /*Configuration for big growing food */
     public static final int GROWING_BIG_FOOD_VALUE = 10;
-    public static final double GROWING_BIG_FOOD_RADIUS = 10;
+    public static final double GROWING_BIG_FOOD_RADIUS = 9;
     public static final boolean GROWING_BIG_FOOD_RESPAWN = true;
     public static final int GROWING_BIG_FOOD_PROBABILITY = 10;
 
     /*Configuration for killer food */
-    public static final int KILLER_FOOD_RADIUS = 10;
+    public static final int KILLER_FOOD_RADIUS = 9;
     public static final boolean KILLER_FOOD_RESPAWN = false;
     public static final int KILLER_FOOD_PROBABILITY = 2;
 

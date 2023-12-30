@@ -15,7 +15,7 @@ import model.skins.SkinRandom;
 public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
 
     /** The skin of the snake, by default it's random */
-    protected Skin<Type,O> skin = SkinRandom.build();
+    protected Skin skin = SkinRandom.build();
 
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
@@ -124,11 +124,11 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return currentHitboxRadius;
     }
 
-    public final void setSkin(Skin<Type,O> skin) {
+    public final void setSkin(Skin skin) {
         this.skin = skin;
     }
 
-    public final Skin<Type,O> getSkin() {
+    public final Skin getSkin() {
         return skin;
     }
 
