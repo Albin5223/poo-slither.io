@@ -19,6 +19,14 @@ public class SnakeData<Type extends Number & Comparable<Type>, O extends Orienta
         return snake.getSkin();
     }
 
+    public boolean isShielded() {
+        return snake.isShielded();
+    }
+
+    public boolean isPoisoned() {
+        return snake.isPoisoned();
+    }
+
     public Coordinate<Type, O> getHead() {
         return snake.getHead().getCenter();
     }

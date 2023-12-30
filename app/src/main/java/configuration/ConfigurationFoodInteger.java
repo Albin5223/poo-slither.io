@@ -34,5 +34,5 @@ public class ConfigurationFoodInteger {
     public static final double SHIELD_FOOD_RADIUS = 9;
     public static final int SHIELD_VALUE = 5;
     public static final boolean SHIELD_FOOD_RESPAWN = true;
-    public static final int SHIELD_FOOD_PROBABILITY = 1;
+    public static final int SHIELD_FOOD_PROBABILITY = 5;
 }

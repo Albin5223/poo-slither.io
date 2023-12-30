@@ -204,7 +204,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             TIME_OF_SHIELD = 0;
         }
         else{
-            TIME_OF_POISON = TIME;
+            TIME_OF_POISON = TIME > 0 ? TIME : 0;
         }
     }
 
@@ -225,7 +225,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             TIME_OF_POISON = 0;
         }
         else{
-            TIME_OF_SHIELD = TIME;
+            TIME_OF_SHIELD = TIME > 0 ? TIME : 0;
         }
     }
 

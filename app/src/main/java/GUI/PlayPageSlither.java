@@ -8,6 +8,10 @@ import externData.OurColors;
 import interfaces.Data;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -39,6 +43,29 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         this.engine = court;
     }
 
+    private void shieldEffect(ImageView imageView){
+        Glow glow = new Glow();
+        glow.setLevel(10); // set the level of the glow effect
+        imageView.setEffect(glow);
+    }
+
+    private void poisonEffect(ImageView imageView, double shadow_radius){
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(-0.3); // change the hue of the image
+
+        // Create a new DropShadow effect
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.GREEN); // set the color of the shadow
+        dropShadow.setRadius(shadow_radius); // set the radius of the shadow
+
+        // Combine the ColorAdjust and DropShadow effects
+        Blend blend = new Blend();
+        blend.setTopInput(colorAdjust);
+        blend.setBottomInput(dropShadow);
+
+        imageView.setEffect(blend);
+    }
+
     @Override
     public void update(Data<Double,Angle> data) {
         this.getChildren().clear();
@@ -68,10 +95,13 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             int tail_pattern_size = tail_pattern.size();
 
             int i = 0;
+            boolean shielded = snakeData.isShielded();
+            boolean poisoned = snakeData.isPoisoned();
             for(Coordinate<Double,Angle> coord : snakeData.getTail().reversed()){
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
 
+                // Drawing the tail
                 Image image = ImageBank.getCircleImage(tail_pattern.get(i%tail_pattern_size));
                 if(image != null){
                     ImageView imageView = new ImageView(image);
@@ -79,6 +109,8 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
                     imageView.setY(y - snakeData.getRadius());
                     imageView.setFitHeight(snakeData.getRadius()*2);
                     imageView.setFitWidth(snakeData.getRadius()*2);
+                    if(shielded){shieldEffect(imageView);}
+                    if(poisoned){poisonEffect(imageView, snakeData.getRadius());}
                     this.getChildren().add(imageView);
                 }
                 else{
@@ -92,6 +124,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             double x_head = D_X + snakeData.getHead().getX().intValue();
             double y_head = D_Y + snakeData.getHead().getY().intValue();
 
+            // Drawing the head
             OurColors head_color = snakeData.getSkin().getHeadColor();
             Image image = ImageBank.getCircleEyesImage(head_color);
             if(image != null){
@@ -103,6 +136,9 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
 
                 Angle orientation = snakeData.getOrientation();
                 imageView.setRotate(orientation.getAngle());
+
+                if(shielded){shieldEffect(imageView);}
+                if(poisoned){poisonEffect(imageView, snakeData.getRadius());}
 
                 this.getChildren().add(imageView);
             }
