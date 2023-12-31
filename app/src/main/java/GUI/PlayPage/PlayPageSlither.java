@@ -1,4 +1,4 @@
-package GUI;
+package GUI.PlayPage;
 
 
 import java.util.ArrayList;
@@ -19,28 +19,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.engine.EngineSlither;
 import model.foods.Food;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.skins.Skin; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
-    
-    Window window;
-    EngineSlither engine;
 
     private int D_X;
     private int D_Y;
 
-    public PlayPageSlither(Window window, int D_X, int D_Y) {
-        this.window = window;
+    public PlayPageSlither(int D_X, int D_Y) {
         this.D_X = D_X;
         this.D_Y = D_Y;
         
-    }
-
-    public void setEngine(EngineSlither court){
-        this.engine = court;
     }
 
     private void shieldEffect(ImageView imageView){

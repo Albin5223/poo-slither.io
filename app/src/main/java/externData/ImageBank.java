@@ -25,6 +25,8 @@ public class ImageBank {
 
     private static Pair[] specials = new Pair[OurSpecials.values().length];
 
+    public static Image homePageBackground;
+
 
     public static Image getCircleImage(OurColors color) {
         for (int i = 0; i < circles.length; i++) {
@@ -91,6 +93,9 @@ public class ImageBank {
         for(OurSpecials s : OurSpecials.values()){
             specials[s.ordinal()] = new Pair(new Image(getClass().getResourceAsStream("/specials/" + s.toString() + ".png")), s.toString());
         }
+
+        homePageBackground = new Image(getClass().getResourceAsStream("/walkpaper/walkpaperHomePage.png"));
+
     }
     
 }

@@ -1,8 +1,7 @@
-package GUI;
+package GUI.PlayPage;
 
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.engine.EngineSnake;
 import model.foods.Food;
 
 import java.util.ArrayList;
@@ -26,24 +25,16 @@ import model.skins.Skin;
 import javafx.scene.paint.Color;
 
 public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
-    
-    Window window;
-    EngineSnake engine;
 
     private int D_X;
     private int D_Y;
 
-    public PlayPageSnake(Window window, int D_X, int D_Y) {
-        this.window = window;
+    public PlayPageSnake(int D_X, int D_Y) {
         this.D_X = D_X;
-        this.D_Y = D_Y;
-        
+        this.D_Y = D_Y;   
     }
 
-    public void setEngine(EngineSnake engine){
-        this.engine = engine;
-    }
-
+    
     private void shieldEffect(ImageView imageView){
         Glow glow = new Glow();
         glow.setLevel(10); // set the level of the glow effect

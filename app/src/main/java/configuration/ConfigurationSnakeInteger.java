@@ -11,7 +11,7 @@ public class ConfigurationSnakeInteger{
     public static final int SNAKE_BIRTH_HITBOX_RADIUS = 10;
     public static final Integer SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
 
-    public static final int SNAKE_DEFAULT_SPEED = 10;
+    public static final int SNAKE_DEFAULT_SPEED = 15;
     public static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
 
     /** Do we want to add food behind a dead snake ? */
