@@ -1,5 +1,6 @@
 package controleur;
 
+import configuration.TouchControler;
 import interfaces.Orientation.Angle;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,6 +17,12 @@ public class ControlerSlither implements KeyboardControler<Double,Angle>{
         this.LEFT = LEFT;
         this.RIGHT = RIGHT;
         this.BOOST = BOOST;
+    }
+
+    public ControlerSlither(TouchControler controler){
+        this.LEFT = controler.getKeyCode(TouchControler.DirectionOfTouch.LEFT);
+        this.RIGHT = controler.getKeyCode(TouchControler.DirectionOfTouch.RIGHT);
+        this.BOOST = controler.getKeyCode(TouchControler.DirectionOfTouch.BOOST);
     }
 
     @Override

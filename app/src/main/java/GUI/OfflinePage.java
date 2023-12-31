@@ -33,7 +33,6 @@ public class OfflinePage extends VBox {
 
         Button playButtonSlither = new Button("Jouer Slither.io");
         Button playButtonSnake = new Button("Jouer Snake");
-        Button optionsButton = new Button("Options");
         Button exitButton = new Button("Quitter");
 
         Border border = new Border(new javafx.scene.layout.BorderStroke(
@@ -81,7 +80,7 @@ public class OfflinePage extends VBox {
         });
 
 
-        getChildren().addAll(title,playButtonSlither,playButtonSnake,optionsButton,exitButton);
+        getChildren().addAll(title,playButtonSlither,playButtonSnake,exitButton);
         VBox.setMargin(playButtonSlither, new javafx.geometry.Insets(50, 0, 0, 0));
     }
     

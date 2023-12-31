@@ -18,11 +18,11 @@ public class ConfigurationSnakeDouble {
     public static final int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
 
     /** Do we want to add food behind a dead snake ? */
-    public static final boolean IS_DEATH_FOOD = true;
+    public static boolean IS_DEATH_FOOD = false;
     public static final int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
-    public static final boolean IS_TRAVERSABLE_WALL = true;
+    public static boolean IS_TRAVERSABLE_WALL = false;
 
-    public static final boolean CAN_COLLIDING_WITH_HIMSELF = false;
+    public static boolean CAN_COLLIDING_WITH_HIMSELF = false;
 }

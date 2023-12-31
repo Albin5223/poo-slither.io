@@ -1,6 +1,9 @@
 package GUI.optionView;
 
 
+import java.util.ArrayList;
+
+import configuration.TouchControler;
 import javafx.scene.input.KeyCode;
 
 public class SetOfConfiguration {
@@ -9,6 +12,7 @@ public class SetOfConfiguration {
     private static int numberOfHumanPlayer;
     private static int numberOfBotPlayer;
 
+    public static ArrayList<TouchControler> commandMapingPanes = new ArrayList<>();
 
 
     private static KeyCode[] keyCodesPlayer1 = new KeyCode[5];
@@ -30,6 +34,14 @@ public class SetOfConfiguration {
         if(numberOfHumanPlayer <2){
             numberOfHumanPlayer++;
         } 
+    }
+
+
+    public static void resetConfiguration(){
+        numberOfHumanPlayer = 0;
+        numberOfBotPlayer = 0;
+        numberOfPlayer = 0;
+        commandMapingPanes.clear();
     }
 
 
@@ -66,5 +78,14 @@ public class SetOfConfiguration {
     private static void updateNumberOfPlayer(){
         numberOfPlayer = numberOfHumanPlayer + numberOfBotPlayer;
     }
-    
+
+
+    public static void addCommand(TouchControler command){
+        commandMapingPanes.add(command);
+    }
+
+    public static void removeCommand(TouchControler command){
+        commandMapingPanes.remove(command);
+    }
+
 }

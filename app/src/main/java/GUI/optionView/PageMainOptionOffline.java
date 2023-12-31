@@ -1,7 +1,11 @@
 package GUI.optionView;
 
+
 import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
+import configuration.ConfigurationSnakeDouble;
+import configuration.ConfigurationSnakeInteger;
+import configuration.TouchControler;
 import controleur.ControlerSlither;
 import controleur.ControlerSnake;
 import controleur.KeyboardControler;
@@ -32,14 +36,18 @@ public class PageMainOptionOffline extends VBox{
     private Stage primaryStage;
     private Scene homeScene;
 
+    private boolean isSnake;
+
 
     private Label title;
     private PlayerChoosePane playerChoosePane;
+    OptionConfigPane optionConfigPane;
 
     private Button launchButton;
     public PageMainOptionOffline (Stage primaryStage,Scene scene,int width, int height,boolean isSnake) {
         title = new Label("Parametre de lancement");
 
+        this.isSnake = isSnake;
         this.primaryStage = primaryStage;
 
         BackgroundSize backgroundSize = new BackgroundSize(WITDH, HEIGHT, false, false, false, true);
@@ -65,19 +73,45 @@ public class PageMainOptionOffline extends VBox{
 
         final boolean isSnakeFinal = isSnake;
         launchButton.setOnAction(e -> {
+            valideConfig();
             if(isSnakeFinal){
                 lanchSnake();
             }else{
                 launchSlither();
             }
         });
-        OptionConfigPane optionConfigPane = new OptionConfigPane();
+        optionConfigPane = new OptionConfigPane();
 
         
         getChildren().addAll(title,playerChoosePane,optionConfigPane,launchButton);
 
         VBox.setMargin(playerChoosePane, new javafx.geometry.Insets(100, 0, 0, 0));
         setAlignment(javafx.geometry.Pos.CENTER);
+    }
+
+    public void valideConfig(){
+        if(isSnake){
+            if(optionConfigPane.isReachableWallActivated()){
+                ConfigurationSnakeInteger.TRAVERSABLE_WALL = true;
+            }
+            if(optionConfigPane.isCollitionWithMeActivated()){
+                ConfigurationSnakeInteger.CAN_COLLIDING_WITH_HIMSELF = true;
+            }
+            if(optionConfigPane.greedyDeathActivated()){
+                ConfigurationSnakeInteger.IS_DEATH_FOOD = true;
+            }
+        }
+        else{
+            if(optionConfigPane.isReachableWallActivated()){
+                ConfigurationSnakeDouble.IS_TRAVERSABLE_WALL = true;
+            }
+            if(optionConfigPane.isCollitionWithMeActivated()){
+                ConfigurationSnakeDouble.CAN_COLLIDING_WITH_HIMSELF = true;
+            }
+            if(optionConfigPane.greedyDeathActivated()){
+                ConfigurationSnakeDouble.IS_DEATH_FOOD = true;
+            }
+        }
     }
 
 
@@ -89,11 +123,12 @@ public class PageMainOptionOffline extends VBox{
 
         Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
 
-        KeyboardControler<Double,Angle> controler1 = new ControlerSlither(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP);
-        //KeyboardControler<Double,Angle> controler2 = new ControlerSlither(KeyCode.Q, KeyCode.D, KeyCode.Z);
         
-        engine.addPlayer(controler1);
-        //engine.addPlayer(controler2);
+        for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
+            KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
+            engine.addPlayer(controler);
+            
+        }
 
         for(int i = 0;i<SetOfConfiguration.getNumberOfBot();i++){
             engine.addBot();
@@ -101,8 +136,6 @@ public class PageMainOptionOffline extends VBox{
             engine.addBot();
         }
         
-        
-
         gameScene.setOnKeyPressed( ev -> {
             if(ev.getCode() == KeyCode.ESCAPE){
                 primaryStage.setScene(homeScene);
@@ -128,7 +161,9 @@ public class PageMainOptionOffline extends VBox{
 
         playPage.setFocusTraversable(true);
         playPage.requestFocus();
-
+        
+        TouchControler.resetNumber();
+        SetOfConfiguration.resetConfiguration();
         engine.run();
     }
 
@@ -139,11 +174,12 @@ public class PageMainOptionOffline extends VBox{
         Scene gameScene = new Scene(playPage, WITDH, HEIGHT);
         gameScene.setOnKeyTyped(null);
         
-        KeyboardControler<Integer,Direction> controler1 = new ControlerSnake(KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.SPACE);
-        //KeyboardControler<Integer,Direction> controler2 = new ControlerSnake(KeyCode.Z, KeyCode.S, KeyCode.Q, KeyCode.D, KeyCode.SPACE);
-        
-        engine.addPlayer(controler1);
-        //engine.addPlayer(controler2);
+        for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
+            KeyboardControler<Integer,Direction> controler = new ControlerSnake (SetOfConfiguration.commandMapingPanes.get(i));
+            engine.addPlayer(controler);
+            
+        }
+       
         for(int i = 0;i<SetOfConfiguration.getNumberOfBot();i++){
             engine.addBot();
         }
@@ -175,7 +211,8 @@ public class PageMainOptionOffline extends VBox{
         playPage.setFocusTraversable(true);
         playPage.requestFocus();
 
-        
+        TouchControler.resetNumber();
+        SetOfConfiguration.resetConfiguration();
         engine.run();
     }
 

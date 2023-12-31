@@ -22,7 +22,7 @@ public class Window {
 
     Stage primaryStage;
     Pane root;
-    Label title;
+    Button title;
     Scene scene;
 
     public Window(Stage primaryStage) {
@@ -42,11 +42,11 @@ public class Window {
 
         scene = new Scene(layout, WITDH, HEIGHT);
 
-        title = new Label("The Yazicinho' Games");
+        title = new ButtonPixelFont("THE YAZICINHO'S GAME", 70);
 
 
-        Button playOnline = new Button("Jouer en ligne");
-        Button playOffline = new Button("Jouer hors ligne");
+        ButtonPixelFont playOnline = new ButtonPixelFont("ONLINE",50);
+        ButtonPixelFont playOffline = new ButtonPixelFont("OFFLINE",50);
 
         playOffline.setOnAction(e -> {
             OfflinePage offlinePage = new OfflinePage(primaryStage, scene, WITDH, HEIGHT);
@@ -56,7 +56,7 @@ public class Window {
 
         });
 
-        Button exitButton = new Button("Quitter");
+        Button exitButton = new ButtonPixelFont("EXIT",40);
         
 
         exitButton.setOnAction(e -> {

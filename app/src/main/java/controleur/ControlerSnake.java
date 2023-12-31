@@ -1,5 +1,6 @@
 package controleur;
 
+import configuration.TouchControler;
 import interfaces.Orientation.Direction;
 import interfaces.Turnable.Turning;
 import javafx.scene.input.KeyCode;
@@ -20,6 +21,14 @@ public class ControlerSnake implements KeyboardControler<Integer,Direction>{
         this.LEFT = LEFT;
         this.RIGHT = RIGHT;
         this.BOOST = BOOST;
+    }
+
+    public ControlerSnake(TouchControler controler){
+        this.UP = controler.getKeyCode(TouchControler.DirectionOfTouch.UP);
+        this.DOWN = controler.getKeyCode(TouchControler.DirectionOfTouch.DOWN);
+        this.LEFT = controler.getKeyCode(TouchControler.DirectionOfTouch.LEFT);
+        this.RIGHT = controler.getKeyCode(TouchControler.DirectionOfTouch.RIGHT);
+        this.BOOST = controler.getKeyCode(TouchControler.DirectionOfTouch.BOOST);
     }
 
     @Override

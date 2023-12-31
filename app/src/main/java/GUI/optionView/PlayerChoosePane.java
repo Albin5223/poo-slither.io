@@ -1,5 +1,6 @@
 package GUI.optionView;
 
+import configuration.TouchControler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -18,7 +19,6 @@ public class PlayerChoosePane extends VBox {
 
     
     public PlayerChoosePane(boolean isSnake) {
-
         botPlayerSpinnerBox = new HBox();
         humanPlayerSpinnerBox = new HBox();
         Label titleBot = new Label ("Nombre de joueur robot : ");
@@ -41,19 +41,13 @@ public class PlayerChoosePane extends VBox {
         botPlayerSpinner.getChildren().addAll(minus,ViewNumber,plus);
         botPlayerSpinnerBox.getChildren().addAll(titleBot,botPlayerSpinner);
 
-        if(isSnake){
-            humanPlayerSpinnerBox.setSpacing(50);
-            AddPlayerBoxSnake addPlayerBoxSnakePlayer1 = new AddPlayerBoxSnake();
-            AddPlayerBoxSnake addPlayerBoxSnakePlayer2 = new AddPlayerBoxSnake();
-
-
-
-            humanPlayerSpinnerBox.getChildren().addAll(addPlayerBoxSnakePlayer1,addPlayerBoxSnakePlayer2);
-        }
         
-
-
-    
+        humanPlayerSpinnerBox.setSpacing(50);
+        AddPlayerBox addPlayerBoxSnakePlayer1 = new AddPlayerBox(isSnake);
+        AddPlayerBox addPlayerBoxSnakePlayer2 = new AddPlayerBox(isSnake);
+        humanPlayerSpinnerBox.getChildren().addAll(addPlayerBoxSnakePlayer1,addPlayerBoxSnakePlayer2);
+        
+        
         setPadding(new Insets(10)); // Marge de 10 pixels à tous les côtés du Pane
         getChildren().addAll(botPlayerSpinnerBox);
         getChildren().addAll(humanPlayerSpinnerBox);

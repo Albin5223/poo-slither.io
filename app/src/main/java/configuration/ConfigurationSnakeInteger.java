@@ -15,11 +15,11 @@ public class ConfigurationSnakeInteger{
     public static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
 
     /** Do we want to add food behind a dead snake ? */
-    public static final boolean IS_DEATH_FOOD = true;
+    public static boolean IS_DEATH_FOOD = false;
     public static final int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
-    public static final boolean TRAVERSABLE_WALL = true;
+    public static boolean TRAVERSABLE_WALL = false;
 
-    public static final boolean CAN_COLLIDING_WITH_HIMSELF = true;
+    public static boolean CAN_COLLIDING_WITH_HIMSELF = false;
 }
