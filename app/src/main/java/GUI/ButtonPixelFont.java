@@ -28,5 +28,13 @@ public class ButtonPixelFont extends Button {
         textPixelFont.setFill(value);
     }
 
+    public void setStroke(Paint value) {
+        textPixelFont.setStroke(value);
+    }
+
+    public void setSize(int size) {
+        this.textPixelFont = new TextPixelFont(textPixelFont.getText(), size);
+        this.setGraphic(textPixelFont);
+    }
     
 }
