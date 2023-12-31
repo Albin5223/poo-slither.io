@@ -1,17 +1,17 @@
 package GUI.optionView;
 
-import javafx.scene.control.Label;
+import GUI.ButtonPixelFont;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 public class CommandMapingPane extends HBox{
     
-    private Label title;
+    private ButtonPixelFont title;
     private TextField selectTouch;
     
     
     public CommandMapingPane(String title){
-        this.title = new Label(title);
+        this.title = new ButtonPixelFont(title,15);
         setSpacing(20);
 
         this.selectTouch = new TextField();
@@ -26,7 +26,7 @@ public class CommandMapingPane extends HBox{
         return selectTouch;
     }
 
-    public Label getTitle(){
+    public ButtonPixelFont getTitle(){
         return title;
     }
 

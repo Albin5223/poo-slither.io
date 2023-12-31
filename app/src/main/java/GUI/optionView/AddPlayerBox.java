@@ -1,21 +1,20 @@
 package GUI.optionView;
 
 
+import GUI.ButtonGrisablePixelFont;
+import GUI.ButtonPixelFont;
 import configuration.TouchControler;
 import configuration.TouchControler.DirectionOfTouch;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class AddPlayerBox extends VBox {
 
-    CheckBox present;
-    boolean isPresent;
+    ButtonGrisablePixelFont present;
 
     private static int numero = 0;
     private int id;
 
-    Label title;
+    ButtonPixelFont title;
     CommandMapingPane droite;
     CommandMapingPane gauche;
     CommandMapingPane haut;
@@ -30,12 +29,14 @@ public class AddPlayerBox extends VBox {
     public AddPlayerBox(Boolean isSnake){
         id = numero;
         this.isSnake = isSnake;
+        this.setSpacing(5);
         touchControler = new TouchControler();
         numero++;
-        present = new CheckBox("Ajouter un joueur");
+        present = new ButtonGrisablePixelFont("ADD PLAYER",10,true);
+        
         present.setOnAction(e -> {
-            isPresent = present.isSelected();
-            if(isPresent){
+            
+            if(!present.switchGrise()){
                 SetOfConfiguration.incrementNumberOfHuman();
                 addPlayer();
             }else{
@@ -43,46 +44,46 @@ public class AddPlayerBox extends VBox {
                 removePlayer();
             }
         });
-        title = new Label("Personnalisation des touches  : ");
-        droite = new CommandMapingPane("Droite : ");
+
+        title = new ButtonPixelFont("CUSTOM COMMAND PLAYER ",15);
+        droite = new CommandMapingPane("RIGHT : ");
         droite.getSelectTouch().setOnKeyPressed(e -> {
-            isPresent = present.isSelected();
-            if(isPresent){
-                touchControler.updateTouchControl(DirectionOfTouch.RIGHT, e.getCode());
-                droite.getSelectTouch().setText(e.getCode().toString());
-            }
+            
+            touchControler.updateTouchControl(DirectionOfTouch.RIGHT, e.getCode());
+            droite.getSelectTouch().setText(e.getCode().toString());
+            
         });
-        gauche = new CommandMapingPane("Gauche : ");
+        gauche = new CommandMapingPane("LEFT : ");
         gauche.getSelectTouch().setOnKeyPressed(e -> {
-            if(isPresent){
-                touchControler.updateTouchControl(DirectionOfTouch.LEFT, e.getCode());
-                gauche.getSelectTouch().setText(e.getCode().toString());
-            }
+            
+            touchControler.updateTouchControl(DirectionOfTouch.LEFT, e.getCode());
+            gauche.getSelectTouch().setText(e.getCode().toString());
+            
         });
         if(isSnake){
-            haut = new CommandMapingPane("Haut : ");
+            haut = new CommandMapingPane("UP : ");
             haut.getSelectTouch().setOnKeyPressed(e -> {
-                if(isPresent){
-                    touchControler.updateTouchControl(DirectionOfTouch.UP, e.getCode());
-                    haut.getSelectTouch().setText(e.getCode().toString());
-                }
+                
+                touchControler.updateTouchControl(DirectionOfTouch.UP, e.getCode());
+                haut.getSelectTouch().setText(e.getCode().toString());
+                
             });
 
-            bas = new CommandMapingPane("Bas : ");
+            bas = new CommandMapingPane("DOWN : ");
             bas.getSelectTouch().setOnKeyPressed(e -> {
-                if(isPresent){
-                    touchControler.updateTouchControl(DirectionOfTouch.DOWN, e.getCode());
-                    bas.getSelectTouch().setText(e.getCode().toString());
-                }
+               
+                touchControler.updateTouchControl(DirectionOfTouch.DOWN, e.getCode());
+                bas.getSelectTouch().setText(e.getCode().toString());
+            
             });
         }
         
-        boost = new CommandMapingPane("Boost : ");
+        boost = new CommandMapingPane("BOOST : ");
         boost.getSelectTouch().setOnKeyPressed(e -> {
-            if(isPresent){
-                touchControler.updateTouchControl(DirectionOfTouch.BOOST, e.getCode());
-                boost.getSelectTouch().setText(e.getCode().toString());
-            }
+            
+            touchControler.updateTouchControl(DirectionOfTouch.BOOST, e.getCode());
+            boost.getSelectTouch().setText(e.getCode().toString());
+            
         });
 
         getChildren().addAll(present);
@@ -104,7 +105,7 @@ public class AddPlayerBox extends VBox {
 
 
     private void removePlayer(){
-        isPresent = false;
+        
         SetOfConfiguration.removeCommand(touchControler);
         title.setVisible(false);
         droite.setVisible(false);
@@ -118,7 +119,7 @@ public class AddPlayerBox extends VBox {
     }
 
     private void addPlayer(){
-        isPresent = false;
+        
         SetOfConfiguration.addCommand(touchControler);
         title.setVisible(true);
         droite.setVisible(true);

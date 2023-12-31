@@ -1,6 +1,6 @@
 package GUI.optionView;
 
-import javafx.scene.control.Label;
+import GUI.ButtonPixelFont;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 
@@ -8,11 +8,11 @@ public class SettingToggle extends HBox{
 
 
 
-    private Label title;
+    private ButtonPixelFont title;
     private ToggleButton toggleButton;
 
     public SettingToggle(String title){
-        this.title = new Label(title);
+        this.title = new ButtonPixelFont(title,15);
 
         toggleButton = new ToggleButton("OFF");
         toggleButton.setStyle("-fx-base: #ff0000;");

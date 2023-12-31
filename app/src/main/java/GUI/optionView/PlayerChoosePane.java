@@ -1,6 +1,6 @@
 package GUI.optionView;
 
-import configuration.TouchControler;
+import GUI.ButtonPixelFont;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -21,7 +21,7 @@ public class PlayerChoosePane extends VBox {
     public PlayerChoosePane(boolean isSnake) {
         botPlayerSpinnerBox = new HBox();
         humanPlayerSpinnerBox = new HBox();
-        Label titleBot = new Label ("Nombre de joueur robot : ");
+        ButtonPixelFont titleBot = new ButtonPixelFont("NUMBER OF IA : ",15);
         Label ViewNumber = new Label("0");
         botPlayerSpinner = new HBox();
         Label plus = new Label("+");

@@ -6,7 +6,7 @@ import javafx.scene.paint.Paint;
 
 public class ButtonPixelFont extends Button {
 
-    private TextPixelFont textPixelFont;
+    protected TextPixelFont textPixelFont;
 
     public ButtonPixelFont(String text, int size) {
         this.textPixelFont = new TextPixelFont(text, size);

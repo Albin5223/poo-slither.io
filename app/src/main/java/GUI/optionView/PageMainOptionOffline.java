@@ -1,6 +1,7 @@
 package GUI.optionView;
 
 
+import GUI.ButtonPixelFont;
 import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
 import configuration.ConfigurationSnakeDouble;
@@ -15,8 +16,6 @@ import interfaces.Orientation.Angle;
 import interfaces.Orientation.Direction;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -39,13 +38,13 @@ public class PageMainOptionOffline extends VBox{
     private boolean isSnake;
 
 
-    private Label title;
+    private ButtonPixelFont title;
     private PlayerChoosePane playerChoosePane;
     OptionConfigPane optionConfigPane;
 
-    private Button launchButton;
+    private ButtonPixelFont launchButton;
     public PageMainOptionOffline (Stage primaryStage,Scene scene,int width, int height,boolean isSnake) {
-        title = new Label("Parametre de lancement");
+        title = new ButtonPixelFont("SETTING OF LAUNCH",40);
 
         this.isSnake = isSnake;
         this.primaryStage = primaryStage;
@@ -67,7 +66,7 @@ public class PageMainOptionOffline extends VBox{
         playerChoosePane = new PlayerChoosePane(isSnake);
 
 
-        launchButton = new Button("Lancer la partie");
+        launchButton = new ButtonPixelFont("LAUNCH GAME",30);
         
         setPadding(new Insets(20)); // Marge de 10 pixels à tous les côtés du Pane
 
@@ -86,6 +85,7 @@ public class PageMainOptionOffline extends VBox{
         getChildren().addAll(title,playerChoosePane,optionConfigPane,launchButton);
 
         VBox.setMargin(playerChoosePane, new javafx.geometry.Insets(100, 0, 0, 0));
+        VBox.setMargin(launchButton, new javafx.geometry.Insets(100, 0, 0, 0));
         setAlignment(javafx.geometry.Pos.CENTER);
     }
 

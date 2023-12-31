@@ -7,14 +7,25 @@ public class ButtonGrisablePixelFont extends ButtonPixelFont {
     public ButtonGrisablePixelFont(String text, int size, boolean grisedAtStart) {
         super(text, size);
         this.grise = grisedAtStart;
-        this.setOnAction(e -> {
-            this.grise = !this.grise;
-            if (grise) {
-                this.textPixelFont.setOpacity(0.5);
-            }
-            else {
-                this.textPixelFont.setOpacity(1);
-            }
-        });
+        if(grise){
+            this.textPixelFont.setOpacity(0.5);
+        }
+        else{
+            this.textPixelFont.setOpacity(1);
+        }
+    }
+
+    public boolean switchGrise() {
+        grise = !grise;
+        if (grise) {
+            this.textPixelFont.setOpacity(0.5);
+        } else {
+            this.textPixelFont.setOpacity(1);
+        }
+        return grise;
+    }
+
+    public boolean isGrise() {
+        return grise;
     }
 }

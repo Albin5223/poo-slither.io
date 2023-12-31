@@ -10,10 +10,10 @@ public class OptionConfigPane extends VBox {
     SettingToggle toggleGreedyDeath;
     public OptionConfigPane() {
     
-        toggleReachableWall = new SettingToggle("Mur franchissable");
+        toggleReachableWall = new SettingToggle("REACHABLE WALL");
 
-        toggleCollitionWithMe = new SettingToggle("Collision avec soi-même");
-        toggleGreedyDeath = new SettingToggle("Mort gourmande");
+        toggleCollitionWithMe = new SettingToggle("COLLITION WITH ME");
+        toggleGreedyDeath = new SettingToggle("GREEDY DEATH");
         this.getChildren().addAll(toggleReachableWall,toggleCollitionWithMe,toggleGreedyDeath);
     }
 

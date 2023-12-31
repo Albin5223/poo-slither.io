@@ -4,8 +4,6 @@ import GUI.optionView.PageMainOptionOffline;
 import externData.ImageBank;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -23,17 +21,16 @@ public class OfflinePage extends VBox {
 
     Stage primaryStage;
     Scene homeScene;
-    private int WITDH;
-    private int HEIGHT;
+    
 
     public OfflinePage(Stage primaryStage,Scene homeScene, int WITDH, int HEIGHT) {
         this.primaryStage = primaryStage;
 
-        Label title = new Label("Offline");
+        ButtonPixelFont title = new ButtonPixelFont("OFFLINE",60);
 
-        Button playButtonSlither = new Button("Jouer Slither.io");
-        Button playButtonSnake = new Button("Jouer Snake");
-        Button exitButton = new Button("Quitter");
+        ButtonPixelFont playButtonSlither = new ButtonPixelFont("SLITHER.IO",40);
+        ButtonPixelFont playButtonSnake = new ButtonPixelFont("SNAKE",40);
+        ButtonPixelFont exitButton = new ButtonPixelFont("EXIT",40);
 
         Border border = new Border(new javafx.scene.layout.BorderStroke(
                 javafx.scene.paint.Color.BLACK,
