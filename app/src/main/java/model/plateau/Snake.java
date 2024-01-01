@@ -133,10 +133,6 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return skin;
     }
 
-    public final double getRadius(){
-        return currentHitboxRadius;
-    }
-
     public final O getOrientation(){
         return head.getOrientation();
     }

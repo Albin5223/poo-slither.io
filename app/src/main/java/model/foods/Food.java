@@ -10,7 +10,7 @@ public abstract class Food<Type extends Number & Comparable<Type>, O extends Ori
 
     protected Image image;
 
-    protected Coordinate<Type, O> coordinate;
+    protected final Coordinate<Type, O> coordinate;
     protected final double radius;
     protected final boolean respawn;
     protected final int probability;

@@ -2,6 +2,7 @@ package GUI.PlayPage;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import externData.ImageBank;
 import externData.OurColors;
@@ -61,25 +62,36 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     public void update(Data<Double,Angle> data) {
         this.getChildren().clear();
 
-        for (Coordinate<Double,Angle> coord : data.getAllFood().keySet()) {
-            Food<Double,Angle> food = data.getAllFood().get(coord);
+        BorderDouble border = (BorderDouble) data.getGameBorder();
+
+        /*
+         * On affiche les foods seulement dans une certaine mesure :
+         * On ne les affiche que si elles sont dans un cercle de centre border.getCenter() et de rayon border.getMinRadius()
+         * Cela permet de ne pas afficher les foods qui sont trop loin de centre de l'écran
+         * 
+         * ATTENTION :
+         * Quand on passera à la version ou il y a un snake principal à suivre, il faudra placer le centre sur ce snake
+         */
+        List<Food<Double,Angle>> allFood = data.getAllFood(border.getCenter(),border.map_radius);   // Avoid recalculating it
+        for (Food<Double,Angle> food : allFood) {
             Image image = food.getImage();
             if(image != null){
                 ImageView imageView = new ImageView(image);
-                imageView.setX(D_X + coord.getX().doubleValue() - food.getRadius());
-                imageView.setY(D_Y + coord.getY().doubleValue() - food.getRadius());
+                imageView.setX(D_X + food.getCenter().getX().doubleValue() - food.getRadius());
+                imageView.setY(D_Y + food.getCenter().getY().doubleValue() - food.getRadius());
                 imageView.setFitHeight(food.getRadius()*2);
                 imageView.setFitWidth(food.getRadius()*2);
                 this.getChildren().add(imageView);
             }
             else{
-                Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
+                Circle c = new Circle(D_X + food.getCenter().getX().doubleValue(), D_Y + food.getCenter().getY().doubleValue(), food.getRadius());
                 c.setFill(Color.BLACK);
                 this.getChildren().add(c);
             }
         }
 
-        for(SnakeData<Double,Angle> snakeData : data.getAllSnake()){
+        ArrayList<SnakeData<Double,Angle>> allSnakes = data.getAllSnake(); // Avoid recalculating it
+        for(SnakeData<Double,Angle> snakeData : allSnakes){
 
             Skin skin = snakeData.getSkin();
             ArrayList<OurColors> tail_pattern = skin.getTailPattern();
@@ -88,7 +100,9 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             int i = 0;
             boolean shielded = snakeData.isShielded();
             boolean poisoned = snakeData.isPoisoned();
-            for(Coordinate<Double,Angle> coord : snakeData.getTail().reversed()){
+
+            List<Coordinate<Double,Angle>> tail = snakeData.getTail().reversed();  // Avoid recalculating it
+            for(Coordinate<Double,Angle> coord : tail){
                 double x = D_X + coord.getX().doubleValue();
                 double y = D_Y +  coord.getY().doubleValue();
 
@@ -140,7 +154,6 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             }
         }
 
-        BorderDouble border = (BorderDouble) data.getGameBorder();
         Circle c = new Circle(D_X + border.getCenter().getX().doubleValue(), D_Y + border.getCenter().getY().doubleValue(), border.getRadius());
         c.setFill(Color.TRANSPARENT);
         c.setStroke(Color.BLACK);

@@ -24,5 +24,10 @@ public class CoordinateInteger extends Coordinate<Integer,Direction> {
             throw new IllegalArgumentException("The direction " + direction + " is not a valid direction");
        }
     }
+
+    @Override
+    public Coordinate<Integer, Direction> clone(double x, double y) {
+        return new CoordinateInteger((int)x, (int)y);
+    }
     
 }

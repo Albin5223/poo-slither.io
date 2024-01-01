@@ -1,18 +1,17 @@
 package model.plateau;
 
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.ArrayList;
 
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
-import exceptions.ExceptionTooManyFoods;
 import interfaces.GameBorder;
 import interfaces.Orientation;
 import javafx.animation.AnimationTimer;
 import model.coordinate.Coordinate;
-import model.coordinate.CoordinateTree;
+import model.coordinate.Grid;
 import model.foods.DeathFood;
 import model.foods.Food;
 import model.foods.FoodFactory;
@@ -20,12 +19,12 @@ import model.foods.FoodFactory;
 public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
-    protected CoordinateTree<Type, O, Food<Type,O>> foodTree = new CoordinateTree<Type, O, Food<Type,O>>();
+    protected Grid<Type,O> foodGrid = new Grid<Type,O>();
     
     protected final FoodFactory<Type,O> foodFactory;
     protected final GameBorder<Type,O> border;
 
-    protected final int MAX_FOOD_COEF = 3;
+    protected final int MAX_FOOD_COEF = 2;
     protected final int NB_FOOD;
 
     /**
@@ -70,8 +69,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         animation.stop();
     }
 
-    public CoordinateTree<Type, O, Food<Type,O>> getFoodTree() {
-        return foodTree;
+    public Grid<Type,O> getFoods() {
+        return foodGrid;
     }
 
     public GameBorder<Type,O> getBorder() {
@@ -113,32 +112,31 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         }
     }
 
-    protected void addFood(Coordinate<Type,O> c,Food<Type,O> food) throws ExceptionCollisionWithFood,ExceptionTooManyFoods {
+    protected void addFood(Food<Type,O> food) throws ExceptionCollisionWithFood {
         synchronized(lock) {
-            if(foodTree.contains(c)){
+            if(!foodGrid.insert(food)){
                 throw new ExceptionCollisionWithFood("Food added in another food");
             }
-            foodTree.add(c,food);
         }
     }
 
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
             ArrayList<DeathFood<Type,O>> deathFoods = foodFactory.getDeathFoods(snake);
-            if(foodTree.size() > MAX_FOOD_COEF*NB_FOOD){return;}
+            if(foodGrid.size() > MAX_FOOD_COEF*NB_FOOD){return;}
             for(DeathFood<Type,O> food : deathFoods){
                 try {
-                    addFood(food.getCenter(), food);
-                } catch ( ExceptionCollisionWithFood | ExceptionTooManyFoods e ) {
+                    addFood(food);
+                } catch ( ExceptionCollisionWithFood e ) {
                     // If the food is already present then we do nothing
                 }
             }
         }
     }
 
-    public void removeFood(Coordinate<Type,O> c) throws IllegalArgumentException {
+    public void removeFood(Food<Type,O> food) throws IllegalArgumentException {
         synchronized(lock) {
-            if(!foodTree.remove(c)){
+            if(!foodGrid.remove(food)){
                 throw new IllegalArgumentException("Food not found");
             }
         }
@@ -147,8 +145,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     public void addOneFood(){
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
-            addFood(c, foodFactory.getRandomFood(c));
-        } catch (ExceptionCollision | ExceptionTooManyFoods e) {
+            addFood(foodFactory.getRandomFood(c));
+        } catch (ExceptionCollision e) {
             // If the food is already present then we do nothing
         }
     }
@@ -179,23 +177,23 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         ArrayList<Food<Type,O>> collidingFoods = new ArrayList<Food<Type,O>>();
         int foodsToAdd = 0;
 
-        while (true) {
-            Coordinate<Type,O> closestCoordinate = foodTree.getClosest(snake.getHead().getCenter());
-            if (closestCoordinate == null) {
-                break;
-            }
+        List<Food<Type,O>> nearbyFoods = foodGrid.getNearbyFoods(snake);
 
-            Food<Type,O> closestFood = foodTree.get(closestCoordinate);
-
-            double distance = closestFood.getCenter().distanceTo(snake.getHead().getCenter());
-            if (distance <= snake.getRadius() + closestFood.getRadius()) {
-                removeFood(closestCoordinate);
-                if (closestFood.isRespawnable()) {
+        for (Food<Type,O> food : nearbyFoods) {
+            if (snake.isCollidingWith(food)) {
+                if(food.isRespawnable()){
                     foodsToAdd += 1;
                 }
-                collidingFoods.add(closestFood);
-            } else {
-                break;
+                collidingFoods.add(food);
+            }
+        }
+
+        // We remove the food from the board AFTER the loop to avoid concurrent access
+        for(Food<Type,O> food : collidingFoods){
+            try {
+                removeFood(food);
+            } catch (IllegalArgumentException e) {
+                // If the food is already removed then we do nothing
             }
         }
 

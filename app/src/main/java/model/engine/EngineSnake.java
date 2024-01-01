@@ -1,7 +1,8 @@
 package model.engine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -66,12 +67,8 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>> getAllFood() {
-        HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>> copie = new HashMap<Coordinate<Integer,Direction>, Food<Integer,Direction>>();
-        for(Food<Integer,Direction> food : plateau.getFoodTree().valuesCollection()){
-            copie.put(food.getCenter(), food);
-        }
-        return copie;
+    public List<Food<Integer,Direction>> getAllFood(Coordinate<Integer,Direction> coord, double radius) {
+        return plateau.getFoods().getRenderZone(coord, radius);
     }
 
     @Override

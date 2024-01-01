@@ -1,7 +1,8 @@
 package model.engine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -79,12 +80,8 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public HashMap<Coordinate<Double,Angle>, Food<Double,Angle>> getAllFood() {
-        HashMap<Coordinate<Double,Angle>, Food<Double,Angle>> copie = new HashMap<Coordinate<Double,Angle>, Food<Double,Angle>>();
-        for(Food<Double,Angle> food : plateau.getFoodTree().valuesCollection()){
-            copie.put(food.getCenter(), food);
-        }
-        return copie;
+    public List<Food<Double,Angle>> getAllFood(Coordinate<Double,Angle> coordinate, double radius) {
+        return plateau.getFoods().getRenderZone(coordinate, radius);
     }
 
     @Override

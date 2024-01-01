@@ -5,6 +5,7 @@ import model.coordinate.Coordinate;
 import model.foods.Food;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import externData.ImageBank;
 import externData.OurColors;
@@ -62,25 +63,28 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
     public void update(Data<Integer,Direction> data) {
         this.getChildren().clear();
 
-        for (Coordinate<Integer,Direction> coord : data.getAllFood().keySet()) {
-            Food<Integer,Direction> food = data.getAllFood().get(coord);
+        BorderInteger border = (BorderInteger) data.getGameBorder();
+
+        List<Food<Integer,Direction>> allFood = data.getAllFood(border.getCenter(),border.getMinRadius()); // Avoid recalculating it
+        for (Food<Integer,Direction> food : allFood) {
             Image image = food.getImage();
             if(image != null){
                 ImageView imageView = new ImageView(image);
-                imageView.setX(D_X + coord.getX().doubleValue() - food.getRadius());
-                imageView.setY(D_Y + coord.getY().doubleValue() - food.getRadius());
+                imageView.setX(D_X + food.getCenter().getX().doubleValue() - food.getRadius());
+                imageView.setY(D_Y + food.getCenter().getY().doubleValue() - food.getRadius());
                 imageView.setFitHeight(food.getRadius()*2);
                 imageView.setFitWidth(food.getRadius()*2);
                 this.getChildren().add(imageView);
             }
             else{
-                Circle c = new Circle(D_X + coord.getX().doubleValue(), D_Y + coord.getY().doubleValue(), food.getRadius());
+                Circle c = new Circle(D_X + food.getCenter().getX().doubleValue(), D_Y + food.getCenter().getY().doubleValue(), food.getRadius());
                 c.setFill(Color.BLACK);
                 this.getChildren().add(c);
             }
         }
 
-        for(SnakeData<Integer,Direction> snakeData : data.getAllSnake()){
+        ArrayList<SnakeData<Integer,Direction>> allSnakes = data.getAllSnake(); // Avoid recalculating it
+        for(SnakeData<Integer,Direction> snakeData : allSnakes){
             int witdh = (int) (snakeData.getRadius()*2);
 
             Skin skin = snakeData.getSkin();
@@ -90,7 +94,9 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
             int i = 0;
             boolean shielded = snakeData.isShielded();
             boolean poisoned = snakeData.isPoisoned();
-            for(Coordinate<Integer,Direction> coord : snakeData.getTail().reversed()){
+            
+            List<Coordinate<Integer,Direction>> tail = snakeData.getTail().reversed();  // Avoid recalculating it
+            for(Coordinate<Integer,Direction> coord : tail){
                 int x = D_X + coord.getX().intValue() - witdh/2;
                 int y = D_Y + coord.getY().intValue() - witdh/2;
 
@@ -145,7 +151,6 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
             }
         }
 
-        BorderInteger border = (BorderInteger) data.getGameBorder();
         Rectangle c = new Rectangle(D_X + border.getxMin(), D_Y + border.getyMin(), border.getxMax() - border.getxMin(), border.getyMax() - border.getyMin());
         c.setFill(Color.TRANSPARENT);
         c.setStroke(Color.BLACK);

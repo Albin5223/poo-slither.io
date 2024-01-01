@@ -7,6 +7,9 @@ import java.util.TreeMap;
 
 import interfaces.Orientation;
 
+/**
+ * @deprecated Old version for the implementation of the foods in the board 
+ */
 public class CoordinateTree<Type extends Number & Comparable<Type>,O extends Orientation<O>, Value> {
 
     private TreeMap<Coordinate<Type, O>, Value> map = new TreeMap<>(new CoordinateComparator());
@@ -28,8 +31,7 @@ public class CoordinateTree<Type extends Number & Comparable<Type>,O extends Ori
         double minDistance = Double.MAX_VALUE;
     
         for (Coordinate<Type, O> c : map.keySet()) {
-            double distance = Math.sqrt(Math.pow(c.getX().doubleValue() - coordinate.getX().doubleValue(), 2) +
-                                        Math.pow(c.getY().doubleValue() - coordinate.getY().doubleValue(), 2));
+            double distance = coordinate.distanceTo(c);
     
             if (distance < minDistance) {
                 minDistance = distance;
@@ -48,7 +50,7 @@ public class CoordinateTree<Type extends Number & Comparable<Type>,O extends Ori
         return map.keySet();
     }
 
-    public Collection<Value> valuesCollection() {
+    public Collection<Value> getAllFood() {
         return map.values();
     }
 

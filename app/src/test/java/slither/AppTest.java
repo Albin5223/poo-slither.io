@@ -5,22 +5,11 @@ package slither;
 
 import org.junit.jupiter.api.Test;
 
-import model.coordinate.CoordinateInteger;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class AppTest {
     App app = new App();
-
-    @Test
-    void testCompareTo(){
-        CoordinateInteger c1 = new CoordinateInteger(1,1);
-        CoordinateInteger c2 = new CoordinateInteger(1,1);
-        assertEquals(0, c1.compareTo(c2));
-    }
-
-    
     
     @Test void testApp() {
         assertTrue(true);

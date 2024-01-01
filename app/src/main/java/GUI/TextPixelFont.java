@@ -15,7 +15,7 @@ public class TextPixelFont extends Text {
         this.setStroke(Color.BLACK);
         this.setStrokeWidth(size*STROKE_RATIO);
         this.setFill(Color.WHITE);
-        Font customFont = Font.loadFont(getClass().getResource("/PixelFontYS.ttf").toExternalForm(), size);
+        Font customFont = Font.loadFont(getClass().getResource("/PixelFontYSMAJ.ttf").toExternalForm(), size);
         this.setFont(customFont);
 
         // Add drop shadow effect

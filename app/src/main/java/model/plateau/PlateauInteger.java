@@ -14,11 +14,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public static class BorderInteger implements GameBorder<Integer,Direction> {
 
-        private int xMin;
-        private int xMax;
+        public final int xMin;
+        public final int xMax;
 
-        private int yMin;
-        private int yMax;
+        public final int yMin;
+        public final int yMax;
 
         public BorderInteger(int xMin, int xMax, int yMin, int yMax) {
             this.xMin = xMin;
@@ -91,6 +91,22 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
                 return getRandomCoordinateNotAlignWithSnake();
             }
         }
+
+        /**
+         * @return the center of the map
+         */
+        public CoordinateInteger getCenter(){
+            return new CoordinateInteger((xMax + xMin)/2, (yMax + yMin)/2);
+        }
+
+        /**
+         * @return the minimum radius to display the whole map on the screen (considering the center of the map is the center of the screen)
+         */
+        public int getMinRadius(){
+            int halfWidth = (xMax - xMin) / 2;
+            int halfHeight = (yMax - yMin) / 2;
+            return (int) Math.sqrt(halfHeight*halfHeight + halfWidth*halfWidth);
+        }
     }
 
     private final static int NB_FOOD = 50;
@@ -101,10 +117,10 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public static PlateauInteger createPlateauSnake(int width, int height){
         BorderInteger border = new BorderInteger(
-            -4*width/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS),
-            4*width/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
-            -4*height/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS), 
-            4*height/(ConfigurationSnakeInteger.SNAKE_BIRTH_HITBOX_RADIUS)
+            -width/2, 
+            width/2, 
+            -height/2,
+            height/2
         );
 
         PlateauInteger plateau = new PlateauInteger(NB_FOOD, FoodFactoryInteger.build(), border);

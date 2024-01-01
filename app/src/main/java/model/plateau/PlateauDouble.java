@@ -13,9 +13,8 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public static class BorderDouble implements GameBorder<Double,Angle> {
 
-
-        private CoordinateDouble map_center;
-        private double map_radius;
+        public final CoordinateDouble map_center;
+        public final double map_radius;
 
         public BorderDouble(CoordinateDouble map_center, double map_radius) {
             this.map_center = map_center.clone();
