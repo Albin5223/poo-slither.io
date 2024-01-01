@@ -1,14 +1,11 @@
 package GUI;
 
+import java.util.ArrayList;
+
 import GUI.optionView.PageMainOptionOffline;
-import externData.ImageBank;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
@@ -20,10 +17,13 @@ public class OfflinePage extends VBox {
 
 
     Stage primaryStage;
-    Scene homeScene;
+    VBox homeLayout;
+    Scene scene;
+
+    ArrayList<Node> listNode = new ArrayList<>();
     
 
-    public OfflinePage(Stage primaryStage,Scene homeScene, int WITDH, int HEIGHT) {
+    public OfflinePage(Stage primaryStage,VBox homeLayout, Scene scene) {
         this.primaryStage = primaryStage;
 
         ButtonPixelFont title = new ButtonPixelFont("OFFLINE",60);
@@ -45,31 +45,17 @@ public class OfflinePage extends VBox {
         setSpacing(50);
 
 
-        
-
-        BackgroundSize backgroundSize = new BackgroundSize(WITDH, HEIGHT, false, false, false, true);
-        BackgroundImage background = new BackgroundImage(
-                ImageBank.homePageBackground,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                backgroundSize
-        );
-
-        this.setBackground(new Background(background));
-
         playButtonSlither.setOnAction(e -> {
-            PageMainOptionOffline pageMainOption = new PageMainOptionOffline(primaryStage,homeScene,WITDH,HEIGHT,false);
-            Scene optionScene = new Scene(pageMainOption,WITDH,HEIGHT);
-            primaryStage.setScene(optionScene);
-            primaryStage.show();
+            PageMainOptionOffline pageMainOption = new PageMainOptionOffline(primaryStage,homeLayout,scene,false);
+            homeLayout.getChildren().removeAll(listNode);
+            homeLayout.getChildren().addAll(pageMainOption);
         });
 
         playButtonSnake.setOnAction(e -> {
-            PageMainOptionOffline pageMainOption = new PageMainOptionOffline(primaryStage,homeScene,WITDH,HEIGHT,true);
-            Scene optionScene = new Scene(pageMainOption,WITDH,HEIGHT);
-            primaryStage.setScene(optionScene);
-            primaryStage.show();
+            PageMainOptionOffline pageMainOption = new PageMainOptionOffline(primaryStage,homeLayout,scene,true);
+            homeLayout.getChildren().removeAll(listNode);
+            homeLayout.getChildren().addAll(pageMainOption);
+            
         });
 
         exitButton.setOnAction(e -> {
@@ -77,7 +63,12 @@ public class OfflinePage extends VBox {
         });
 
 
-        getChildren().addAll(title,playButtonSlither,playButtonSnake,exitButton);
+        listNode.add(title);
+        listNode.add(playButtonSlither);
+        listNode.add(playButtonSnake);
+        listNode.add(exitButton);
+
+        homeLayout.getChildren().addAll(listNode);
         VBox.setMargin(playButtonSlither, new javafx.geometry.Insets(50, 0, 0, 0));
     }
     

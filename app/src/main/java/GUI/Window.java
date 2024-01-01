@@ -1,10 +1,18 @@
 package GUI;
 
+
 import externData.ImageBank;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.util.ArrayList;
+
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -12,17 +20,22 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Window {
 
-    int WITDH = 1200;
-    int HEIGHT = 800;
+    
+    public static Rectangle2D screen = Screen.getPrimary().getBounds();
+    int WITDH = (int) screen.getWidth();
+    int HEIGHT = (int) screen.getHeight();
 
     Stage primaryStage;
     Pane root;
     Button title;
     Scene scene;
+
+    ArrayList<Node> listNode = new ArrayList<>();
 
     public Window(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -48,10 +61,11 @@ public class Window {
         ButtonPixelFont playOffline = new ButtonPixelFont("OFFLINE",50);
 
         playOffline.setOnAction(e -> {
-            OfflinePage offlinePage = new OfflinePage(primaryStage, scene, WITDH, HEIGHT);
-            Scene offlineScene = new Scene(offlinePage, WITDH, HEIGHT);
-            primaryStage.setScene(offlineScene);
-            primaryStage.show();
+            OfflinePage offlinePage = new OfflinePage(primaryStage, layout,scene);
+            
+            layout.getChildren().removeAll(listNode);
+
+            layout.getChildren().addAll(offlinePage);
 
         });
 
@@ -63,7 +77,12 @@ public class Window {
         });
 
         
-        layout.getChildren().addAll(title,playOnline,playOffline, exitButton);
+        
+        listNode.add(title);
+        listNode.add(playOnline);
+        listNode.add(playOffline);
+        listNode.add(exitButton);
+        layout.getChildren().addAll(listNode);
         layout.setAlignment(Pos.CENTER);
 
         VBox.setMargin(playOnline, new Insets(60, 0, 0, 0));

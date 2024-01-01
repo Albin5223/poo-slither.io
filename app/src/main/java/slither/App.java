@@ -24,9 +24,12 @@ public class App extends Application{
         primaryStage.setTitle("Slither");
         primaryStage.setScene(window.getScene());
         primaryStage.show();
+       
+        primaryStage.setFullScreenExitHint("");
         primaryStage.setOnCloseRequest(e -> {
             primaryStage.close();
         });
+        primaryStage.setFullScreen(true);
     }
 
     public static void main(String[] args) {

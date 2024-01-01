@@ -30,8 +30,8 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     private int D_Y;
 
     public PlayPageSlither(int D_X, int D_Y) {
-        this.D_X = D_X;
-        this.D_Y = D_Y;
+        this.D_X = D_X/2;
+        this.D_Y = D_Y/2;
         
     }
 
