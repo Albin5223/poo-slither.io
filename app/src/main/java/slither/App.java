@@ -6,6 +6,7 @@ package slither;
 import GUI.Window;
 import externData.ImageBank;
 import javafx.application.Application;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -26,6 +27,7 @@ public class App extends Application{
         primaryStage.show();
        
         primaryStage.setFullScreenExitHint("");
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.valueOf("Ctrl+C"));
         primaryStage.setOnCloseRequest(e -> {
             primaryStage.close();
         });

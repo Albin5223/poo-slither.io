@@ -22,13 +22,13 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     /** The current speed of the snake */
     protected int currentSpeed = 0;
-    protected double currentHitboxRadius;
+    protected int currentHitboxRadius;
     protected volatile boolean isBoosting = false;
 
     private final Object lock = new Object();
 
-    private final Type GAP_BETWEEN_TAIL;
-    private final double BIRTH_HITBOX_RADIUS;
+    private final int GAP_BETWEEN_TAIL;
+    private final int BIRTH_HITBOX_RADIUS;
     private final int BIRTH_LENGTH;
     /** The amount of food that the snake needs to eat before growing */
     public final int MAX_FOOD_CHARGING;
@@ -43,6 +43,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     public final boolean IS_TRAVERSABLE_WALL;
     public final boolean IS_DROPING_FOOD_ON_DEATH;
     public final boolean CAN_COLLIDING_WITH_HIMSELF;
+    public final boolean RADIUS_IS_GROWING;
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
@@ -90,7 +91,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, Type gap_between_tail, double hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment, boolean is_traversable_wall, boolean is_droping_food_on_death, boolean is_colliding_with_himself) throws ExceptionCollision {
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, int gap_between_tail, int hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment, boolean is_traversable_wall, boolean is_droping_food_on_death, boolean is_colliding_with_himself, boolean radius_is_growing) throws ExceptionCollision {
         this.GAP_BETWEEN_TAIL = gap_between_tail;
         this.BIRTH_HITBOX_RADIUS = hitboxRadius;
         this.currentHitboxRadius = hitboxRadius;
@@ -103,6 +104,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.IS_TRAVERSABLE_WALL = is_traversable_wall;
         this.IS_DROPING_FOOD_ON_DEATH = is_droping_food_on_death;
         this.CAN_COLLIDING_WITH_HIMSELF = is_colliding_with_himself;
+        this.RADIUS_IS_GROWING = radius_is_growing;
         this.head = new SnakePart(location.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart>();
 
@@ -117,7 +119,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         plateau.addSnake(this);
     }
 
-    public void setHitboxRadius(double hitboxRadius) {
+    public void setHitboxRadius(int hitboxRadius) {
         this.currentHitboxRadius = hitboxRadius;
     }
 
@@ -143,7 +145,6 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.setBoosting(false);
         this.setPoisoned(0,0);
         this.setShielded(0);
-        this.isDead = false;
     }
 
     private final void resetSnake(Coordinate<Type,O> newLocation, O startingDirection, int nbTail) throws ExceptionCollisionWithSnake{
@@ -155,6 +156,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
 
         this.isDead = true;
+        resetAttributes();
 
         this.head = new SnakePart(newLocation.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart>();
@@ -169,8 +171,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
         }
 
-        resetAttributes();
-
+        this.isDead = false;
         this.plateau.addSnake(this);
     }
 
@@ -274,7 +275,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         if(IS_TRAVERSABLE_WALL && !plateau.border.isInside(newHead.getCenter())){
             newHead = new SnakePart(plateau.border.getOpposite(newHead.getCenter()), newDirection);
         }
-        // We check if the snake is colliding with the wall
+        // We check if the snake is colliding with the wall or he's outside the board
         else if(!plateau.border.isInside(newHead.getCenter())){
             throw new ExceptionCollisionWithWall("Snake is colliding with the wall");
         }
@@ -282,6 +283,10 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.tail.remove(tail.size() - 1);  // We remove the last element of the tail
         this.tail.add(0, head); // We add the old head to the tail
         this.head = newHead;    // We update the head
+
+        if(RADIUS_IS_GROWING){
+            this.currentHitboxRadius = (int) (BIRTH_HITBOX_RADIUS + (tail.size() * (BIRTH_HITBOX_RADIUS * 0.005)));
+        }
 
         plateau.addSnake(this);   // We update the position of the snake on the board
 

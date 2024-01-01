@@ -9,10 +9,10 @@ public class ConfigurationSnakeDouble {
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
     public static final Angle SLITHER_TURNING_FORCE = new Angle(4);
-    public static final double SLITHER_GAP_BETWEEN_TAIL = 4;
-    public static final int SLITHER_BIRTH_LENGTH = 50;
+    public static final int SLITHER_GAP_BETWEEN_TAIL = 4;
+    public static final int SLITHER_BIRTH_LENGTH = 15;
     public static final int SLITHER_MAX_FOOD_CHARGING = 10;
-    public static final double SLITHER_BIRTH_HITBOX_RADIUS = 10;
+    public static final int SLITHER_BIRTH_HITBOX_RADIUS = 10;
 
     public static final int SLITHER_DEFAULT_SPEED = 75;
     public static final int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
@@ -25,4 +25,6 @@ public class ConfigurationSnakeDouble {
     public static boolean IS_TRAVERSABLE_WALL = false;
 
     public static boolean CAN_COLLIDING_WITH_HIMSELF = false;
+
+    public static boolean RADIUS_IS_GROWING = true;
 }

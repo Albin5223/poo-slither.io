@@ -94,7 +94,7 @@ public class ImageBank {
             specials[s.ordinal()] = new Pair(new Image(getClass().getResourceAsStream("/specials/" + s.toString() + ".png")), s.toString());
         }
 
-        homePageBackground = new Image(getClass().getResourceAsStream("/walkpaper/walkpaperHomePage.png"));
+        homePageBackground = new Image(getClass().getResourceAsStream("/wallpaper/wallpaperHomePage.png"));
 
     }
     

@@ -9,7 +9,7 @@ public class ConfigurationSnakeInteger{
     public static final int SNAKE_BIRTH_LENGTH = 10;
     public static final int SNAKE_MAX_FOOD_CHARGING = 5;
     public static final int SNAKE_BIRTH_HITBOX_RADIUS = 10;
-    public static final Integer SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
+    public static final int SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
 
     public static final int SNAKE_DEFAULT_SPEED = 15;
     public static final int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
@@ -22,4 +22,6 @@ public class ConfigurationSnakeInteger{
     public static boolean TRAVERSABLE_WALL = false;
 
     public static boolean CAN_COLLIDING_WITH_HIMSELF = false;
+
+    public static boolean RADIUS_IS_GROWING = false;
 }

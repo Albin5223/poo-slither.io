@@ -14,7 +14,7 @@ public class CoordinateDouble extends Coordinate<Double,Angle> {
     }
 
     @Override
-    public CoordinateDouble placeCoordinateFrom(Angle direction, Double distance) {
+    public CoordinateDouble placeCoordinateFrom(Angle direction, double distance) {
         double radian = Math.toRadians(direction.getAngle());
         double newX = this.x + Math.cos(radian) * distance;
         double newY = this.y + Math.sin(radian) * distance;

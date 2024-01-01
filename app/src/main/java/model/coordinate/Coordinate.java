@@ -44,5 +44,5 @@ public abstract class Coordinate<Type extends Number, O extends Orientation<O>> 
 
     public abstract Coordinate<Type,O> clone();
     public abstract Coordinate<Type,O> clone(double x, double y);
-    public abstract Coordinate<Type,O> placeCoordinateFrom(O direction, Type distance);
+    public abstract Coordinate<Type,O> placeCoordinateFrom(O direction, double distance);
 }

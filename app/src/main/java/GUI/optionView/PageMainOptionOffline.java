@@ -130,7 +130,7 @@ public class PageMainOptionOffline extends VBox{
         }
         
         scene.setOnKeyPressed( ev -> {
-            if(ev.getCode() == KeyCode.P){
+            if(ev.getCode() == KeyCode.ESCAPE){
                 engine.stop();
 
                 homeLayout.getChildren().removeAll(playPageSlither);
