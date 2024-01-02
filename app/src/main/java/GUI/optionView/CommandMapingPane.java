@@ -9,9 +9,10 @@ public class CommandMapingPane extends HBox{
     private ButtonPixelFont title;
     private TextField selectTouch;
     
+    private int textSize = 25;
     
     public CommandMapingPane(String title){
-        this.title = new ButtonPixelFont(title,15);
+        this.title = new ButtonPixelFont(title,textSize);
         setSpacing(20);
 
         this.selectTouch = new TextField();

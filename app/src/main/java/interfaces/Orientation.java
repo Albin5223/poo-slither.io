@@ -35,6 +35,10 @@ public sealed interface Orientation<O extends Orientation<O>> {
 
         @Override
         public Angle getRandom(){
+            return getRandomAngle();
+        }
+
+        public static Angle getRandomAngle(){
             return new Angle(Math.random() * 360);
         }
 
@@ -68,6 +72,10 @@ public sealed interface Orientation<O extends Orientation<O>> {
         
         @Override
         public Direction getRandom(){
+            return getRandomDirection();
+        }
+
+        public static Direction getRandomDirection(){
             int r = (int) (Math.random() * 4);
             switch (r) {
                 case 0: return Direction.UP;

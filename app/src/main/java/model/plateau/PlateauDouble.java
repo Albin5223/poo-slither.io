@@ -56,7 +56,7 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         }
     }
 
-    private final static int NB_FOOD = 50;
+    private final static int NB_FOOD = 100;
 
     public PlateauDouble(int nbFood, FoodFactoryDouble foodFactory, BorderDouble border) {
         super(nbFood, foodFactory, border);

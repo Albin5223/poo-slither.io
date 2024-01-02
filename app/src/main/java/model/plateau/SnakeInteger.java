@@ -13,7 +13,7 @@ public final class SnakeInteger extends Snake<Integer,Direction> {
 
     public static SnakeInteger createSnakeInteger(PlateauInteger plateau) {
         CoordinateInteger location = (CoordinateInteger) plateau.border.getRandomCoordinate();
-        Direction dir = Direction.UP.getRandom();
+        Direction dir = Direction.getRandomDirection();
         
         try{
             SnakeInteger snake = new SnakeInteger(location, plateau, dir);

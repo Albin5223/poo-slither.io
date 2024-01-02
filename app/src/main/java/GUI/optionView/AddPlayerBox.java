@@ -24,6 +24,7 @@ public class AddPlayerBox extends VBox {
     private boolean isSnake;
     private TouchControler touchControler;
 
+    private int textSize = 25;
 
     
     public AddPlayerBox(Boolean isSnake){
@@ -32,7 +33,7 @@ public class AddPlayerBox extends VBox {
         this.setSpacing(5);
         touchControler = new TouchControler();
         numero++;
-        present = new ButtonGrisablePixelFont("ADD PLAYER",10,true);
+        present = new ButtonGrisablePixelFont("ADD PLAYER",textSize,true);
         
         present.setOnAction(e -> {
             

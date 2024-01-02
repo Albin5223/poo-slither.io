@@ -16,16 +16,17 @@ public class PlayerChoosePane extends VBox {
 
     private HBox humanPlayerSpinnerBox;
 
+    private static int textSize = 25;
 
     
     public PlayerChoosePane(boolean isSnake) {
         botPlayerSpinnerBox = new HBox();
         humanPlayerSpinnerBox = new HBox();
-        ButtonPixelFont titleBot = new ButtonPixelFont("NUMBER OF IA : ",15);
-        ButtonNotClickeablePixelFont ViewNumber = new ButtonNotClickeablePixelFont(String.valueOf(SetOfConfiguration.getNumberOfBot()),15);
+        ButtonNotClickeablePixelFont titleBot = new ButtonNotClickeablePixelFont("NUMBER OF IA : ",textSize);
+        ButtonNotClickeablePixelFont ViewNumber = new ButtonNotClickeablePixelFont(String.valueOf(SetOfConfiguration.getNumberOfBot()),textSize);
         botPlayerSpinner = new HBox();
-        ButtonPixelFont plus = new ButtonPixelFont("+",15);
-        ButtonPixelFont minus = new ButtonPixelFont("-",15);
+        ButtonPixelFont plus = new ButtonPixelFont("+",textSize);
+        ButtonPixelFont minus = new ButtonPixelFont("-",textSize);
         plus.setOnMouseClicked(event -> {
             SetOfConfiguration.incrementNumberOfBot();
             ViewNumber.setButtonText(String.valueOf(SetOfConfiguration.getNumberOfBot()));

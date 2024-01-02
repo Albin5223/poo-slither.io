@@ -14,6 +14,7 @@ public class ButtonPixelFont extends Button {
 
         // Set the style of the button
         this.setStyle("-fx-padding: 0; -fx-background-color: transparent;");
+        //this.setStyle("-fx-padding: 3 15 2 15; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 3;");
 
         // Change the cursor when it hovers over the button
         this.setOnMouseEntered(e -> this.setCursor(Cursor.HAND));  // Change to hand cursor

@@ -1,7 +1,11 @@
 package GUI;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 
 public abstract class Page {
 
@@ -19,12 +23,17 @@ public abstract class Page {
 
     /** This method clears the layout of the window */
     public void clear(){
-        window.getLayout().getChildren().clear();
-        window.getLayout().setSpacing(0);
-        window.getLayout().setPadding(new Insets(0));
-        window.getLayout().setAlignment(Pos.CENTER);
-        window.getLayout().setBorder(null);
-        
+        window.resetLayout();        
+    }
+
+    public void setBackground(Image image){
+        window.getLayout().setBackground(new Background(new BackgroundImage(
+                image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(Window.WITDH, Window.HEIGHT, false, false, false, true)
+        )));
     }
 
     protected void show(){

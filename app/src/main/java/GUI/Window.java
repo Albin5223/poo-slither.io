@@ -29,7 +29,10 @@ public class Window {
     public Stage getPrimaryStage() {return primaryStage;}
     public Scene getScene() {return scene;}
     public VBox getLayout() {return layout;}
-    public void resetLayout() {layout = new VBox();}
+    public void resetLayout() {
+        layout = new VBox();
+        scene.setRoot(layout);
+    }
 
     public EngineSlither getOfflineSlither() {return offlineSlither;}
     public EngineSnake getOfflineSnake() {return offlineSnake;}
@@ -41,7 +44,6 @@ public class Window {
         this.layout = new VBox();
         this.scene = new Scene(layout, WITDH, HEIGHT);
         // setScene is already called in App.java
-
 
         menuPage = new MenuPage(this);
         offlinePage = new OfflinePage(this);

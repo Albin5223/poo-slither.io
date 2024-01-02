@@ -13,7 +13,7 @@ public final class SnakeDouble extends Snake<Double,Angle> {
 
     public static SnakeDouble createSnakeDouble(PlateauDouble plateau) {
         CoordinateDouble location = (CoordinateDouble) plateau.border.getRandomCoordinate();
-        Angle angle = new Angle(0).getRandom();
+        Angle angle = Angle.getRandomAngle();
         
         try{
             SnakeDouble snake = new SnakeDouble(location, plateau, angle);

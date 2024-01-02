@@ -13,6 +13,7 @@ import configuration.TouchControler;
 import controleur.ControlerSlither;
 import controleur.ControlerSnake;
 import controleur.KeyboardControler;
+import externData.ImageBank;
 import interfaces.HumanPlayer;
 import interfaces.Orientation.Angle;
 import interfaces.Orientation.Direction;
@@ -59,8 +60,6 @@ public class PageMainOptionOffline extends Page {
             }
         }
     }
-
-
 
     public void launchSlither(){
         clear();
@@ -153,15 +152,16 @@ public class PageMainOptionOffline extends Page {
 
     @Override
     public void createPage() {
-        ButtonNotClickeablePixelFont title = new ButtonNotClickeablePixelFont("SETTING OF LAUNCH",40);
+        ButtonNotClickeablePixelFont title = new ButtonNotClickeablePixelFont("SETTING OF LAUNCH",50);
         PlayerChoosePane playerChoosePane = new PlayerChoosePane(isSnake);
-        ButtonPixelFont launchButton = new ButtonPixelFont("LAUNCH GAME",30);
+        ButtonPixelFont launchButton = new ButtonPixelFont("LAUNCH GAME",40);
         
         VBox layout = window.getLayout();
         layout.getChildren().clear();
         layout.setSpacing(50);
         layout.setPadding(new Insets(20)); // Marge de 10 pixels à tous les côtés du Pane
         layout.setAlignment(Pos.CENTER);
+        setBackground(ImageBank.wallpaper_settings);
 
         final boolean isSnakeFinal = isSnake;
         launchButton.setOnAction(e -> {

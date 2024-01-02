@@ -26,6 +26,7 @@ public class ImageBank {
     private static Pair[] specials = new Pair[OurSpecials.values().length];
 
     public static Image homePageBackground;
+    public static Image wallpaper_settings;
 
 
     public static Image getCircleImage(OurColors color) {
@@ -94,7 +95,8 @@ public class ImageBank {
             specials[s.ordinal()] = new Pair(new Image(getClass().getResourceAsStream("/specials/" + s.toString() + ".png")), s.toString());
         }
 
-        homePageBackground = new Image(getClass().getResourceAsStream("/wallpaper/wallpaperHomePage.png"));
+        homePageBackground = new Image(getClass().getResourceAsStream("/wallpaper/wallpaper_menu.png"));
+        wallpaper_settings = new Image(getClass().getResourceAsStream("/wallpaper/settings.jpg"));
 
     }
     
