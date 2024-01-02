@@ -8,6 +8,7 @@ public class OptionConfigPane extends VBox {
     SettingToggle toggleReachableWall;
     SettingToggle toggleCollitionWithMe;
     SettingToggle toggleGreedyDeath;
+    
     public OptionConfigPane() {
         setSpacing(10);
         toggleReachableWall = new SettingToggle("REACHABLE WALL");

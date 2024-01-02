@@ -1,4 +1,4 @@
-package GUI;
+package GUI.customButton;
 
 import javafx.scene.Cursor;
 

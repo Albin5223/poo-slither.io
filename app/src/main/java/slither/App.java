@@ -37,11 +37,4 @@ public class App extends Application{
     public static void main(String[] args) {
         launch(args);
     }
-    /*
-     * Différencier les foods
-     * Food emppoisonnée
-     * Commencer Le réseau 
-     * Mode a online où le joueur est unique et au centre
-     */
-    
 }

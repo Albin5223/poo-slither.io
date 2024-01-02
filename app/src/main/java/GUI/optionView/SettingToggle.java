@@ -1,6 +1,6 @@
 package GUI.optionView;
 
-import GUI.ButtonPixelFont;
+import GUI.customButton.ButtonPixelFont;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 

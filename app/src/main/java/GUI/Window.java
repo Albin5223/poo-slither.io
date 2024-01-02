@@ -1,94 +1,65 @@
 package GUI;
 
 
-import externData.ImageBank;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-
-import java.util.ArrayList;
-
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.engine.EngineSlither;
+import model.engine.EngineSnake;
 
 public class Window {
 
-    
-    public static Rectangle2D screen = Screen.getPrimary().getBounds();
-    int WITDH = (int) screen.getWidth();
-    int HEIGHT = (int) screen.getHeight();
+    private EngineSlither offlineSlither;
+    private EngineSnake offlineSnake;
 
-    Stage primaryStage;
-    Pane root;
-    Button title;
-    Scene scene;
+    public static final Rectangle2D screen = Screen.getPrimary().getBounds();
+    public static final int WITDH = (int) screen.getWidth();
+    public static final int HEIGHT = (int) screen.getHeight();
 
-    ArrayList<Node> listNode = new ArrayList<>();
+    private Stage primaryStage;
+    private Scene scene;
+    private VBox layout;
+
+    private MenuPage menuPage;
+    private OfflinePage offlinePage;
+    private PageMainOptionOffline pageMainOptionOffline;
+
+    public Stage getPrimaryStage() {return primaryStage;}
+    public Scene getScene() {return scene;}
+    public VBox getLayout() {return layout;}
+    public void resetLayout() {layout = new VBox();}
+
+    public EngineSlither getOfflineSlither() {return offlineSlither;}
+    public EngineSnake getOfflineSnake() {return offlineSnake;}
+    public void setOfflineSlither(EngineSlither offlineSlither) {this.offlineSlither = offlineSlither;}
+    public void setOfflineSnake(EngineSnake offlineSnake) {this.offlineSnake = offlineSnake;}
 
     public Window(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
-        BackgroundSize backgroundSize = new BackgroundSize(WITDH, HEIGHT, false, false, false, true);
-        BackgroundImage background = new BackgroundImage(
-                ImageBank.homePageBackground,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                backgroundSize
-        );
-
-        VBox layout = new VBox(30);
-        layout.setBackground(new Background(background));
-
-        scene = new Scene(layout, WITDH, HEIGHT);
-
-        title = new ButtonPixelFont("THE YAZICINHO'S GAME", 70);
+        this.layout = new VBox();
+        this.scene = new Scene(layout, WITDH, HEIGHT);
+        // setScene is already called in App.java
 
 
-        ButtonPixelFont playOnline = new ButtonPixelFont("ONLINE",50);
-        ButtonPixelFont playOffline = new ButtonPixelFont("OFFLINE",50);
+        menuPage = new MenuPage(this);
+        offlinePage = new OfflinePage(this);
 
-        playOffline.setOnAction(e -> {
-            OfflinePage offlinePage = new OfflinePage(primaryStage, layout,scene);
-            
-            layout.getChildren().removeAll(listNode);
-
-            layout.getChildren().addAll(offlinePage);
-
-        });
-
-        Button exitButton = new ButtonPixelFont("EXIT",40);
-        
-
-        exitButton.setOnAction(e -> {
-            primaryStage.close();
-        });
-
-        
-        
-        listNode.add(title);
-        listNode.add(playOnline);
-        listNode.add(playOffline);
-        listNode.add(exitButton);
-        layout.getChildren().addAll(listNode);
-        layout.setAlignment(Pos.CENTER);
-
-        VBox.setMargin(playOnline, new Insets(60, 0, 0, 0));
-       
+        menuPage.show();
     }
 
-    public Scene getScene() {
-        return scene;
+    public void switchToMenuPage(){
+        menuPage.show();
+    }
+
+    public void switchToOfflinePage(){
+        offlinePage.show();
+    }
+
+    public void switchToPageMainOptionOffline(boolean isSnake){
+        pageMainOptionOffline = new PageMainOptionOffline(this,isSnake);
+        pageMainOptionOffline.show();
     }
     
 }

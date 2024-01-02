@@ -1,4 +1,4 @@
-package GUI;
+package GUI.customButton;
 
 public class ButtonGrisablePixelFont extends ButtonPixelFont {
 

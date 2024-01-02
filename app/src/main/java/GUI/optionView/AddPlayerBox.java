@@ -1,8 +1,8 @@
 package GUI.optionView;
 
 
-import GUI.ButtonGrisablePixelFont;
-import GUI.ButtonPixelFont;
+import GUI.customButton.ButtonGrisablePixelFont;
+import GUI.customButton.ButtonPixelFont;
 import configuration.TouchControler;
 import configuration.TouchControler.DirectionOfTouch;
 import javafx.scene.layout.VBox;

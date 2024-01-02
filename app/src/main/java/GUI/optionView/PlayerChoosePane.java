@@ -1,8 +1,8 @@
 package GUI.optionView;
 
-import GUI.ButtonPixelFont;
+import GUI.customButton.ButtonNotClickeablePixelFont;
+import GUI.customButton.ButtonPixelFont;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -22,18 +22,18 @@ public class PlayerChoosePane extends VBox {
         botPlayerSpinnerBox = new HBox();
         humanPlayerSpinnerBox = new HBox();
         ButtonPixelFont titleBot = new ButtonPixelFont("NUMBER OF IA : ",15);
-        Label ViewNumber = new Label("0");
+        ButtonNotClickeablePixelFont ViewNumber = new ButtonNotClickeablePixelFont(String.valueOf(SetOfConfiguration.getNumberOfBot()),15);
         botPlayerSpinner = new HBox();
-        Label plus = new Label("+");
-        Label minus = new Label("-");
+        ButtonPixelFont plus = new ButtonPixelFont("+",15);
+        ButtonPixelFont minus = new ButtonPixelFont("-",15);
         plus.setOnMouseClicked(event -> {
             SetOfConfiguration.incrementNumberOfBot();
-            ViewNumber.setText(String.valueOf(SetOfConfiguration.getNumberOfBot()));
+            ViewNumber.setButtonText(String.valueOf(SetOfConfiguration.getNumberOfBot()));
         });
 
         minus.setOnMouseClicked(event -> {
             SetOfConfiguration.decrementNumberOfBot();
-            ViewNumber.setText(String.valueOf(SetOfConfiguration.getNumberOfBot()));
+            ViewNumber.setButtonText(String.valueOf(SetOfConfiguration.getNumberOfBot()));
         });
 
         botPlayerSpinner.setSpacing(10);

@@ -1,4 +1,4 @@
-package GUI;
+package GUI.customButton;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -35,6 +35,10 @@ public class ButtonPixelFont extends Button {
     public void setSize(int size) {
         this.textPixelFont = new TextPixelFont(textPixelFont.getText(), size);
         this.setGraphic(textPixelFont);
+    }
+
+    public void setButtonText(String text) {
+        this.textPixelFont.setText(text);
     }
     
 }
