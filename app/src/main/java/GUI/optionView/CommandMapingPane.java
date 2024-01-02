@@ -1,18 +1,18 @@
 package GUI.optionView;
 
-import GUI.customButton.ButtonPixelFont;
+import GUI.customButton.ButtonNotClickeablePixelFont;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 public class CommandMapingPane extends HBox{
     
-    private ButtonPixelFont title;
+    private ButtonNotClickeablePixelFont title;
     private TextField selectTouch;
     
     private int textSize = 25;
     
     public CommandMapingPane(String title){
-        this.title = new ButtonPixelFont(title,textSize);
+        this.title = new ButtonNotClickeablePixelFont(title,textSize);
         setSpacing(20);
 
         this.selectTouch = new TextField();
@@ -27,7 +27,7 @@ public class CommandMapingPane extends HBox{
         return selectTouch;
     }
 
-    public ButtonPixelFont getTitle(){
+    public ButtonNotClickeablePixelFont getTitle(){
         return title;
     }
 

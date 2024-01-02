@@ -25,9 +25,9 @@ public class MenuPage extends Page {
 
         ButtonNotClickeablePixelFont title = new ButtonNotClickeablePixelFont("THE YAZICINHO'S GAME", 70);
         title.setFill(Color.GRAY);
-        ButtonPixelFont playOnline = new ButtonPixelFont("ONLINE",50);
-        ButtonPixelFont playOffline = new ButtonPixelFont("OFFLINE",50);
-        Button exitButton = new ButtonPixelFont("EXIT",40);
+        ButtonPixelFont playOnline = new ButtonPixelFont("ONLINE",50, true);
+        ButtonPixelFont playOffline = new ButtonPixelFont("OFFLINE",50, true);
+        Button exitButton = new ButtonPixelFont("EXIT",40, true);
 
         VBox layout = window.getLayout();
         layout.setSpacing(30);

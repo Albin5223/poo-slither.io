@@ -22,9 +22,9 @@ public class OfflinePage extends Page {
     public void createPage() {
         ButtonNotClickeablePixelFont title = new ButtonNotClickeablePixelFont("OFFLINE",60);
         title.setFill(Color.GRAY);
-        ButtonPixelFont playButtonSlither = new ButtonPixelFont("SLITHER.IO",40);
-        ButtonPixelFont playButtonSnake = new ButtonPixelFont("SNAKE",40);
-        ButtonPixelFont exitButton = new ButtonPixelFont("BACK",40);
+        ButtonPixelFont playButtonSlither = new ButtonPixelFont("SLITHER.IO",40, true);
+        ButtonPixelFont playButtonSnake = new ButtonPixelFont("SNAKE",40, true);
+        ButtonPixelFont exitButton = new ButtonPixelFont("BACK",40, true);
 
         Border border = new Border(new javafx.scene.layout.BorderStroke(
                 javafx.scene.paint.Color.BLACK,

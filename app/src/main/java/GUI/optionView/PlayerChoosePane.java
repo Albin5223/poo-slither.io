@@ -25,8 +25,8 @@ public class PlayerChoosePane extends VBox {
         ButtonNotClickeablePixelFont titleBot = new ButtonNotClickeablePixelFont("NUMBER OF IA : ",textSize);
         ButtonNotClickeablePixelFont ViewNumber = new ButtonNotClickeablePixelFont(String.valueOf(SetOfConfiguration.getNumberOfBot()),textSize);
         botPlayerSpinner = new HBox();
-        ButtonPixelFont plus = new ButtonPixelFont("+",textSize);
-        ButtonPixelFont minus = new ButtonPixelFont("-",textSize);
+        ButtonPixelFont plus = new ButtonPixelFont("+",textSize, false);
+        ButtonPixelFont minus = new ButtonPixelFont("-",textSize, false);
         plus.setOnMouseClicked(event -> {
             SetOfConfiguration.incrementNumberOfBot();
             ViewNumber.setButtonText(String.valueOf(SetOfConfiguration.getNumberOfBot()));

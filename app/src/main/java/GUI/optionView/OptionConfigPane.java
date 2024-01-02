@@ -8,16 +8,17 @@ public class OptionConfigPane extends VBox {
     SettingToggle toggleReachableWall;
     SettingToggle toggleCollitionWithMe;
     SettingToggle toggleGreedyDeath;
+    SettingToggle toggleGrowingSnake;
 
     private int textSize = 25;
     
     public OptionConfigPane() {
         setSpacing(10);
-        toggleReachableWall = new SettingToggle("REACHABLE WALL", textSize);
-
-        toggleCollitionWithMe = new SettingToggle("COLLITION WITH ME", textSize);
-        toggleGreedyDeath = new SettingToggle("GREEDY DEATH", textSize);
-        this.getChildren().addAll(toggleReachableWall,toggleCollitionWithMe,toggleGreedyDeath);
+        toggleReachableWall = new SettingToggle("REACHABLE WALL :", textSize);
+        toggleCollitionWithMe = new SettingToggle("COLLITION WITH ME :", textSize);
+        toggleGreedyDeath = new SettingToggle("GENEROUS DEATH :", textSize);
+        toggleGrowingSnake = new SettingToggle("GROWING SNAKES :", textSize);
+        this.getChildren().addAll(toggleReachableWall,toggleCollitionWithMe,toggleGreedyDeath,toggleGrowingSnake);
     }
 
     public boolean isReachableWallActivated(){
@@ -30,6 +31,10 @@ public class OptionConfigPane extends VBox {
 
     public boolean greedyDeathActivated(){
         return toggleGreedyDeath.isActivated();
+    }
+
+    public boolean growingSnakeActivated(){
+        return toggleGrowingSnake.isActivated();
     }
 
 

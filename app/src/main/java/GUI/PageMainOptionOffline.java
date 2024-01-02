@@ -47,6 +47,9 @@ public class PageMainOptionOffline extends Page {
             if(optionConfigPane.greedyDeathActivated()){
                 ConfigurationSnakeInteger.IS_DEATH_FOOD = true;
             }
+            if(optionConfigPane.growingSnakeActivated()){
+                ConfigurationSnakeInteger.RADIUS_IS_GROWING = true;
+            }
         }
         else{
             if(optionConfigPane.isReachableWallActivated()){
@@ -57,6 +60,9 @@ public class PageMainOptionOffline extends Page {
             }
             if(optionConfigPane.greedyDeathActivated()){
                 ConfigurationSnakeDouble.IS_DEATH_FOOD = true;
+            }
+            if(optionConfigPane.growingSnakeActivated()){
+                ConfigurationSnakeDouble.RADIUS_IS_GROWING = true;
             }
         }
     }
@@ -99,8 +105,6 @@ public class PageMainOptionOffline extends Page {
         window.getOfflineSlither().notifyObservers();
 
         window.getLayout().getChildren().add(playPageSlither);
-        //VBox.setMargin(playPageSlither, new javafx.geometry.Insets(-100, 0, 0, 0));
-        
         
         TouchControler.resetNumber();
         SetOfConfiguration.resetConfiguration();
@@ -143,7 +147,6 @@ public class PageMainOptionOffline extends Page {
         window.getOfflineSnake().notifyObservers();  playPageSnake.requestFocus();
 
         window.getLayout().getChildren().add(playPageSnake);
-        //VBox.setMargin(playPageSnake, new javafx.geometry.Insets(-100, 0, 0, 0));
 
         TouchControler.resetNumber();
         SetOfConfiguration.resetConfiguration();
@@ -154,7 +157,7 @@ public class PageMainOptionOffline extends Page {
     public void createPage() {
         ButtonNotClickeablePixelFont title = new ButtonNotClickeablePixelFont("SETTING OF LAUNCH",50);
         PlayerChoosePane playerChoosePane = new PlayerChoosePane(isSnake);
-        ButtonPixelFont launchButton = new ButtonPixelFont("LAUNCH GAME",40);
+        ButtonPixelFont launchButton = new ButtonPixelFont("LAUNCH GAME",40, true);
         
         VBox layout = window.getLayout();
         layout.getChildren().clear();

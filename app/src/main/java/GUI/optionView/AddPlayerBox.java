@@ -2,7 +2,7 @@ package GUI.optionView;
 
 
 import GUI.customButton.ButtonGrisablePixelFont;
-import GUI.customButton.ButtonPixelFont;
+import GUI.customButton.ButtonNotClickeablePixelFont;
 import configuration.TouchControler;
 import configuration.TouchControler.DirectionOfTouch;
 import javafx.scene.layout.VBox;
@@ -14,7 +14,7 @@ public class AddPlayerBox extends VBox {
     private static int numero = 0;
     private int id;
 
-    ButtonPixelFont title;
+    ButtonNotClickeablePixelFont title;
     CommandMapingPane droite;
     CommandMapingPane gauche;
     CommandMapingPane haut;
@@ -46,7 +46,7 @@ public class AddPlayerBox extends VBox {
             }
         });
 
-        title = new ButtonPixelFont("CUSTOM COMMAND PLAYER ",15);
+        title = new ButtonNotClickeablePixelFont("CUSTOM COMMAND PLAYER ",15);
         droite = new CommandMapingPane("RIGHT : ");
         droite.getSelectTouch().setOnKeyPressed(e -> {
             
