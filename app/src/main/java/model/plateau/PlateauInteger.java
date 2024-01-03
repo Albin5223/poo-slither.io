@@ -44,7 +44,7 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
         @Override
         public boolean isInside(Coordinate<Integer, Direction> c) {
-            return c.getX() > xMin && c.getX() < xMax && c.getY() > yMin && c.getY() < yMax;
+            return c.getX() >= xMin && c.getX() <= xMax && c.getY() >= yMin && c.getY() <= yMax;
         }
 
         @Override

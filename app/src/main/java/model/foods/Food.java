@@ -10,8 +10,6 @@ import model.plateau.Snake;
 
 public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
 
-    protected Image image;
-
     protected final Coordinate<Type, O> coordinate;
     protected final double radius;
     protected final boolean respawn;
@@ -40,9 +38,7 @@ public abstract class Food<Type extends Number & Comparable<Type>, O extends Ori
         return probability;
     }
 
-    public Image getImage(){
-        return image;
-    }
+    public abstract Image getImage();
 
     public abstract FoodType getFoodType();
 

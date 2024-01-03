@@ -7,6 +7,7 @@ import externData.ImageBank;
 import externData.OurColors;
 import externData.OurSpecials;
 import interfaces.Orientation.Direction;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 
@@ -49,8 +50,6 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public GrowingFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.GROWING_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_FOOD_PROBABILITY);
-            OurColors color = OurColors.getRandomColor();
-            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -62,13 +61,18 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         public FoodType getFoodType() {
             return FoodType.GROWING_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            OurColors color = OurColors.getRandomColor();
+            return ImageBank.getCircleImage(color);
+        }
     }
 
     public static class ShieldFoodInteger extends Food<Integer,Direction> {
 
         public ShieldFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.SHIELD_FOOD_RADIUS, ConfigurationFoodInteger.SHIELD_FOOD_RESPAWN, ConfigurationFoodInteger.SHIELD_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.SHIELD);
         }
 
         @Override
@@ -80,14 +84,17 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         public FoodType getFoodType() {
             return FoodType.SHIELD_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            return ImageBank.getSpecialImage(OurSpecials.SHIELD);
+        }
     }
 
     public static class GrowingBigFoodInteger extends Food<Integer,Direction> {
 
         public GrowingBigFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate,ConfigurationFoodInteger.GROWING_BIG_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_BIG_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_BIG_FOOD_PROBABILITY);
-            OurColors color = OurColors.getRandomColor();
-            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -99,6 +106,12 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         public FoodType getFoodType() {
             return FoodType.GROWING_BIG_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            OurColors color = OurColors.getRandomColor();
+            return ImageBank.getCircleImage(color);
+        }
     }
 
     public static class KillerFoodInteger extends Food<Integer,Direction> {
@@ -107,7 +120,6 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.KILLER_FOOD_RADIUS, ConfigurationFoodInteger.KILLER_FOOD_RESPAWN, ConfigurationFoodInteger.KILLER_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.SKULL);
         }
 
         @Override
@@ -119,6 +131,11 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         public FoodType getFoodType() {
             return FoodType.KILLER_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            return ImageBank.getSpecialImage(OurSpecials.SKULL);
+        }
     }
 
 
@@ -126,7 +143,6 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         public PoisonFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.POISON_FOOD_RADIUS, ConfigurationFoodInteger.POISON_FOOD_RESPAWN, ConfigurationFoodInteger.POISON_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.POISON);
         }
 
         @Override
@@ -137,6 +153,11 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         @Override
         public FoodType getFoodType() {
             return FoodType.POISON_FOOD;
+        }
+
+        @Override
+        public Image getImage() {
+            return ImageBank.getSpecialImage(OurSpecials.POISON);
         }
     }
 

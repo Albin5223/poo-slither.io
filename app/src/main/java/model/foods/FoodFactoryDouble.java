@@ -8,6 +8,7 @@ import externData.ImageBank;
 import externData.OurColors;
 import externData.OurSpecials;
 import interfaces.Orientation.Angle;
+import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.Snake;
@@ -51,8 +52,6 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public GrowingFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.GROWING_FOOD_RADIUS, ConfigurationFoodDouble.GROWING_FOOD_RESPAWN, ConfigurationFoodDouble.GROWING_FOOD_PROBABILITY);
-            OurColors color = OurColors.getRandomColor();
-            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -64,14 +63,18 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         public FoodType getFoodType() {
             return FoodType.GROWING_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            OurColors color = OurColors.getRandomColor();
+            return ImageBank.getCircleImage(color);
+        }
     }
 
     public static class GrowingBigFoodDouble extends Food<Double,Angle> {
 
         public GrowingBigFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate,ConfigurationFoodDouble.GROWING_BIG_FOOD_RADIUS, ConfigurationFoodDouble.GROWING_BIG_FOOD_RESPAWN, ConfigurationFoodDouble.GROWING_BIG_FOOD_PROBABILITY);
-            OurColors color = OurColors.getRandomColor();
-            image = ImageBank.getCircleImage(color);
         }
 
         @Override
@@ -83,6 +86,12 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         public FoodType getFoodType() {
             return FoodType.GROWING_BIG_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+            OurColors color = OurColors.getRandomColor();
+            return ImageBank.getCircleImage(color);
+        }
     }
 
     public static class PoisonFoodDouble extends Food<Double,Angle> {
@@ -90,8 +99,6 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         
         public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.POISON_FOOD_RADIUS, ConfigurationFoodDouble.POISON_FOOD_RESPAWN, ConfigurationFoodDouble.POISON_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.POISON);
-        
         }
 
         @Override
@@ -103,13 +110,17 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         public FoodType getFoodType() {
             return FoodType.POISON_FOOD;
         }
+
+        @Override
+        public Image getImage() {
+        return ImageBank.getSpecialImage(OurSpecials.POISON);
+        }
     }
 
     public static class KillerFoodDouble extends Food<Double,Angle> {
 
         public KillerFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.KILLER_FOOD_RADIUS, ConfigurationFoodDouble.KILLER_FOOD_RESPAWN, ConfigurationFoodDouble.KILLER_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.SKULL);
         }
 
         @Override
@@ -120,6 +131,11 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         @Override
         public FoodType getFoodType() {
             return FoodType.KILLER_FOOD;
+        }
+
+        @Override
+        public Image getImage() {
+            return ImageBank.getSpecialImage(OurSpecials.SKULL);
         }
     }
 
@@ -159,7 +175,6 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         public ShieldFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.SHIELD_FOOD_RADIUS, ConfigurationFoodDouble.SHIELD_FOOD_RESPAWN, ConfigurationFoodDouble.SHIELD_FOOD_PROBABILITY);
-            image = ImageBank.getSpecialImage(OurSpecials.SHIELD);
         }
 
         @Override
@@ -170,6 +185,11 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         @Override
         public FoodType getFoodType() {
             return FoodType.SHIELD_FOOD;
+        }
+
+        @Override
+        public Image getImage() {
+            return ImageBank.getSpecialImage(OurSpecials.SHIELD);
         }
     }
 }
