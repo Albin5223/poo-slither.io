@@ -1,10 +1,10 @@
 package model.coordinate;
 
 import java.util.Objects;
-
+import java.io.Serializable;
 import interfaces.Orientation;
 
-public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable {
+public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable,Serializable {
     
     protected Type x;
     protected Type y;

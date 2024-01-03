@@ -1,10 +1,11 @@
 package model.skins;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import externData.OurColors;
 
-public abstract class Skin {
+public abstract class Skin implements Serializable{
 
     private final OurColors head_color;
     private final ArrayList<OurColors> tail_pattern;

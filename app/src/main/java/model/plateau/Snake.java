@@ -10,9 +10,10 @@ import interfaces.Turnable;
 import model.coordinate.Coordinate;
 import model.foods.Food;
 import model.skins.Skin;
+import java.io.Serializable;
 import model.skins.SkinRandom;
 
-public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
+public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O>,Serializable permits SnakeInteger, SnakeDouble {
 
     /** The skin of the snake, by default it's random */
     protected Skin skin = SkinRandom.build();
@@ -25,7 +26,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     protected int currentHitboxRadius;
     protected volatile boolean isBoosting = false;
 
-    private final Object lock = new Object();
+    private final Objet lock = new Objet();
 
     private final int GAP_BETWEEN_TAIL;
     private final int BIRTH_HITBOX_RADIUS;
@@ -50,7 +51,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     private boolean isDead = false;
 
-    public final class SnakePart implements Cloneable {
+    public final class SnakePart implements Cloneable,Serializable {
 
         /** The coordinate center of the snake part */
         protected Coordinate<Type,O> center;

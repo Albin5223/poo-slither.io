@@ -3,12 +3,20 @@ package server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import externData.ImageBank;
+import model.paquet.FrameSnake;
+import model.paquet.PaquetSnake;
+import model.plateau.PlateauInteger;
+import model.plateau.SnakeInteger;
 
 public class Server implements Runnable{
 
@@ -19,14 +27,17 @@ public class Server implements Runnable{
 
     private ExecutorService pool;
 
-
+    private PlateauInteger plateau;
 
     public class ConnexionHandle implements Runnable{
 
         private Socket client;
         PrintWriter out;
         BufferedReader in;
+        ObjectInputStream ois;
+        ObjectOutputStream oos;
         String name;
+        SnakeInteger snake;
 
         public ConnexionHandle(Socket client){
             this.client = client;
@@ -36,13 +47,29 @@ public class Server implements Runnable{
             try{
                 out = new PrintWriter(client.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                oos = new ObjectOutputStream(client.getOutputStream());
+                ois = new ObjectInputStream(client.getInputStream());
 
-                out.println("Please enter a nickename");
+                try{ 
+                    snake = SnakeInteger.createSnakeInteger(plateau);
+                    
+                    oos.writeObject(PaquetSnake.createPaquetWithMessage("Please enter a nickname"));
+
+
+                    FrameSnake frame = new FrameSnake (snake.getHead().getCenter(),400,400);
+                }
+                catch (IOException e){
+                    System.out.println("Echec de l'envoie");
+                    e.printStackTrace();
+                }
+                
                 name = in.readLine();
                 System.out.println("New client : " + name);
                 sendAll(name + " has joined the chat");
 
 
+
+                //Lis les objets qu'il reçoit
                 String message;
                 while((message = in.readLine()) != null){
                     sendAll(name + " : " + message);
@@ -54,13 +81,18 @@ public class Server implements Runnable{
                 }
 
             }catch(IOException e){
-                
+                System.out.println("Echec");
             }
         
         }
 
-        public void send(String msg){
-            out.println(msg);
+        public void sendMessage(String msg){
+            PaquetSnake ps = PaquetSnake.createPaquetWithMessage(msg);
+            try {
+                oos.writeObject(ps);
+            } catch (IOException e) {
+                
+            }
         }
 
         public void close(){
@@ -81,6 +113,7 @@ public class Server implements Runnable{
 
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
+        plateau = PlateauInteger.createPlateauSnake(1000, 1000);
         done = false;
     }
 
@@ -88,7 +121,7 @@ public class Server implements Runnable{
     public void sendAll(String msg){
         for(ConnexionHandle client : clients){
             if(client != null){
-                client.send(msg);
+                client.sendMessage(msg);
             }
         }
     }
@@ -97,7 +130,6 @@ public class Server implements Runnable{
     public void run() {
         try {
             server = new ServerSocket(port);
-            
             
             pool = Executors.newCachedThreadPool();
             while(!done){
@@ -130,8 +162,14 @@ public class Server implements Runnable{
        
     }
 
-
+    
     public static void main(String[] args) {
+        try {
+            new ImageBank().loadImages();
+        } catch (NullPointerException e) {
+            System.out.println("Error while loading images");
+        }
+
         Server server = new Server();
         server.run();   
     }

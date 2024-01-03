@@ -9,14 +9,14 @@ import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
 import interfaces.GameBorder;
 import interfaces.Orientation;
-import javafx.animation.AnimationTimer;
 import model.coordinate.Coordinate;
 import model.coordinate.Grid;
 import model.foods.DeathFood;
 import model.foods.Food;
 import model.foods.FoodFactory;
+import java.io.Serializable;
 
-public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
+public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable permits PlateauDouble, PlateauInteger {
 
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
     protected Grid<Type,O> foodGrid = new Grid<Type,O>();
@@ -32,41 +32,19 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * This lock is used to avoid concurrent access to the board.
      * Usefull for having snakes with different speed.
      */
-    private Object lock = new Object();
-
-    private AnimationTimer animation;
-    private long lastUpdate = 0;
+    private Objet lock = new Objet();
 
 
     protected Plateau(int nbFood, FoodFactory<Type,O> foodFactory, GameBorder<Type,O> border) {
         this.NB_FOOD = nbFood;
         this.foodFactory = foodFactory;
         this.border = border;
-        animation = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                
-                if((now-lastUpdate) >= 1_000_000_000){
-                    //System.out.println("Update");
-                    for(Snake<Type,O> snake : plateau.values()){
-                        if(snake.underEffect()){
-                            snake.applyEffect();
-                        }
-                    }
-                    lastUpdate = now;
-                }
-                
-            }
-        };
+        
         this.addAllFood();
     }
 
-    public void startAnimation(){
-        animation.start();
-    }
-
-    public void stopAnimation(){
-        animation.stop();
+    public HashMap<Coordinate<Type,O>, Snake<Type,O>> getHashMap() {
+        return plateau;
     }
 
     public Grid<Type,O> getFoods() {

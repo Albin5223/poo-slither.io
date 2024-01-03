@@ -6,8 +6,10 @@ import java.util.Random;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
+import java.io.Serializable;
 
-public abstract class FoodFactory<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+
+public abstract class FoodFactory<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
 
     public static enum FoodType {
         GROWING_FOOD,
@@ -18,7 +20,7 @@ public abstract class FoodFactory<Type extends Number & Comparable<Type>, O exte
         SHIELD_FOOD;
     }
 
-    public static abstract class FoodBuilder<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+    public static abstract class FoodBuilder<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
         public abstract Food<Type,O> createFood(FoodType foodType, Coordinate<Type,O> coordinate);
     }
 

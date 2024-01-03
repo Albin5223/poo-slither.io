@@ -2,7 +2,7 @@ package model.coordinate;
 
 import interfaces.Orientation.Direction;
 
-public class CoordinateInteger extends Coordinate<Integer,Direction> {
+public class CoordinateInteger extends Coordinate<Integer,Direction>  {
 
     public CoordinateInteger(Integer x, Integer y) {
         super(x, y);

@@ -8,13 +8,15 @@ import interfaces.Engine;
 import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Angle;
+import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.foods.Food;
 import model.plateau.PlateauDouble;
-import model.plateau.SnakeDouble;
 import model.plateau.PlateauDouble.BorderDouble;
+import model.plateau.Snake;
+import model.plateau.SnakeDouble;
 import model.player.HumanSlitherPlayer;
 import model.player.Bot.BotSlitherPlayer;
 
@@ -27,6 +29,9 @@ public class EngineSlither implements Engine<Double,Angle>{
     ArrayList<HumanSlitherPlayer> players;
     ArrayList<BotSlitherPlayer> bots;
 
+    private AnimationTimer animationEffect;
+    private long lastUpdate = 0;
+
     private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakeMovers = new ArrayList<SnakeMover<Double,Angle>>();
         for(SnakeDouble snake : snakes){
@@ -36,6 +41,23 @@ public class EngineSlither implements Engine<Double,Angle>{
         this.bots = new ArrayList<BotSlitherPlayer>();
         this.observers = new ArrayList<Observer<Double,Angle>>();
         this.players = new ArrayList<HumanSlitherPlayer>();
+
+        animationEffect = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                
+                if((now-lastUpdate) >= 1_000_000_000){
+                    //System.out.println("Update");
+                    for(Snake<Double,Angle> snake : plateau.getHashMap().values()){
+                        if(snake.underEffect()){
+                            snake.applyEffect();
+                        }
+                    }
+                    lastUpdate = now;
+                }
+                
+            }
+        };
     }
 
     public static EngineSlither createGame(int radius){
@@ -125,7 +147,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void run() {
-        plateau.startAnimation();
+        animationEffect.start();
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.start();
         }
@@ -133,7 +155,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void stop() {
-        plateau.stopAnimation();
+        animationEffect.stop();
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.stop();
         }

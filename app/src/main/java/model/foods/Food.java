@@ -1,12 +1,14 @@
 package model.foods;
 
+import java.io.Serializable;
+
 import interfaces.Orientation;
 import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
 
-public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
 
     protected Image image;
 

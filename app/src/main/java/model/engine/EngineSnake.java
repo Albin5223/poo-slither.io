@@ -8,11 +8,13 @@ import interfaces.Engine;
 import interfaces.HumanPlayer;
 import interfaces.Observer;
 import interfaces.Orientation.Direction;
+import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.foods.Food;
 import model.plateau.PlateauInteger.BorderInteger;
+import model.plateau.Snake;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
 import model.player.HumanSnakePlayer;
@@ -32,6 +34,9 @@ public class EngineSnake implements Engine<Integer,Direction> {
     ArrayList<Observer<Integer,Direction>> observers;
     ArrayList<BotSnakePlayer> bots;
 
+    private AnimationTimer animationEffect;
+    private long lastUpdate = 0;
+
     private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
         this.snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
         for(SnakeInteger snake : snakes){
@@ -41,6 +46,23 @@ public class EngineSnake implements Engine<Integer,Direction> {
         this.plateau = plateau;
         this.bots = new ArrayList<BotSnakePlayer>();
         this.observers = new ArrayList<Observer<Integer,Direction>>();
+
+        animationEffect = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                
+                if((now-lastUpdate) >= 1_000_000_000){
+                    //System.out.println("Update");
+                    for(Snake<Integer,Direction> snake : plateau.getHashMap().values()){
+                        if(snake.underEffect()){
+                            snake.applyEffect();
+                        }
+                    }
+                    lastUpdate = now;
+                }
+                
+            }
+        };
     }
 
     public static EngineSnake createGame(int width, int height){
@@ -129,7 +151,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public void run() {
-        plateau.startAnimation();
+        animationEffect.start();
         for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
             snakeMover.start();
         }
@@ -137,7 +159,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public void stop() {
-        plateau.stopAnimation();
+        animationEffect.stop();
         for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
             snakeMover.stop();
         }
