@@ -34,18 +34,19 @@ public class MenuPage extends Page {
         layout.setAlignment(Pos.CENTER);
         this.setBackground(ImageBank.homePageBackground);
 
+        playOnline.setOnAction(e -> {
+            window.switchToGameSelector(true);
+        });
+
         playOffline.setOnAction(e -> {
-            window.switchToOfflinePage();
+            window.switchToGameSelector(false);
         });
         
         exitButton.setOnAction(e -> {
             window.getPrimaryStage().close();
         });
 
-        layout.getChildren().add(title);
-        layout.getChildren().add(playOnline);
-        layout.getChildren().add(playOffline);
-        layout.getChildren().add(exitButton);
+        layout.getChildren().addAll(title, playOnline, playOffline, exitButton);
 
         VBox.setMargin(playOnline, new Insets(60, 0, 0, 0));
     }

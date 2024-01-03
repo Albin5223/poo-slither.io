@@ -1,6 +1,6 @@
 package GUI;
 
-
+import client.Client;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -10,6 +10,9 @@ import model.engine.EngineSlither;
 import model.engine.EngineSnake;
 
 public class Window {
+
+    private Client client = new Client();
+    public Client getClient() {return client;}
 
     private EngineSlither offlineSlither;
     private EngineSnake offlineSnake;
@@ -21,10 +24,6 @@ public class Window {
     private Stage primaryStage;
     private Scene scene;
     private VBox layout;
-
-    private MenuPage menuPage;
-    private OfflinePage offlinePage;
-    private PageMainOptionOffline pageMainOptionOffline;
 
     public Stage getPrimaryStage() {return primaryStage;}
     public Scene getScene() {return scene;}
@@ -45,23 +44,23 @@ public class Window {
         this.scene = new Scene(layout, WITDH, HEIGHT);
         // setScene is already called in App.java
 
-        menuPage = new MenuPage(this);
-        offlinePage = new OfflinePage(this);
-
-        menuPage.show();
+        switchToMenuPage();
     }
 
     public void switchToMenuPage(){
-        menuPage.show();
+        new MenuPage(this).show();
     }
 
-    public void switchToOfflinePage(){
-        offlinePage.show();
+    public void switchToGameSelector(boolean isOnline){
+        GameSelectorPage.createGameSelectorPage(this, isOnline).show();
     }
 
     public void switchToPageMainOptionOffline(boolean isSnake){
-        pageMainOptionOffline = new PageMainOptionOffline(this,isSnake);
-        pageMainOptionOffline.show();
+        new PageMainOptionOffline(this,isSnake).show();
+    }
+
+    public void switchToPseudoSelectorPage(boolean isSnake){
+        new PseudoSelectorPage(this, isSnake).show();
     }
     
 }

@@ -27,6 +27,7 @@ public class ImageBank {
 
     public static Image homePageBackground;
     public static Image wallpaper_settings;
+    public static Image wallpaper_dark_bridge;
 
 
     public static Image getCircleImage(OurColors color) {
@@ -97,6 +98,7 @@ public class ImageBank {
 
         homePageBackground = new Image(getClass().getResourceAsStream("/wallpaper/wallpaper_menu.png"));
         wallpaper_settings = new Image(getClass().getResourceAsStream("/wallpaper/settings.jpg"));
+        wallpaper_dark_bridge = new Image(getClass().getResourceAsStream("/wallpaper/dark_bridge.jpg"));
 
     }
     

@@ -81,8 +81,6 @@ public class PageMainOptionOffline extends Page {
 
         for(int i = 0;i<SetOfConfiguration.getNumberOfBot();i++){
             window.getOfflineSlither().addBot();
-            window.getOfflineSlither().addBot();
-            window.getOfflineSlither().addBot();
         }
         
         scene.setOnKeyPressed( ev -> {
@@ -177,10 +175,7 @@ public class PageMainOptionOffline extends Page {
         });
         optionConfigPane = new OptionConfigPane();
 
-        layout.getChildren().add(title);
-        layout.getChildren().add(playerChoosePane);
-        layout.getChildren().add(optionConfigPane);
-        layout.getChildren().add(launchButton);
+        layout.getChildren().addAll(title, playerChoosePane, optionConfigPane, launchButton);
 
         VBox.setMargin(playerChoosePane, new javafx.geometry.Insets(100, 0, 0, 0));
         VBox.setMargin(launchButton, new javafx.geometry.Insets(100, 0, 0, 0));

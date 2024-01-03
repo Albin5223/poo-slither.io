@@ -35,8 +35,11 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
 
     ObjectInputStream ois;
     ObjectOutputStream oos;
-    SnakeInteger snake;
-    PlateauInteger plateau;
+
+    public String pseudo;
+    private SnakeInteger snake;
+    private PlateauInteger plateau;
+    
     ArrayList<Observer<Integer, Direction>> observers;
         
     private boolean done;
@@ -150,12 +153,6 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
         return snake;
     }
 
-    public static void main(String[] args) {
-        Client client = new Client();
-        Thread t = new Thread(client);
-        t.start();
-    }
-
     @Override
     public void addObserver(Observer<Integer, Direction> o) {
         observers.add(o);
@@ -172,4 +169,10 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
             observer.update(this);
         }
     }    
+
+    public static void main(String[] args) {
+        Client client = new Client();
+        Thread t = new Thread(client);
+        t.start();
+    }
 }
