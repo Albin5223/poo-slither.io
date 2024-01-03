@@ -48,8 +48,11 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
     public static class GrowingFoodInteger extends Food<Integer,Direction> {
 
+        private OurColors color;
+
         public GrowingFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.GROWING_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_FOOD_PROBABILITY);
+            color = OurColors.getRandomColor();
         }
 
         @Override
@@ -64,7 +67,6 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         @Override
         public Image getImage() {
-            OurColors color = OurColors.getRandomColor();
             return ImageBank.getCircleImage(color);
         }
     }
@@ -93,8 +95,11 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
     public static class GrowingBigFoodInteger extends Food<Integer,Direction> {
 
+        private OurColors color;
+
         public GrowingBigFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate,ConfigurationFoodInteger.GROWING_BIG_FOOD_RADIUS, ConfigurationFoodInteger.GROWING_BIG_FOOD_RESPAWN, ConfigurationFoodInteger.GROWING_BIG_FOOD_PROBABILITY);
+            color = OurColors.getRandomColor();
         }
 
         @Override
@@ -109,7 +114,6 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
 
         @Override
         public Image getImage() {
-            OurColors color = OurColors.getRandomColor();
             return ImageBank.getCircleImage(color);
         }
     }

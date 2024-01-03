@@ -6,7 +6,7 @@ import java.util.List;
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
-import interfaces.Observer;
+import interfaces.Observer; 
 import interfaces.Orientation.Direction;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
@@ -15,6 +15,7 @@ import model.coordinate.Coordinate;
 import model.foods.Food;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.Snake;
+import model.plateau.Plateau;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
 import model.player.HumanSnakePlayer;
@@ -27,18 +28,17 @@ public class EngineSnake implements Engine<Integer,Direction> {
      * 
      * FAIRE EN SORTE QUE IL Y A AU MAX 60% de nourriture
      */
-    private PlateauInteger plateau;
-    ArrayList<SnakeMover<Integer,Direction>> snakeMovers;
+    protected PlateauInteger plateau;
+    ArrayList<SnakeMover<Integer,Direction>> snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
     ArrayList<HumanSnakePlayer> players;
     
     ArrayList<Observer<Integer,Direction>> observers;
     ArrayList<BotSnakePlayer> bots;
 
-    private AnimationTimer animationEffect;
+    protected AnimationTimer animationEffect;
     private long lastUpdate = 0;
 
-    private EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
-        this.snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
+    protected EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
         for(SnakeInteger snake : snakes){
             this.snakeMovers.add(new SnakeMover<Integer,Direction>(snake,this,null));
         }
@@ -65,6 +65,12 @@ public class EngineSnake implements Engine<Integer,Direction> {
         };
     }
 
+
+    @Override
+    public Plateau<Integer, Direction> getPlateau() {
+        return plateau;
+    }
+
     public static EngineSnake createGame(int width, int height){
         ArrayList<SnakeInteger> s = new ArrayList<SnakeInteger>();
         PlateauInteger p = PlateauInteger.createPlateauSnake(width, height);
@@ -75,6 +81,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
     public void addObserver(Observer<Integer,Direction> o) {
         observers.add(o);
     }
+
 
     @Override
     public void removeObserver(Observer<Integer,Direction> o) {
@@ -116,7 +123,6 @@ public class EngineSnake implements Engine<Integer,Direction> {
         players.add(newPlayer);
         snakeMovers.add(new SnakeMover<Integer,Direction>(newSnake,this,null));
         notifyObservers();
-        
     }
 
     @Override
@@ -136,8 +142,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
                 p.keyReleased(ev);
                 return;
             } 
-        }
-        
+        }   
     }
 
     @Override
@@ -163,6 +168,11 @@ public class EngineSnake implements Engine<Integer,Direction> {
         for(SnakeMover<Integer,Direction> snakeMover : snakeMovers){
             snakeMover.stop();
         }
+    }
+
+    @Override
+    public Snake<Integer,Direction> getMainSnake() {
+        return null;
     }
 
     

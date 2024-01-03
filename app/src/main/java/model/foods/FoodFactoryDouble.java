@@ -50,8 +50,11 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
     public static class GrowingFoodDouble extends Food<Double,Angle> {
 
+        private OurColors color;
+
         public GrowingFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.GROWING_FOOD_RADIUS, ConfigurationFoodDouble.GROWING_FOOD_RESPAWN, ConfigurationFoodDouble.GROWING_FOOD_PROBABILITY);
+            color = OurColors.getRandomColor();
         }
 
         @Override
@@ -66,15 +69,17 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         @Override
         public Image getImage() {
-            OurColors color = OurColors.getRandomColor();
             return ImageBank.getCircleImage(color);
         }
     }
 
     public static class GrowingBigFoodDouble extends Food<Double,Angle> {
 
+        private OurColors color;
+
         public GrowingBigFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate,ConfigurationFoodDouble.GROWING_BIG_FOOD_RADIUS, ConfigurationFoodDouble.GROWING_BIG_FOOD_RESPAWN, ConfigurationFoodDouble.GROWING_BIG_FOOD_PROBABILITY);
+            color = OurColors.getRandomColor();
         }
 
         @Override
@@ -89,13 +94,11 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         @Override
         public Image getImage() {
-            OurColors color = OurColors.getRandomColor();
             return ImageBank.getCircleImage(color);
         }
     }
 
     public static class PoisonFoodDouble extends Food<Double,Angle> {
-
         
         public PoisonFoodDouble(Coordinate<Double, Angle> coordinate) {
             super(coordinate, ConfigurationFoodDouble.POISON_FOOD_RADIUS, ConfigurationFoodDouble.POISON_FOOD_RESPAWN, ConfigurationFoodDouble.POISON_FOOD_PROBABILITY);
@@ -113,7 +116,7 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
 
         @Override
         public Image getImage() {
-        return ImageBank.getSpecialImage(OurSpecials.POISON);
+            return ImageBank.getSpecialImage(OurSpecials.POISON);
         }
     }
 

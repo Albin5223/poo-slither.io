@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.foods.Food;
+import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.plateau.Snake;
@@ -115,6 +116,11 @@ public class EngineSlither implements Engine<Double,Angle>{
         return players;
     }
 
+    @Override
+    public Plateau<Double, Angle> getPlateau() {
+        return plateau;
+    }
+
    
     @Override
     public ArrayList<SnakeData<Double, Angle>> getAllSnake() {
@@ -159,6 +165,11 @@ public class EngineSlither implements Engine<Double,Angle>{
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.stop();
         }
+    }
+
+    @Override
+    public Snake<Double,Angle> getMainSnake() {
+        return null;
     }
 
 }

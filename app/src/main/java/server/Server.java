@@ -13,10 +13,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import externData.ImageBank;
-import model.paquet.FrameSnake;
+import interfaces.Orientation.Direction;
+import model.engine.EngineSnakeOnline;
+import model.engine.SnakeMover;
 import model.paquet.PaquetSnake;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
+import model.skins.Skin;
 
 public class Server implements Runnable{
 
@@ -26,8 +29,7 @@ public class Server implements Runnable{
     public final static int port = 3000;
 
     private ExecutorService pool;
-
-    private PlateauInteger plateau;
+    private EngineSnakeOnline engine;
 
     public class ConnexionHandle implements Runnable{
 
@@ -37,7 +39,8 @@ public class Server implements Runnable{
         ObjectInputStream ois;
         ObjectOutputStream oos;
         String name;
-        SnakeInteger snake;
+        SnakeMover<Integer,Direction> snakeMover;
+        Skin skin;
 
         public ConnexionHandle(Socket client){
             this.client = client;
@@ -50,13 +53,14 @@ public class Server implements Runnable{
                 oos = new ObjectOutputStream(client.getOutputStream());
                 ois = new ObjectInputStream(client.getInputStream());
 
-                try{ 
-                    snake = SnakeInteger.createSnakeInteger(plateau);
+                try{
+
+                    SnakeInteger snake = SnakeInteger.createSnakeInteger((PlateauInteger) engine.getPlateau());
+                    engine.addSnake(snake);
                     
-                    oos.writeObject(PaquetSnake.createPaquetWithMessage("Please enter a nickname"));
-
-
-                    FrameSnake frame = new FrameSnake (snake.getHead().getCenter(),400,400);
+                    System.out.println("Snake created in "+ snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
+                    
+                    oos.writeObject(PaquetSnake.createPaquetWithSnakeAndMessage("Please enter a nickname",snake));
                 }
                 catch (IOException e){
                     System.out.println("Echec de l'envoie");
@@ -113,7 +117,7 @@ public class Server implements Runnable{
 
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
-        plateau = PlateauInteger.createPlateauSnake(1000, 1000);
+        engine = EngineSnakeOnline.createEngineSnakeOnline(1000, 1000);
         done = false;
     }
 
@@ -130,6 +134,8 @@ public class Server implements Runnable{
     public void run() {
         try {
             server = new ServerSocket(port);
+
+            engine.run();
             
             pool = Executors.newCachedThreadPool();
             while(!done){
@@ -155,6 +161,7 @@ public class Server implements Runnable{
             for(ConnexionHandle client : clients){
                 client.close();
             }
+            engine.stop();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

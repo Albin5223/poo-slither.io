@@ -136,6 +136,10 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return skin;
     }
 
+    public Plateau<Type, O> getPlateau() {
+        return plateau;
+    }
+
     public final O getOrientation(){
         return head.getOrientation();
     }

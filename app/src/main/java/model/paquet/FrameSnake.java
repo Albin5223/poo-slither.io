@@ -1,36 +1,34 @@
 package model.paquet;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
-import model.foods.Food;
+import model.plateau.PlateauInteger;
+import model.plateau.PlateauInteger.BorderInteger;
 
 public class FrameSnake implements Serializable {
 
-    private int X_center;
-    private int Y_center;
-    private int widht;
-    private int height;
+    private Coordinate<Integer,Direction> center;
 
-    ArrayList<Food<Integer,Direction>> food;
+    private BorderInteger border;
+    private PlateauInteger plateau;
 
-
-
-    public FrameSnake (int X_center,int Y_centrer, int widht, int height){
-        this.X_center = X_center;
-        this.Y_center = Y_centrer;
-        this.widht = widht;
-        this.height = height;
-        
+    public FrameSnake(Coordinate<Integer,Direction> center,PlateauInteger plateau) {
+        this.center = center;
+        this.plateau = plateau;
     }
 
-    public FrameSnake(Coordinate<Integer, Direction> center, int i, int j) {
-        X_center = center.getX();
-        Y_center = center.getY();
-        widht = i;
-        height = j;
+    public BorderInteger getBorder() {
+        return border;
+    }
+
+    public PlateauInteger getPlateau() {
+        return plateau;
+    }
+
+    public Coordinate<Integer, Direction> getCenter() {
+        return center;
     }
     
 }
