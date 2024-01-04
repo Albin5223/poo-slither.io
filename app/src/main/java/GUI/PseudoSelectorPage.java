@@ -13,8 +13,10 @@ import javafx.scene.text.Font;
 
 public class PseudoSelectorPage extends Page {
 
-    private static int PSEUDO_MIN_LENGTH = 1;
-    private static int PSEUDO_MAX_LENGTH = 15;
+    private static final int PSEUDO_MIN_LENGTH = 1;
+    private static final int PSEUDO_MAX_LENGTH = 15;
+
+    private final boolean isSnake;
 
     private ButtonNotClickeablePixelFont instructionLabel;
     private TextField pseudoField;
@@ -22,6 +24,7 @@ public class PseudoSelectorPage extends Page {
 
     public PseudoSelectorPage(Window window, boolean isSnake) {
         super(window);
+        this.isSnake = isSnake;
     }
 
     @Override
@@ -45,19 +48,22 @@ public class PseudoSelectorPage extends Page {
         // Add a text formatter to transform input to uppercase
         pseudoField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getText().toUpperCase();
-            if (newText.matches("[A-Z0-9-'_]*")) {  // Only accept uppercase letters, numbers, -, ', and _
+            if (newText.matches("[A-Z0-9-'_]*") && change.getControlNewText().length() <= PSEUDO_MAX_LENGTH) {  // Only accept uppercase letters, numbers, -, ', and _
                 change.setText(newText);
+                //pseudoField.setStyle("-fx-padding: 0;-fx-text-fill: black;");  // Set the padding of the TextField
             } else {
                 change.setText("");
+                // TODO : on pourrait mettre le texte en rouge si le pseudo est déjà pris
+                //pseudoField.setStyle("-fx-padding: 0;-fx-text-fill: red;");  // Set the padding of the TextField
             }
             return change;
         }));
         
         submitButton = new ButtonPixelFont("SUBMIT", 60, true);
         submitButton.setOnAction(e ->{
-            window.getClient().pseudo = pseudoField.getText();
-            if(window.getClient().pseudo.length() >= PSEUDO_MIN_LENGTH && window.getClient().pseudo.length() <= PSEUDO_MAX_LENGTH){
-                window.switchToMenuPage();
+            if(pseudoField.getText().length() >= PSEUDO_MIN_LENGTH && pseudoField.getText().length() <= PSEUDO_MAX_LENGTH){
+                window.getClient().setPseudo(pseudoField.getText());
+                window.switchToSkinSelectorPage(isSnake);
             }
         });
         
@@ -66,6 +72,8 @@ public class PseudoSelectorPage extends Page {
         layout.setAlignment(Pos.CENTER);
         this.setBackground(ImageBank.wallpaper_dark_bridge);
         layout.getChildren().addAll(instructionLabel, pseudoField, submitButton);  // Add the TextField directly to the layout
+
+        pseudoField.requestFocus();  // Set the focus on the TextField
         
         VBox.setMargin(pseudoField, new javafx.geometry.Insets(20, 50, 20, 50));  // Set the margin for the TextField
     }
@@ -75,6 +83,9 @@ public class PseudoSelectorPage extends Page {
         window.getScene().setOnKeyPressed( ev -> {
             if(ev.getCode() == KeyCode.ESCAPE){
                 window.switchToMenuPage();
+            }
+            else if(ev.getCode() == KeyCode.ENTER){
+                submitButton.fire();
             }
         });
     }

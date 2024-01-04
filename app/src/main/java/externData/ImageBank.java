@@ -29,6 +29,13 @@ public class ImageBank {
     public static Image wallpaper_settings;
     public static Image wallpaper_dark_bridge;
 
+    public static Image skin_slither_france;
+    public static Image skin_slither_germany;
+    public static Image skin_slither_italy;
+
+    public static Image skin_snake_france;
+    public static Image skin_snake_germany;
+    public static Image skin_snake_italy;
 
     public static Image getCircleImage(OurColors color) {
         for (int i = 0; i < circles.length; i++) {
@@ -100,6 +107,13 @@ public class ImageBank {
         wallpaper_settings = new Image(getClass().getResourceAsStream("/wallpaper/settings.jpg"));
         wallpaper_dark_bridge = new Image(getClass().getResourceAsStream("/wallpaper/dark_bridge.jpg"));
 
+        skin_slither_france = new Image(getClass().getResourceAsStream("/skins/slither_france.png"));
+        skin_slither_germany = new Image(getClass().getResourceAsStream("/skins/slither_germany.png"));
+        skin_slither_italy = new Image(getClass().getResourceAsStream("/skins/slither_italy.png"));
+
+        skin_snake_france = new Image(getClass().getResourceAsStream("/skins/snake_france.png"));
+        skin_snake_germany = new Image(getClass().getResourceAsStream("/skins/snake_germany.png"));
+        skin_snake_italy = new Image(getClass().getResourceAsStream("/skins/snake_italy.png"));
     }
     
 }

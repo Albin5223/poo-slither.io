@@ -62,5 +62,9 @@ public class Window {
     public void switchToPseudoSelectorPage(boolean isSnake){
         new PseudoSelectorPage(this, isSnake).show();
     }
+
+    public void switchToSkinSelectorPage(boolean isSnake){
+        new SkinSelectorPage(this, isSnake).show();
+    }
     
 }

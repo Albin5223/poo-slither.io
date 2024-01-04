@@ -10,7 +10,7 @@ public abstract class Skin implements Serializable{
     private final OurColors head_color;
     private final ArrayList<OurColors> tail_pattern;
 
-    public Skin(OurColors head_color, ArrayList<OurColors> tail_pattern) {
+    protected Skin(OurColors head_color, ArrayList<OurColors> tail_pattern) {
         this.head_color = head_color;
         this.tail_pattern = new ArrayList<OurColors>(tail_pattern);
     }

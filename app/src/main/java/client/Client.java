@@ -23,6 +23,7 @@ import model.paquet.PaquetSnake;
 import model.plateau.PlateauInteger;
 import model.plateau.Snake;
 import model.plateau.SnakeInteger;
+import model.skins.Skin;
 import server.Server;
 
 public class Client implements Runnable, Data<Integer,Direction>,Observable<Integer,Direction>{
@@ -36,7 +37,10 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
     ObjectInputStream ois;
     ObjectOutputStream oos;
 
-    public String pseudo;
+    private String pseudo;
+    public void setPseudo(String pseudo){this.pseudo = pseudo;}
+    private Skin skin;
+    public void setSkin(Skin skin){this.skin = skin;}
     private SnakeInteger snake;
     private PlateauInteger plateau;
     
