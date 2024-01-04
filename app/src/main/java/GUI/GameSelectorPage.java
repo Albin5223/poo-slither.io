@@ -16,9 +16,9 @@ public abstract sealed class GameSelectorPage extends Page {
 
     private ButtonNotClickeablePixelFont title;
 
-    protected ButtonPixelFont playButtonSlither = new ButtonPixelFont("SLITHER.IO",40, true);
-    protected ButtonPixelFont playButtonSnake = new ButtonPixelFont("SNAKE",40, true);
-    protected ButtonPixelFont exitButton = new ButtonPixelFont("BACK",40, true);
+    protected ButtonPixelFont playButtonSlither;
+    protected ButtonPixelFont playButtonSnake;
+    protected ButtonPixelFont exitButton;
 
     public GameSelectorPage(Window window, String title) {
         super(window);
@@ -58,7 +58,7 @@ public abstract sealed class GameSelectorPage extends Page {
 
         setButtonsAction();
 
-        layout.getChildren().addAll(title, playButtonSlither, playButtonSnake, exitButton);
+        layout.getChildren().addAll(title, playButtonSlither, playButtonSnake);
 
         VBox.setMargin(playButtonSlither, new javafx.geometry.Insets(50, 0, 0, 0));
     }
@@ -73,8 +73,24 @@ public abstract sealed class GameSelectorPage extends Page {
     }
 
     public static final class OnlineGameSelectorPage extends GameSelectorPage {
+
+        protected ButtonPixelFont serverHostButton;
+
         public OnlineGameSelectorPage(Window window) {
             super(window, "ONLINE");
+        }
+
+        @Override
+        public void createPage() {
+            super.createPage();
+
+            serverHostButton = new ButtonPixelFont("SERVER'S CONFIGURATION",40, true);
+            serverHostButton.setOnAction(e -> {
+                window.switchToHostOrJoinPage();
+            });
+
+            window.getLayout().getChildren().add(serverHostButton);
+            window.getLayout().getChildren().add(exitButton);
         }
 
         @Override
@@ -97,6 +113,12 @@ public abstract sealed class GameSelectorPage extends Page {
     public static final class OfflineGameSelectorPage extends GameSelectorPage {
         public OfflineGameSelectorPage(Window window) {
             super(window, "OFFLINE");
+        }
+
+        @Override
+        public void createPage() {
+            super.createPage();
+            window.getLayout().getChildren().add(exitButton);
         }
 
         @Override

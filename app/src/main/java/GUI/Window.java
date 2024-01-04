@@ -8,8 +8,17 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
+import server.Server;
 
 public class Window {
+
+    private Server server = new Server();
+    public Server getServer() {return server;}
+    private Thread serverThread = new Thread(server);
+    public Thread getServerThread() {return serverThread;}
+    public void replaceServerThread() {
+        serverThread = new Thread(server);
+    }
 
     private Client client = new Client();
     public Client getClient() {return client;}
@@ -65,6 +74,18 @@ public class Window {
 
     public void switchToSkinSelectorPage(boolean isSnake){
         new SkinSelectorPage(this, isSnake).show();
+    }
+
+    public void switchToHostOrJoinPage(){
+        new HostOrJoinPage(this).show();
+    }
+
+    public void switchToServerHostPage(){
+        new ServerHostPage(this).show();
+    }
+
+    public void switchToServerJoinPage(){
+        new ServerJoinPage(this).show();
     }
     
 }

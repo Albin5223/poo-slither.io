@@ -43,6 +43,9 @@ public class MenuPage extends Page {
         });
         
         exitButton.setOnAction(e -> {
+            window.getServer().shutdown();
+            // TODO : don't forget to shutdown the client
+            //window.getClient().shutdown();
             window.getPrimaryStage().close();
         });
 

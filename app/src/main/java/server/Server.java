@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,7 +26,7 @@ import model.skins.Skin;
 public class Server implements Runnable{
 
     private ArrayList<ConnexionHandle> clients;
-    private boolean done;
+    private boolean done = true;
     private ServerSocket server;
     public final static int port = 3000;
 
@@ -118,7 +120,6 @@ public class Server implements Runnable{
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
         engine = EngineSnakeOnline.createEngineSnakeOnline(1000, 1000);
-        done = false;
     }
 
 
@@ -132,6 +133,7 @@ public class Server implements Runnable{
 
     @Override
     public void run() {
+        done = false;
         try {
             server = new ServerSocket(port);
 
@@ -155,7 +157,7 @@ public class Server implements Runnable{
     public void shutdown(){
         done = true;
         try {
-            if(!server.isClosed()){
+            if(server != null && !server.isClosed()){
                 server.close();
             }
             for(ConnexionHandle client : clients){
@@ -166,7 +168,20 @@ public class Server implements Runnable{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-       
+    }
+
+    public boolean isDone(){
+        return done;
+    }
+
+    public String getIp(){
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            return inetAddress.getHostAddress().toString();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return "ERROR : IP NOT FOUND";
     }
 
     
