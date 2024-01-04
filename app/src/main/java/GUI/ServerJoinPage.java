@@ -117,7 +117,7 @@ public class ServerJoinPage extends Page {
                     ip += ".";
                 }
             }
-            window.setIP_joining(ip);
+            window.getClient().setIp(ip);
             window.switchToPseudoSelectorPage(isSnake);
         });
 

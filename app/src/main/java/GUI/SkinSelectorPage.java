@@ -2,6 +2,7 @@ package GUI;
 
 import GUI.customButton.ButtonNotClickeablePixelFont;
 import GUI.customButton.ButtonPixelFont;
+import client.GUI.PlayPageSnakeOnline;
 import externData.ImageBank;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -71,6 +72,19 @@ public class SkinSelectorPage extends Page {
         play.setOnAction(e -> {
             window.getClient().setSkin(allSkins[currentSkin]);
             clear();
+            window.getScene().setOnKeyPressed(ev ->{
+                if(ev.getCode() == KeyCode.ESCAPE){
+                    window.getClient().shutdown();
+                    window.switchToMenuPage();
+                    window.replaceClientThread();
+                }
+            });
+            PlayPageSnakeOnline playPageSnakeOnline = new PlayPageSnakeOnline();
+            window.getClient().setPlayPage(playPageSnakeOnline);
+
+            window.getLayout().getChildren().add(playPageSnakeOnline);
+            window.getClientThread().start();
+            
         });
 
         skinImageView = isSnake ? new ImageView(allSnakeImages[currentSkin]) : new ImageView(allSlitherImages[currentSkin]);

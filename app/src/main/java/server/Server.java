@@ -1,11 +1,8 @@
 package server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,9 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import externData.ImageBank;
-import interfaces.Orientation.Direction;
+import interfaces.Turnable;
 import model.engine.EngineSnakeOnline;
-import model.engine.SnakeMover;
 import model.paquet.PaquetSnake;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
@@ -36,13 +32,13 @@ public class Server implements Runnable{
     public class ConnexionHandle implements Runnable{
 
         private Socket client;
-        PrintWriter out;
-        BufferedReader in;
+        
         ObjectInputStream ois;
         ObjectOutputStream oos;
         String name;
-        SnakeMover<Integer,Direction> snakeMover;
+        SnakeInteger snake;
         Skin skin;
+        Turnable.Turning turning;
 
         public ConnexionHandle(Socket client){
             this.client = client;
@@ -50,44 +46,65 @@ public class Server implements Runnable{
         @Override
         public void run() {
             try{
-                out = new PrintWriter(client.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                
                 oos = new ObjectOutputStream(client.getOutputStream());
                 ois = new ObjectInputStream(client.getInputStream());
 
                 try{
 
-                    SnakeInteger snake = SnakeInteger.createSnakeInteger((PlateauInteger) engine.getPlateau());
-                    engine.addSnake(snake);
+                    snake = SnakeInteger.createSnakeInteger((PlateauInteger) engine.getPlateau());
+
+                    
                     
                     System.out.println("Snake created in "+ snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
-                    
+                    if(client.isClosed()){
+                        System.out.println("Client closed");
+                        return;
+                    }
                     oos.writeObject(PaquetSnake.createPaquetWithSnakeAndMessage("Please enter a nickname",snake));
+                    System.out.println("Snake sent to client");
                 }
                 catch (IOException e){
                     System.out.println("Echec de l'envoie");
                     e.printStackTrace();
                 }
-                
-                name = in.readLine();
+                System.out.println("Waiting for client name");
+                PaquetSnake paquetName = (PaquetSnake) ois.readObject();
+                name = paquetName.getMessage();
+                skin = paquetName.getSkin();
+                snake.setSkin(skin);
                 System.out.println("New client : " + name);
                 sendAll(name + " has joined the chat");
 
 
+                engine.addSnake(snake);
+
 
                 //Lis les objets qu'il reçoit
-                String message;
-                while((message = in.readLine()) != null){
-                    sendAll(name + " : " + message);
-
-                    if(message.equals("exit")){
+                PaquetSnake message = (PaquetSnake) ois.readObject();
+                while(message != null){
+                    if(message.isQuit()){
+                        System.out.println("Client "+name+" disconnected");
                         sendAll(name + " has left the chat");
-                        this.close();
+                        engine.removeSnake(snake);
+                        clients.remove(this);
+                        close();
                     }
+                    if (message.getSkin()!=null){
+                        skin = message.getSkin();
+                        System.out.println("Skin received from "+name);
+                    }
+                    if (message.getTurning()!=null){
+                        turning = message.getTurning();
+                        System.out.println("Turning received from "+name);
+                    }                    
                 }
 
             }catch(IOException e){
                 System.out.println("Echec");
+            }
+            catch(ClassNotFoundException e){
+                System.out.println("Objet non trouve");
             }
         
         }
@@ -101,10 +118,24 @@ public class Server implements Runnable{
             }
         }
 
+        public void sendSnake(){
+            PaquetSnake ps = PaquetSnake.createPaquetWithSnake(snake);
+            if(snake == null){
+                System.out.println("Snake is null");
+                System.exit(0);
+            }
+            try {
+                oos.writeObject(ps);
+            } catch (IOException e) {
+                
+            }
+        }
+
         public void close(){
             try {
-                in.close();
-                out.close();
+                
+                ois.close();
+                oos.close();
                 
                 if(!client.isClosed()){
                     client.close();
@@ -119,7 +150,7 @@ public class Server implements Runnable{
 
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
-        engine = EngineSnakeOnline.createEngineSnakeOnline(1000, 1000);
+        engine = EngineSnakeOnline.createEngineSnakeOnline(1000, 1000,this);
     }
 
 
@@ -127,6 +158,14 @@ public class Server implements Runnable{
         for(ConnexionHandle client : clients){
             if(client != null){
                 client.sendMessage(msg);
+            }
+        }
+    }
+
+    public void sendSnakeAll(){
+        for(ConnexionHandle client : clients){
+            if(client != null){
+                client.sendSnake();
             }
         }
     }
@@ -149,7 +188,8 @@ public class Server implements Runnable{
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            shutdown();
+            System.out.println("Server closed");
         }
     }
 

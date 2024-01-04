@@ -24,11 +24,11 @@ public class Window {
     public Thread getServerSlitherThread() {return serverSlitherThread;}
     public void replaceServerSlitherThread() {serverSlitherThread = new Thread(serverSlither);}
 
-    private String IP_joining;
     private Client client = new Client();
     public Client getClient() {return client;}
-    public void setIP_joining(String IP_joining) {this.IP_joining = IP_joining;}
-    public String getIP_joining() {return IP_joining;}
+    private Thread clientThread = new Thread(client);
+    public Thread getClientThread() {return clientThread;}
+    public void replaceClientThread() {clientThread = new Thread(client);}
 
     private EngineSlither offlineSlither;
     private EngineSnake offlineSnake;

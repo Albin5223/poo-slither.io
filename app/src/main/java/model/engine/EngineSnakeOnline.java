@@ -5,30 +5,39 @@ import java.util.ArrayList;
 import interfaces.Orientation.Direction;
 import model.plateau.PlateauInteger;
 import model.plateau.Snake;
+import server.Server;
 
 public class EngineSnakeOnline extends EngineSnake{
 
-    protected EngineSnakeOnline(PlateauInteger plateau) {
-        super(new ArrayList<>(), plateau);   
+    private Server server;
+
+
+    protected EngineSnakeOnline(PlateauInteger plateau,Server server) {
+        super(new ArrayList<>(), plateau);
+        this.server = server;
     }
 
 
     public void addSnake(Snake<Integer,Direction> snake){
-        SnakeMover<Integer,Direction> snakeMover = new SnakeMover<Integer,Direction>(snake,this, null);
+        SnakeMoverOnline<Integer,Direction> snakeMover = new SnakeMoverOnline<Integer,Direction>(snake,this, null,server);
         this.snakeMovers.add(snakeMover);
 
         snakeMover.start();
-
     }
 
-    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height){
+    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height,Server server){
         PlateauInteger plateau = PlateauInteger.createPlateauSnake(width, height);
-        return new EngineSnakeOnline(plateau);
+        return new EngineSnakeOnline(plateau,server);
     }
 
-    public void removeSnake(SnakeMover<Integer,Direction> snakeMover){
-        this.snakeMovers.remove(snakeMover);
-        snakeMover.stop();
+    public void removeSnake(Snake<Integer,Direction> snake){
+        for(SnakeMover<Integer,Direction> snakeMover : this.snakeMovers){
+            if(snakeMover.getSnake() == snake){
+                snakeMover.stop();
+                this.snakeMovers.remove(snakeMover);
+                break;
+            }
+        }
     }
 
     public void stop(){

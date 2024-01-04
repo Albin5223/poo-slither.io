@@ -9,17 +9,17 @@ import model.player.Bot.BotPlayer;
 
 public class SnakeMover<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
-    private final Snake<Type,O> snake;
-    private final Engine<Type,O> engine;
-    private AnimationTimer timer;
-    private double moverSpeed;
+    protected final Snake<Type,O> snake;
+    protected final Engine<Type,O> engine;
+    protected AnimationTimer timer;
+    protected double moverSpeed;
     BotPlayer bot;
 
     public Snake<Type,O> getSnake() {
         return snake;
     }
 
-    private long lastUpdate = 0;
+    protected long lastUpdate = 0;
 
     public SnakeMover(Snake<Type,O> snake, Engine<Type,O> engine, BotPlayer bot) {
         this.snake = snake;

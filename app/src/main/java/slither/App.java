@@ -31,8 +31,7 @@ public class App extends Application{
         primaryStage.setOnCloseRequest(e -> {
             window.getServerSnake().shutdown();
             window.getServerSlither().shutdown();
-            // TODO : don't forget to shutdown the client if it's running
-            //window.getClient().shutdown();
+            window.getClient().shutdown();
             primaryStage.close();
         });
         primaryStage.setFullScreen(true);

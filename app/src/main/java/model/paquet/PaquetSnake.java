@@ -2,25 +2,52 @@ package model.paquet;
 
 import java.io.Serializable;
 
+import interfaces.Turnable;
 import interfaces.Orientation.Direction;
-import model.coordinate.CoordinateInteger;
 import model.plateau.SnakeInteger;
 import model.skins.Skin;
 
 public class PaquetSnake implements Serializable {
 
-    
+
+
+    private boolean quit = false;
     private String message;
     private SnakeInteger snake;
     private Direction direction;
     private Skin skin;
+    private Turnable.Turning turning;
 
     private PaquetSnake(String msg, SnakeInteger snake, Direction direction,Skin skin){
         message = msg;
         this.direction = direction;
         this.skin = skin;
         this.snake = snake;
+        turning = null;
+    }
 
+    private PaquetSnake(boolean quit){
+        this.quit = quit;
+    }
+
+    public boolean isQuit() {
+        return quit;
+    }
+
+    public static PaquetSnake createPaquetToQuit(){
+        return new PaquetSnake(true);
+    }
+
+    private PaquetSnake(Turnable.Turning turning){
+        this.turning = turning;
+    }
+
+    public Turnable.Turning getTurning() {
+        return turning;
+    }
+
+    public static PaquetSnake createPaquetWithTurning(Turnable.Turning turning){
+        return new PaquetSnake(turning);
     }
 
     public static PaquetSnake createPaquetWithDirection(Direction direction){
@@ -55,7 +82,7 @@ public class PaquetSnake implements Serializable {
         return new PaquetSnake(null, null, null, skin);
     }
     
-    public static PaquetSnake createPaquetWithSkinAndMessage(Skin skin,String msg){
+    public static PaquetSnake createPaquetWithMessageAndSkin(String msg,Skin skin){
         return new PaquetSnake(msg, null, null, skin);
     }
 
