@@ -12,16 +12,23 @@ import server.Server;
 
 public class Window {
 
-    private Server server = new Server();
-    public Server getServer() {return server;}
-    private Thread serverThread = new Thread(server);
-    public Thread getServerThread() {return serverThread;}
-    public void replaceServerThread() {
-        serverThread = new Thread(server);
-    }
+    private Server serverSnake = new Server();
+    public Server getServerSnake() {return serverSnake;}
+    private Thread serverSnakeThread = new Thread(serverSnake);
+    public Thread getServerSnakeThread() {return serverSnakeThread;}
+    public void replaceServerSnakeThread() {serverSnakeThread = new Thread(serverSnake);}
 
+    private Server serverSlither = new Server();
+    public Server getServerSlither() {return serverSlither;}
+    private Thread serverSlitherThread = new Thread(serverSlither);
+    public Thread getServerSlitherThread() {return serverSlitherThread;}
+    public void replaceServerSlitherThread() {serverSlitherThread = new Thread(serverSlither);}
+
+    private String IP_joining;
     private Client client = new Client();
     public Client getClient() {return client;}
+    public void setIP_joining(String IP_joining) {this.IP_joining = IP_joining;}
+    public String getIP_joining() {return IP_joining;}
 
     private EngineSlither offlineSlither;
     private EngineSnake offlineSnake;
@@ -76,16 +83,16 @@ public class Window {
         new SkinSelectorPage(this, isSnake).show();
     }
 
-    public void switchToHostOrJoinPage(){
-        new HostOrJoinPage(this).show();
+    public void switchToHostOrJoinPage(boolean isSnake){
+        new HostOrJoinPage(this, isSnake).show();
     }
 
-    public void switchToServerHostPage(){
-        new ServerHostPage(this).show();
+    public void switchToServerHostPage(boolean isSnake){
+        new ServerHostPage(this, isSnake).show();
     }
 
-    public void switchToServerJoinPage(){
-        new ServerJoinPage(this).show();
+    public void switchToServerJoinPage(boolean isSnake){
+        new ServerJoinPage(this, isSnake).show();
     }
     
 }

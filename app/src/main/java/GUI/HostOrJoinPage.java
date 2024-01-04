@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 
 public class HostOrJoinPage extends Page {
 
+    private final boolean isSnake;
+
     private ButtonNotClickeablePixelFont title;
 
     private ButtonPixelFont host;
@@ -17,8 +19,9 @@ public class HostOrJoinPage extends Page {
 
     private ButtonPixelFont back;
 
-    public HostOrJoinPage(Window window) {
+    public HostOrJoinPage(Window window, boolean isSnake) {
         super(window);
+        this.isSnake = isSnake;
     }
 
     @Override
@@ -29,11 +32,11 @@ public class HostOrJoinPage extends Page {
         back = new ButtonPixelFont("BACK", 50, true);
 
         host.setOnAction(e -> {
-            window.switchToServerHostPage();
+            window.switchToServerHostPage(isSnake);
         });
 
         join.setOnAction(e -> {
-            window.switchToServerJoinPage();
+            window.switchToServerJoinPage(isSnake);
         });
 
         back.setOnAction(e -> {

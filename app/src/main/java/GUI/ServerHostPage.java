@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 
 public class ServerHostPage extends Page {
 
+    private final boolean isSnake;
+
     private ButtonNotClickeablePixelFont titre;
     private ButtonPixelFont back;
 
@@ -17,14 +19,15 @@ public class ServerHostPage extends Page {
     private ButtonNotClickeablePixelFont IP;
     private ButtonPixelFont stopServer;
 
-    public ServerHostPage(Window window) {
+    public ServerHostPage(Window window, boolean isSnake) {
         super(window);
+        this.isSnake = isSnake;
     }
 
     @Override
     public void createPage() {
 
-        titre = new ButtonNotClickeablePixelFont("SERVER HOSTING", 100);
+        titre = new ButtonNotClickeablePixelFont("SERVER HOSTING : "+ (isSnake ? "SNAKE" : "SLITHER"), 70);
         back = new ButtonPixelFont("BACK", 70, true);
 
         VBox layout = window.getLayout();
@@ -34,27 +37,33 @@ public class ServerHostPage extends Page {
 
         layout.getChildren().add(titre);
 
-        if(window.getServer().isDone()){
+        if((isSnake ? window.getServerSnake() : window.getServerSlither()).isDone()){
             createPageDoneServer(layout);
         } else {
             createPageRunningServer(layout);
         }
 
         back.setOnAction(e -> {
-            window.switchToHostOrJoinPage();
+            window.switchToHostOrJoinPage(isSnake);
         });
         layout.getChildren().add(back);
     }
 
     private void createPageRunningServer(VBox layout) {
 
-        IP = new ButtonNotClickeablePixelFont("IP : " + window.getServer().getIp(), 70);
+        IP = new ButtonNotClickeablePixelFont("IP : " + (isSnake ? window.getServerSnake().getIp() : window.getServerSlither().getIp()), 70);
 
         stopServer = new ButtonPixelFont("STOP SERVER", 70, true);
         stopServer.setOnAction(e -> {
-            window.getServer().shutdown();
-            window.replaceServerThread();
-            window.switchToServerHostPage();
+            if(isSnake){
+                window.getServerSnake().shutdown();
+                window.replaceServerSnakeThread();
+            }
+            else{
+                window.getServerSlither().shutdown();
+                window.replaceServerSlitherThread();
+            }
+            window.switchToServerHostPage(isSnake);
         });
         layout.getChildren().addAll(IP,stopServer);
 
@@ -65,8 +74,13 @@ public class ServerHostPage extends Page {
     private void createPageDoneServer(VBox layout) {
         startServer = new ButtonPixelFont("START SERVER", 70, true);
         startServer.setOnAction(e -> {
-            window.getServerThread().start();
-            window.switchToServerHostPage();
+            if (isSnake) {
+                window.getServerSnakeThread().start();
+            }
+            else{
+                window.getServerSlitherThread().start();
+            }
+            window.switchToServerHostPage(isSnake);
         });
         layout.getChildren().add(startServer);
 

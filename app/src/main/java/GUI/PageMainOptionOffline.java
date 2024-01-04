@@ -34,6 +34,7 @@ public class PageMainOptionOffline extends Page {
     public PageMainOptionOffline (Window window, boolean isSnake) {
         super(window);
         this.isSnake = isSnake;
+        System.out.println("oioi");
     }
 
     public void valideConfig(){

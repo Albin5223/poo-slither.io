@@ -58,7 +58,7 @@ public abstract sealed class GameSelectorPage extends Page {
 
         setButtonsAction();
 
-        layout.getChildren().addAll(title, playButtonSlither, playButtonSnake);
+        layout.getChildren().addAll(title, playButtonSlither, playButtonSnake, exitButton);
 
         VBox.setMargin(playButtonSlither, new javafx.geometry.Insets(50, 0, 0, 0));
     }
@@ -74,33 +74,18 @@ public abstract sealed class GameSelectorPage extends Page {
 
     public static final class OnlineGameSelectorPage extends GameSelectorPage {
 
-        protected ButtonPixelFont serverHostButton;
-
         public OnlineGameSelectorPage(Window window) {
             super(window, "ONLINE");
         }
 
         @Override
-        public void createPage() {
-            super.createPage();
-
-            serverHostButton = new ButtonPixelFont("SERVER'S CONFIGURATION",40, true);
-            serverHostButton.setOnAction(e -> {
-                window.switchToHostOrJoinPage();
-            });
-
-            window.getLayout().getChildren().add(serverHostButton);
-            window.getLayout().getChildren().add(exitButton);
-        }
-
-        @Override
         protected void setButtonsAction() {
             playButtonSlither.setOnAction(e -> {
-                window.switchToPseudoSelectorPage(false);
+                window.switchToHostOrJoinPage(false);
             });
 
             playButtonSnake.setOnAction(e -> {
-                window.switchToPseudoSelectorPage(true);
+                window.switchToHostOrJoinPage(true);
                 
             });
 
@@ -113,12 +98,6 @@ public abstract sealed class GameSelectorPage extends Page {
     public static final class OfflineGameSelectorPage extends GameSelectorPage {
         public OfflineGameSelectorPage(Window window) {
             super(window, "OFFLINE");
-        }
-
-        @Override
-        public void createPage() {
-            super.createPage();
-            window.getLayout().getChildren().add(exitButton);
         }
 
         @Override
