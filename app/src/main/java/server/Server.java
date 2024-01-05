@@ -86,11 +86,8 @@ public class Server implements Runnable{
                 while(!Thread.currentThread().isInterrupted()){
                     PaquetSnake message = (PaquetSnake) ois.readObject();
                     if(message.isQuit()){
-                        System.out.println("Client "+name+" disconnected");
-                        sendAll(name + " has left the chat");
-                        engine.removeSnake(snake);
-                        clients.remove(this);
                         close();
+                        break;
                     }
                     if (message.getSkin()!=null){
                         skin = message.getSkin();
@@ -99,12 +96,12 @@ public class Server implements Runnable{
                     if (message.getTurning()!=null){
                         turning = message.getTurning();
                         System.out.println("Turning received from "+name);
-                    }
-                    ois.reset();                   
+                    }               
                 }
 
             }catch(IOException e){
                 System.out.println("Echec");
+                e.printStackTrace();        
             }
             catch(ClassNotFoundException e){
                 System.out.println("Objet non trouve");
@@ -136,10 +133,15 @@ public class Server implements Runnable{
         }
 
         public void close(){
+            System.out.println("Client "+name+" disconnected");
+            clients.remove(this);
+            engine.removeSnake(snake);
+            sendAll(name + " has left the chat");
+            System.out.println("Il reste "+clients.size()+" clients");
             try {
                 
                 ois.close();
-                oos.close();
+                oos.close();    // lui
                 
                 if(!client.isClosed()){
                     client.close();
@@ -191,22 +193,23 @@ public class Server implements Runnable{
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            shutdown();
             System.out.println("Server closed");
         }
     }
 
 
     public void shutdown(){
+
         if(!Thread.currentThread().isInterrupted()){    // Garantie
             Thread.currentThread().interrupt();
         }
         try {
+            ArrayList<ConnexionHandle> clients_copy = new ArrayList<ConnexionHandle>(this.clients);
+            for(ConnexionHandle client : clients_copy){
+                client.close();
+            }
             if(server != null && !server.isClosed()){
                 server.close();
-            }
-            for(ConnexionHandle client : clients){
-                client.close();
             }
             engine.stop();
         } catch (IOException e) {

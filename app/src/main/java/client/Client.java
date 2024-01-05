@@ -71,20 +71,18 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
             client = new Socket(ip, Server.port);
     
             System.out.println("Client connected");
-    
+            
             ois = new ObjectInputStream(client.getInputStream());
             oos = new ObjectOutputStream(client.getOutputStream());
-    
-            //Envoyer les messages depuis le terminal
-            InputHandler input = new InputHandler();
-            Thread t = new Thread(input);
-            t.start();
     
             PaquetSnake msg = (PaquetSnake) ois.readObject();
             System.out.println(msg.getMessage());
             snake = msg.getSnake();
             System.out.println("Mon first snake est en : " + snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
             plateau = (PlateauInteger) snake.getPlateau();
+
+            oos.reset();
+            oos.writeObject(PaquetSnake.createPaquetWithMessageAndSkin(pseudo,skin));
     
             //Recevoir les messages
     
@@ -97,8 +95,13 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
     
                     System.out.println("Mon snake est en : " + this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
                     Platform.runLater(() -> notifyObservers());
+
+                    oos.reset();
+                    oos.writeObject(PaquetSnake.createPaquetWithTurning(turning));
     
                 } catch (ClassNotFoundException e) {
+                    System.out.println("Echec de la lecture");
+                    e.printStackTrace();
                 }
             }
             shutdown(); // Au cas où le Thread est interrompu avant d'avoir pu faire appel à shutdown()
@@ -114,6 +117,7 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
         try {
             if(client != null && !client.isClosed()){
                 System.out.println("Client is shuting down");
+                oos.reset();
                 oos.writeObject(PaquetSnake.createPaquetToQuit());
                 ois.close();
                 oos.close();
@@ -121,28 +125,6 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
             }
         } catch (IOException e) {
             
-        }
-    }
-
-
-
-
-    //Gestionnnaire pour envoyer des messages
-    public class InputHandler implements Runnable{
-        //InputHandler va envoyer un premier message qui correspond a son nom et a son skin
-        //Puis il va juste envoyer au serveur son turning
-        @Override
-        public void run() {
-            try{
-                oos.reset();
-                oos.writeObject(PaquetSnake.createPaquetWithMessageAndSkin(pseudo,skin));
-                while(!Thread.currentThread().isInterrupted()){
-                    oos.writeObject(PaquetSnake.createPaquetWithTurning(turning));
-                }
-                
-            }catch(IOException e){
-                
-            }
         }
     }
 
