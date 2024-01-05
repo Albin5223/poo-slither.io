@@ -49,16 +49,17 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
     }
 
     PlayPageSnakeOnline playPageSnakeOnline;
-    public void setPlayPage(PlayPageSnakeOnline page) {
-        playPageSnakeOnline = page;
-        observers.add(page);
+    public PlayPageSnakeOnline getPlayPageSnakeOnline() {
+        return playPageSnakeOnline;
     }
-    
     ArrayList<Observer<Integer, Direction>> observers = new ArrayList<Observer<Integer, Direction>>();
         
     private boolean done = false;
 
-    
+    public Client(){
+        playPageSnakeOnline = new PlayPageSnakeOnline();
+        observers.add(playPageSnakeOnline);
+    }
     
 
 
@@ -82,36 +83,38 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
             Thread t = new Thread(input);
             t.start();
 
+            PaquetSnake msg = (PaquetSnake) ois.readObject();
+            System.out.println(msg.getMessage());
+            snake = msg.getSnake();
+            System.out.println("Mon first snake est en : " + snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
+            plateau = (PlateauInteger) snake.getPlateau();
+        
 
             //Recevoir les messages
-            PaquetSnake message;
-            int i = 0;
+
+
+            
             System.out.println("Client is waiting for messages");
             while(!done){
                 try{
                     
-                    message = (PaquetSnake) ois.readObject();
-                    System.out.println(message.getMessage());
-                    SnakeInteger subSnake = message.getSnake();
-
-                    if(subSnake == null){
-                        System.out.println("Snake is null... in "+i+" th iteration");
-                    }
-                    else{
-                        snake = subSnake;
-                        plateau = (PlateauInteger) snake.getPlateau();
-                    }
+                    PaquetSnake message = (PaquetSnake) ois.readObject();
+                    this.snake = message.getSnake();
+                    this.plateau = (PlateauInteger) this.snake.getPlateau();
                     
-                    System.out.println("Mon snake est en : " + snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
+                    
+                    System.out.println("Mon snake est en : " + this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
                     notifyObservers();
-                    i++;
+
+                    
                 }
                 catch (ClassNotFoundException e){
                 }
                 
+                
             }
             System.out.println("Client is done");
-        }catch(IOException e){
+        }catch(IOException | ClassNotFoundException e){
             
         }
     }
@@ -139,6 +142,7 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
         @Override
         public void run() {
             try{
+                oos.reset();
                 oos.writeObject(PaquetSnake.createPaquetWithMessageAndSkin(pseudo,skin));
                 while(!done){
                     oos.writeObject(PaquetSnake.createPaquetWithTurning(turning));

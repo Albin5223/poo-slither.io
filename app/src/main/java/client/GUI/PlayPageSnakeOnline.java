@@ -53,6 +53,7 @@ public class PlayPageSnakeOnline extends Pane implements Observer<Integer, Direc
 
     @Override
     public void update(Data<Integer, Direction> data) {
+        System.out.println("Updating the play page...");
         Snake<Integer,Direction> snake = data.getMainSnake();
         if(snake == null){
             System.out.println("Client's snake is null...");
@@ -157,6 +158,9 @@ public class PlayPageSnakeOnline extends Pane implements Observer<Integer, Direc
         c.setFill(Color.TRANSPARENT);
         c.setStroke(Color.BLACK);
         this.getChildren().add(c);
+
+
+        System.out.println("Play page updated");
     }
     
 }

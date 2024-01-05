@@ -26,6 +26,14 @@ public class PaquetSnake implements Serializable {
         turning = null;
     }
 
+
+    public void affiche(){
+        System.out.println("Message : " + message);
+        System.out.println("Direction : " + direction);
+        System.out.println("Snake : " + snake);
+        System.out.println("Skin : " + skin);
+    }
+
     private PaquetSnake(boolean quit){
         this.quit = quit;
     }

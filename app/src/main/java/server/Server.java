@@ -39,6 +39,7 @@ public class Server implements Runnable{
         SnakeInteger snake;
         Skin skin;
         Turnable.Turning turning;
+        
 
         public ConnexionHandle(Socket client){
             this.client = client;
@@ -61,8 +62,9 @@ public class Server implements Runnable{
                         System.out.println("Client closed");
                         return;
                     }
+                    oos.reset();
                     oos.writeObject(PaquetSnake.createPaquetWithSnakeAndMessage("Please enter a nickname",snake));
-                    System.out.println("Snake sent to client");
+                    System.out.println("Snake sent to client ");
                 }
                 catch (IOException e){
                     System.out.println("Echec de l'envoie");
@@ -74,15 +76,16 @@ public class Server implements Runnable{
                 skin = paquetName.getSkin();
                 snake.setSkin(skin);
                 System.out.println("New client : " + name);
-                sendAll(name + " has joined the chat");
+                //sendAll(name + " has joined the chat");
 
 
                 engine.addSnake(snake);
 
 
                 //Lis les objets qu'il reçoit
-                PaquetSnake message = (PaquetSnake) ois.readObject();
-                while(message != null){
+                
+                while(!done){
+                    PaquetSnake message = (PaquetSnake) ois.readObject();
                     if(message.isQuit()){
                         System.out.println("Client "+name+" disconnected");
                         sendAll(name + " has left the chat");
@@ -97,7 +100,8 @@ public class Server implements Runnable{
                     if (message.getTurning()!=null){
                         turning = message.getTurning();
                         System.out.println("Turning received from "+name);
-                    }                    
+                    }
+                    ois.reset();                   
                 }
 
             }catch(IOException e){
@@ -112,6 +116,7 @@ public class Server implements Runnable{
         public void sendMessage(String msg){
             PaquetSnake ps = PaquetSnake.createPaquetWithMessage(msg);
             try {
+                oos.reset();
                 oos.writeObject(ps);
             } catch (IOException e) {
                 
@@ -119,13 +124,13 @@ public class Server implements Runnable{
         }
 
         public void sendSnake(){
-            PaquetSnake ps = PaquetSnake.createPaquetWithSnake(snake);
-            if(snake == null){
-                System.out.println("Snake is null");
-                System.exit(0);
-            }
+            
+            PaquetSnake ps = PaquetSnake.createPaquetWithSnake(this.snake);
             try {
+                
+                oos.reset();
                 oos.writeObject(ps);
+                System.out.println("Snake sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
             } catch (IOException e) {
                 
             }

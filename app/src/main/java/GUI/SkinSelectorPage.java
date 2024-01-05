@@ -2,8 +2,8 @@ package GUI;
 
 import GUI.customButton.ButtonNotClickeablePixelFont;
 import GUI.customButton.ButtonPixelFont;
-import client.GUI.PlayPageSnakeOnline;
 import externData.ImageBank;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -79,11 +79,11 @@ public class SkinSelectorPage extends Page {
                     window.replaceClientThread();
                 }
             });
-            PlayPageSnakeOnline playPageSnakeOnline = new PlayPageSnakeOnline();
-            window.getClient().setPlayPage(playPageSnakeOnline);
-
-            window.getLayout().getChildren().add(playPageSnakeOnline);
-            window.getClientThread().start();
+            
+            this.setBackground(ImageBank.wallpaper_dark_bridge);
+            window.getLayout().getChildren().add(window.getClient().getPlayPageSnakeOnline());
+            Platform.runLater(window.getClient());
+           
             
         });
 
