@@ -110,7 +110,8 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
     }
 
-    private final static int NB_FOOD = 50;
+    //TODO : make a ratio of the size of the map
+    private final static int NB_FOOD = 1000;
 
     public PlateauInteger(int nbFood, FoodFactoryInteger foodFactory, BorderInteger border) {
         super(nbFood, foodFactory, border);

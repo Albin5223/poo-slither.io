@@ -38,6 +38,9 @@ public class Window {
     public String getServerSlitherIp(){return serverSlither.getIp();}
 
     private Client client = new Client();
+    public Client getClient() {
+        return client;
+    }
     public void setClientPseudo(String pseudo){client.setPseudo(pseudo);}
     public void setClientIp(String ip){client.setIp(ip);}
     public void setClientSkin(Skin skin){client.setSkin(skin);}

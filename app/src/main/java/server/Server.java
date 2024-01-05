@@ -95,6 +95,7 @@ public class Server implements Runnable{
                     }
                     if (message.getTurning()!=null){
                         turning = message.getTurning();
+                        snake.setTurning(turning);
                         System.out.println("Turning received from "+name);
                     }               
                 }
@@ -156,7 +157,7 @@ public class Server implements Runnable{
 
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
-        engine = EngineSnakeOnline.createEngineSnakeOnline(1000, 1000,this);
+        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000,this);
     }
 
 

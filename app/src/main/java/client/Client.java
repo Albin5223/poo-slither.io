@@ -15,6 +15,8 @@ import interfaces.Observable;
 import interfaces.Observer;
 import interfaces.Turnable.Turning;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import interfaces.Orientation.Direction;
 import model.SnakeData;
 import model.coordinate.Coordinate;
@@ -46,8 +48,54 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
     private PlateauInteger plateau;
     private Turning turning;
 
+    private KeyCode UP = KeyCode.UP;
+    private KeyCode DOWN = KeyCode.DOWN;
+    private KeyCode LEFT =  KeyCode.LEFT;
+    private KeyCode RIGHT = KeyCode.RIGHT;
+    private KeyCode BOOST = KeyCode.SPACE;
+
     public void setTurning(Turning turning) {
         this.turning = turning;
+    }
+
+    
+    public void setKeyCode(KeyEvent ev){
+        if (ev.getCode() == this.LEFT) {
+            if (snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT) {
+                if (snake.getDirection() == Direction.UP) {
+                    setTurning(Turning.GO_LEFT);
+                } else {
+                    setTurning(Turning.GO_RIGHT);
+                }
+            }
+        } else if (ev.getCode() == this.RIGHT) {
+            if (snake.getDirection() != Direction.RIGHT && snake.getDirection() != Direction.LEFT) {
+                if (snake.getDirection() == Direction.UP) {
+                    setTurning(Turning.GO_RIGHT);
+                } else {
+                    setTurning(Turning.GO_LEFT);
+                }
+            }
+        } else if (ev.getCode() == this.UP) {
+            if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN) {
+                if (snake.getDirection() == Direction.LEFT) {
+                    setTurning(Turning.GO_RIGHT);
+                } else {
+                    setTurning(Turning.GO_LEFT);
+                }
+            }
+        } else if (ev.getCode() == this.DOWN) {
+            if (snake.getDirection() != Direction.UP && snake.getDirection() != Direction.DOWN) {
+                if (snake.getDirection() == Direction.LEFT) {
+                    setTurning(Turning.GO_LEFT);
+                } else {
+                    setTurning(Turning.GO_RIGHT);
+                }
+            }
+        }
+        else if(ev.getCode() == this.BOOST){
+            //TODO :: BOOST
+        }
     }
 
     PlayPageSnakeOnline playPageSnakeOnline;
@@ -98,6 +146,9 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
 
                     oos.reset();
                     oos.writeObject(PaquetSnake.createPaquetWithTurning(turning));
+                    if(turning != Turning.FORWARD){
+                        turning = Turning.FORWARD;
+                    }
     
                 } catch (ClassNotFoundException e) {
                     System.out.println("Echec de la lecture");

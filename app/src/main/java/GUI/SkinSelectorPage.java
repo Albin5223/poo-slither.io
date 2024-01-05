@@ -76,6 +76,7 @@ public class SkinSelectorPage extends Page {
                     window.stopClient();
                     window.switchToMenuPage();
                 }
+                window.getClient().setKeyCode(ev);
             });
             
             window.getLayout().getChildren().add(window.getClientPlayPageSnakeOnline());

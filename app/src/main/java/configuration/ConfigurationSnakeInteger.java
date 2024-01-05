@@ -19,7 +19,7 @@ public class ConfigurationSnakeInteger{
     public static final int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
-    public static boolean TRAVERSABLE_WALL = false;
+    public static boolean TRAVERSABLE_WALL = true;
 
     public static boolean CAN_COLLIDING_WITH_HIMSELF = false;
 
