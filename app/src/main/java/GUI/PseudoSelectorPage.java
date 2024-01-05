@@ -62,7 +62,7 @@ public class PseudoSelectorPage extends Page {
         submitButton = new ButtonPixelFont("SUBMIT", 60, true);
         submitButton.setOnAction(e ->{
             if(pseudoField.getText().length() >= PSEUDO_MIN_LENGTH && pseudoField.getText().length() <= PSEUDO_MAX_LENGTH){
-                window.getClient().setPseudo(pseudoField.getText());
+                window.setClientPseudo(pseudoField.getText());
                 window.switchToSkinSelectorPage(isSnake);
             }
         });

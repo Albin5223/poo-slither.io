@@ -1,6 +1,8 @@
 package GUI;
 
 import client.Client;
+import client.GUI.PlayPageSnakeOnline;
+import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -8,27 +10,53 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
+import model.skins.Skin;
 import server.Server;
 
 public class Window {
 
     private Server serverSnake = new Server();
-    public Server getServerSnake() {return serverSnake;}
     private Thread serverSnakeThread = new Thread(serverSnake);
-    public Thread getServerSnakeThread() {return serverSnakeThread;}
-    public void replaceServerSnakeThread() {serverSnakeThread = new Thread(serverSnake);}
+    public void startServerSnake(){serverSnakeThread.start();}
+    public void stopServerSnake(){
+        serverSnake.shutdown();
+        serverSnakeThread = new Thread(serverSnake);
+    }
+    public boolean isServerSnakeDone(){
+        return !serverSnakeThread.isAlive();
+    }
+    public String getServerSnakeIp(){return serverSnake.getIp();}
 
     private Server serverSlither = new Server();
-    public Server getServerSlither() {return serverSlither;}
     private Thread serverSlitherThread = new Thread(serverSlither);
-    public Thread getServerSlitherThread() {return serverSlitherThread;}
-    public void replaceServerSlitherThread() {serverSlitherThread = new Thread(serverSlither);}
+    public void startServerSlither(){serverSlitherThread.start();}
+    public void stopServerSlither(){
+        serverSlither.shutdown();
+        serverSlitherThread = new Thread(serverSlither);
+    }
+    public boolean isServerSlitherDone(){return !serverSlitherThread.isAlive();}
+    public String getServerSlitherIp(){return serverSlither.getIp();}
 
     private Client client = new Client();
-    public Client getClient() {return client;}
-    private Thread clientThread = new Thread(client);
-    public Thread getClientThread() {return clientThread;}
-    public void replaceClientThread() {clientThread = new Thread(client);}
+    public void setClientPseudo(String pseudo){client.setPseudo(pseudo);}
+    public void setClientIp(String ip){client.setIp(ip);}
+    public void setClientSkin(Skin skin){client.setSkin(skin);}
+    public PlayPageSnakeOnline getClientPlayPageSnakeOnline() {return client.getPlayPageSnakeOnline();}
+
+    private Task<Void> clientTask = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            // long-running task
+            client.run();
+            return null;
+        }
+    };
+    private Thread clientThread = new Thread(clientTask);
+    public void startClient(){clientThread.start();}
+    public void stopClient(){
+        client.shutdown();
+        clientThread = new Thread(clientTask);
+    }
 
     private EngineSlither offlineSlither;
     private EngineSnake offlineSnake;

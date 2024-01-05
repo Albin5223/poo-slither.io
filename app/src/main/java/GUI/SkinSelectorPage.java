@@ -3,7 +3,6 @@ package GUI;
 import GUI.customButton.ButtonNotClickeablePixelFont;
 import GUI.customButton.ButtonPixelFont;
 import externData.ImageBank;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,21 +69,17 @@ public class SkinSelectorPage extends Page {
         });
 
         play.setOnAction(e -> {
-            window.getClient().setSkin(allSkins[currentSkin]);
+            window.setClientSkin(allSkins[currentSkin]);
             clear();
             window.getScene().setOnKeyPressed(ev ->{
                 if(ev.getCode() == KeyCode.ESCAPE){
-                    window.getClient().shutdown();
+                    window.stopClient();
                     window.switchToMenuPage();
-                    window.replaceClientThread();
                 }
             });
             
-            this.setBackground(ImageBank.wallpaper_dark_bridge);
-            window.getLayout().getChildren().add(window.getClient().getPlayPageSnakeOnline());
-            Platform.runLater(window.getClient());
-           
-            
+            window.getLayout().getChildren().add(window.getClientPlayPageSnakeOnline());
+            window.startClient();
         });
 
         skinImageView = isSnake ? new ImageView(allSnakeImages[currentSkin]) : new ImageView(allSlitherImages[currentSkin]);

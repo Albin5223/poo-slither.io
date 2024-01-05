@@ -64,6 +64,10 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         return false;
     }
 
+    public ArrayList<Snake<Type,O>> getSnakes() {
+        return new ArrayList<Snake<Type,O>>(plateau.values());
+    }
+
 
     /**
      * Add a snake to the board

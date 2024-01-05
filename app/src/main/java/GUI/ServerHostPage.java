@@ -37,7 +37,7 @@ public class ServerHostPage extends Page {
 
         layout.getChildren().add(titre);
 
-        if((isSnake ? window.getServerSnake() : window.getServerSlither()).isDone()){
+        if((isSnake ? window.isServerSnakeDone() : window.isServerSlitherDone())){
             createPageDoneServer(layout);
         } else {
             createPageRunningServer(layout);
@@ -51,17 +51,15 @@ public class ServerHostPage extends Page {
 
     private void createPageRunningServer(VBox layout) {
 
-        IP = new ButtonNotClickeablePixelFont("IP : " + (isSnake ? window.getServerSnake().getIp() : window.getServerSlither().getIp()), 70);
+        IP = new ButtonNotClickeablePixelFont("IP : " + (isSnake ? window.getServerSnakeIp() : window.getServerSlitherIp()), 70);
 
         stopServer = new ButtonPixelFont("STOP SERVER", 70, true);
         stopServer.setOnAction(e -> {
             if(isSnake){
-                window.getServerSnake().shutdown();
-                window.replaceServerSnakeThread();
+                window.stopServerSnake();
             }
             else{
-                window.getServerSlither().shutdown();
-                window.replaceServerSlitherThread();
+                window.stopServerSlither();
             }
             window.switchToServerHostPage(isSnake);
         });
@@ -75,10 +73,10 @@ public class ServerHostPage extends Page {
         startServer = new ButtonPixelFont("START SERVER", 70, true);
         startServer.setOnAction(e -> {
             if (isSnake) {
-                window.getServerSnakeThread().start();
+                window.startServerSnake();
             }
             else{
-                window.getServerSlitherThread().start();
+                window.startServerSlither();
             }
             window.switchToServerHostPage(isSnake);
         });

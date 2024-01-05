@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import client.GUI.PlayPageSnakeOnline;
 import interfaces.Data;
@@ -13,6 +14,7 @@ import interfaces.GameBorder;
 import interfaces.Observable;
 import interfaces.Observer;
 import interfaces.Turnable.Turning;
+import javafx.application.Platform;
 import interfaces.Orientation.Direction;
 import model.SnakeData;
 import model.coordinate.Coordinate;
@@ -53,8 +55,6 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
         return playPageSnakeOnline;
     }
     ArrayList<Observer<Integer, Direction>> observers = new ArrayList<Observer<Integer, Direction>>();
-        
-    private boolean done = false;
 
     public Client(){
         playPageSnakeOnline = new PlayPageSnakeOnline();
@@ -65,68 +65,60 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
 
     @Override
     public void run() {
-        try{
+        try {
             System.out.println("Client started");
-            
-            done = false;
+
             client = new Socket(ip, Server.port);
-            
+    
             System.out.println("Client connected");
-            
-
+    
             ois = new ObjectInputStream(client.getInputStream());
-			oos = new ObjectOutputStream(client.getOutputStream());
-
-
+            oos = new ObjectOutputStream(client.getOutputStream());
+    
             //Envoyer les messages depuis le terminal
             InputHandler input = new InputHandler();
             Thread t = new Thread(input);
             t.start();
-
+    
             PaquetSnake msg = (PaquetSnake) ois.readObject();
             System.out.println(msg.getMessage());
             snake = msg.getSnake();
             System.out.println("Mon first snake est en : " + snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
             plateau = (PlateauInteger) snake.getPlateau();
-        
-
+    
             //Recevoir les messages
-
-
-            
+    
             System.out.println("Client is waiting for messages");
-            while(!done){
-                try{
-                    
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
                     PaquetSnake message = (PaquetSnake) ois.readObject();
                     this.snake = message.getSnake();
                     this.plateau = (PlateauInteger) this.snake.getPlateau();
-                    
-                    
+    
                     System.out.println("Mon snake est en : " + this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
-                    notifyObservers();
-
-                    
+                    Platform.runLater(() -> notifyObservers());
+    
+                } catch (ClassNotFoundException e) {
                 }
-                catch (ClassNotFoundException e){
-                }
-                
-                
             }
-            System.out.println("Client is done");
-        }catch(IOException | ClassNotFoundException e){
-            
+            shutdown(); // Au cas où le Thread est interrompu avant d'avoir pu faire appel à shutdown()
+        } catch (IOException | ClassNotFoundException e) {
+    
         }
     }
 
     public void shutdown(){
-        done = true;
+        if(!Thread.currentThread().isInterrupted()){
+            Thread.currentThread().interrupt();
+        }
         try {
-            oos.writeObject(PaquetSnake.createPaquetToQuit());
-            
-            ois.close();
-            oos.close();
-            client.close();
+            if(client != null && !client.isClosed()){
+                System.out.println("Client is shuting down");
+                oos.writeObject(PaquetSnake.createPaquetToQuit());
+                ois.close();
+                oos.close();
+                client.close();
+            }
         } catch (IOException e) {
             
         }
@@ -144,7 +136,7 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
             try{
                 oos.reset();
                 oos.writeObject(PaquetSnake.createPaquetWithMessageAndSkin(pseudo,skin));
-                while(!done){
+                while(!Thread.currentThread().isInterrupted()){
                     oos.writeObject(PaquetSnake.createPaquetWithTurning(turning));
                 }
                 
@@ -156,9 +148,9 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
 
     @Override
     public ArrayList<SnakeData<Integer, Direction>> getAllSnake() {
-        ArrayList<SnakeData<Integer, Direction>> allSnake = new ArrayList<SnakeData<Integer, Direction>>();
-        // TODO : ne donner que les snakes qui sont dans le rayon de vision de l'écran
-        return allSnake;
+            return plateau.getSnakes().stream()
+                   .map(snake -> new SnakeData<Integer, Direction>(snake))
+                   .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

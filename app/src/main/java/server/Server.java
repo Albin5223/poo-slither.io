@@ -22,7 +22,6 @@ import model.skins.Skin;
 public class Server implements Runnable{
 
     private ArrayList<ConnexionHandle> clients;
-    private boolean done = true;
     private ServerSocket server;
     public final static int port = 3000;
 
@@ -84,7 +83,7 @@ public class Server implements Runnable{
 
                 //Lis les objets qu'il reçoit
                 
-                while(!done){
+                while(!Thread.currentThread().isInterrupted()){
                     PaquetSnake message = (PaquetSnake) ois.readObject();
                     if(message.isQuit()){
                         System.out.println("Client "+name+" disconnected");
@@ -177,14 +176,13 @@ public class Server implements Runnable{
 
     @Override
     public void run() {
-        done = false;
         try {
             server = new ServerSocket(port);
 
             engine.run();
             
             pool = Executors.newCachedThreadPool();
-            while(!done){
+            while(!Thread.currentThread().isInterrupted()){
                 Socket client = server.accept();
                 ConnexionHandle handle = new ConnexionHandle(client);
                 clients.add(handle);
@@ -200,7 +198,9 @@ public class Server implements Runnable{
 
 
     public void shutdown(){
-        done = true;
+        if(!Thread.currentThread().isInterrupted()){    // Garantie
+            Thread.currentThread().interrupt();
+        }
         try {
             if(server != null && !server.isClosed()){
                 server.close();
@@ -213,10 +213,6 @@ public class Server implements Runnable{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    public boolean isDone(){
-        return done;
     }
 
     public String getIp(){
