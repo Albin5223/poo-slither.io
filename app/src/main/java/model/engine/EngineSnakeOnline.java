@@ -31,13 +31,20 @@ public class EngineSnakeOnline extends EngineSnake{
     }
 
     public void removeSnake(Snake<Integer,Direction> snake){
+        SnakeMoverOnline<Integer,Direction> s = null;
         for(SnakeMover<Integer,Direction> snakeMover : this.snakeMovers){
             if(snakeMover.getSnake() == snake){
-                snakeMover.stop();
-                this.snakeMovers.remove(snakeMover);
+                s = (SnakeMoverOnline<Integer, Direction>) snakeMover;
                 break;
             }
         }
+        if(s == null){
+            System.out.println("SnakeMoverOnline not found while removing");
+            return;
+        }
+        s.stop();
+        this.snakeMovers.remove(s);
+        this.plateau.removeSnake(snake);
     }
 
     public void stop(){

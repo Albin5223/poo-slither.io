@@ -1,8 +1,8 @@
 package GUI.PlayPage;
 
+import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.Food;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,9 +65,9 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
 
         BorderInteger border = (BorderInteger) data.getGameBorder();
 
-        List<Food<Integer,Direction>> allFood = data.getAllFood(border.getCenter(),border.getMinRadius()); // Avoid recalculating it
-        for (Food<Integer,Direction> food : allFood) {
-            Image image = food.getImage();
+        List<FoodData<Integer,Direction>> allFood = data.getAllFood(border.getCenter(),border.getMinRadius()); // Avoid recalculating it
+        for (FoodData<Integer,Direction> food : allFood) {
+            Image image = ImageBank.getFoodImage(food.getFoodApparence());
             if(image != null){
                 ImageView imageView = new ImageView(image);
                 imageView.setX(D_X + food.getCenter().getX().doubleValue() - food.getRadius());

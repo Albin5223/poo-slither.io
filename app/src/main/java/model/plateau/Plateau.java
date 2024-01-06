@@ -88,7 +88,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * @param snake the snake to remove
      * @return true if the snake was on the board, false otherwise
      */
-    protected boolean removeSnake(Snake<Type,O> snake) {
+    public boolean removeSnake(Snake<Type,O> snake) {
         synchronized(lock) {
             return plateau.remove(snake.getHead().getCenter()) != null;
         }

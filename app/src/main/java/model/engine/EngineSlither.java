@@ -10,9 +10,9 @@ import interfaces.Observer;
 import interfaces.Orientation.Angle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
+import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.Food;
 import model.plateau.Plateau;
 import model.plateau.PlateauDouble;
 import model.plateau.PlateauDouble.BorderDouble;
@@ -103,7 +103,7 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public List<Food<Double,Angle>> getAllFood(Coordinate<Double,Angle> coordinate, double radius) {
+    public List<FoodData<Double,Angle>> getAllFood(Coordinate<Double,Angle> coordinate, double radius) {
         return plateau.getFoods().getRenderZone(coordinate, radius);
     }
 
@@ -168,7 +168,7 @@ public class EngineSlither implements Engine<Double,Angle>{
     }
 
     @Override
-    public Snake<Double,Angle> getMainSnake() {
+    public Coordinate<Double,Angle> getMainSnakeCenter() {
         return null;
     }
 

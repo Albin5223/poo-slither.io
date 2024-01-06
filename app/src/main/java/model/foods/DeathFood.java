@@ -1,9 +1,7 @@
 package model.foods;
 
-import externData.ImageBank;
 import externData.OurColors;
 import interfaces.Orientation;
-import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
@@ -11,6 +9,7 @@ import model.plateau.Snake;
 public abstract class DeathFood<Type extends Number & Comparable<Type>, O extends Orientation<O>> extends Food<Type,O> {
 
     private final int value;
+    private final OurColors color = OurColors.getRandomColor();
 
     public DeathFood(Coordinate<Type, O> coordinate, double radius, int value) {
         super(coordinate, radius, false, 0);
@@ -28,8 +27,7 @@ public abstract class DeathFood<Type extends Number & Comparable<Type>, O extend
     }
 
     @Override
-    public Image getImage(){
-        OurColors color = OurColors.getRandomColor();
-        return ImageBank.getCircleImage(color);
+    public final OurColors getColor() {
+        return color;
     }
 }

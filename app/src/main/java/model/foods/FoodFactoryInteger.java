@@ -3,11 +3,8 @@ package model.foods;
 import java.util.ArrayList;
 
 import configuration.ConfigurationFoodInteger;
-import externData.ImageBank;
 import externData.OurColors;
-import externData.OurSpecials;
 import interfaces.Orientation.Direction;
-import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
 
@@ -66,8 +63,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getCircleImage(color);
+        public OurColors getColor() {
+            return color;
         }
     }
 
@@ -88,8 +85,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.SHIELD);
+        public OurColors getColor() {
+            return OurColors.SHIELD;
         }
     }
 
@@ -113,14 +110,12 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getCircleImage(color);
+        public OurColors getColor() {
+            return color;
         }
     }
 
     public static class KillerFoodInteger extends Food<Integer,Direction> {
-
-        
 
         public KillerFoodInteger(Coordinate<Integer, Direction> coordinate) {
             super(coordinate, ConfigurationFoodInteger.KILLER_FOOD_RADIUS, ConfigurationFoodInteger.KILLER_FOOD_RESPAWN, ConfigurationFoodInteger.KILLER_FOOD_PROBABILITY);
@@ -137,8 +132,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.SKULL);
+        public OurColors getColor() {
+            return OurColors.SKULL;
         }
     }
 
@@ -160,8 +155,8 @@ public class FoodFactoryInteger extends FoodFactory<Integer,Direction> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.POISON);
+        public OurColors getColor() {
+            return OurColors.POISON;
         }
     }
 

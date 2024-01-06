@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import interfaces.Orientation;
+import model.FoodData;
 import model.foods.Food;
 import model.plateau.Snake;
 
@@ -47,8 +48,8 @@ public class Grid<Type extends Number & Comparable<Type>, O extends Orientation<
         return nearbyFoods;
     }
 
-    public List<Food<Type, O>> getRenderZone(Coordinate<Type, O> coordinate, double radius) {
-        List<Food<Type, O>> nearbyFoods = new ArrayList<>();
+    public ArrayList<FoodData<Type,O>> getRenderZone(Coordinate<Type, O> coordinate, double radius) {
+        ArrayList<FoodData<Type,O>> nearbyFoods = new ArrayList<>();
         int gridRadius = (int) Math.ceil(radius / gridSize);
     
         int centerX = (int) (coordinate.getX().doubleValue() / gridSize);
@@ -61,7 +62,7 @@ public class Grid<Type extends Number & Comparable<Type>, O extends Orientation<
                 for (Food<Type, O> food : foodsInGrid) {
                     double distance = coordinate.distanceTo(food.getCenter());
                     if (distance <= radius) {
-                        nearbyFoods.add(food);
+                        nearbyFoods.add(new FoodData<Type,O>(food));
                     }
                 }
             }

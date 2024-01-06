@@ -30,7 +30,7 @@ public class SnakeMoverOnline<Type extends Number & Comparable<Type>, O extends 
         // call snake's method to update position
         try {
             snake.move();
-            server.sendSnakeAll();
+            server.sendInformationsToDrawToAll();
             engine.notifyObservers();
         } catch (ExceptionCollision e) {
             snake.reset();

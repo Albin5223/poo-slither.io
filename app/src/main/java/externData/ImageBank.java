@@ -87,6 +87,19 @@ public class ImageBank {
         return null;
     }
 
+    public static Image getFoodImage(OurColors color){
+        switch (color){
+            case SKULL:
+                return getSpecialImage(OurSpecials.SKULL);
+            case POISON:
+                return getSpecialImage(OurSpecials.POISON);
+            case SHIELD:
+                return getSpecialImage(OurSpecials.SHIELD);
+            default:
+                return getCircleImage(color);
+        }
+    }
+
     public void loadImages() throws NullPointerException {
 
         for(OurColors c : SlitherColors){

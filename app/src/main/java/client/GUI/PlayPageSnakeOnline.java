@@ -19,11 +19,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.Food;
 import model.plateau.PlateauInteger.BorderInteger;
-import model.plateau.Snake;
 import model.skins.Skin;
 
 public class PlayPageSnakeOnline extends Pane implements Observer<Integer, Direction> {
@@ -54,23 +53,23 @@ public class PlayPageSnakeOnline extends Pane implements Observer<Integer, Direc
     @Override
     public void update(Data<Integer, Direction> data) {
         System.out.println("Updating the play page...");
-        Snake<Integer,Direction> snake = data.getMainSnake();
-        if(snake == null){
-            System.out.println("Client's snake is null...");
+        Coordinate<Integer,Direction> location = data.getMainSnakeCenter();
+        if(location == null){
+            System.out.println("Client's location is null...");
             return;
         }
 
         this.getChildren().clear();
 
-        int D_X = (int) (Window.WITDH/2 - snake.getHead().getCenter().getX().doubleValue());
-        int D_Y = (int) (Window.HEIGHT/2 - snake.getHead().getCenter().getY().doubleValue());
+        int D_X = (int) (Window.WITDH/2 - location.getX().doubleValue());
+        int D_Y = (int) (Window.HEIGHT/2 - location.getY().doubleValue());
 
         BorderInteger border = (BorderInteger) data.getGameBorder();
 
         double renderRadius = Math.min(Window.HEIGHT, Window.WITDH);
-        List<Food<Integer,Direction>> allFood = data.getAllFood(snake.getHead().getCenter(),renderRadius); // Avoid recalculating it
-        for (Food<Integer,Direction> food : allFood) {
-            Image image = food.getImage();
+        List<FoodData<Integer,Direction>> allFood = data.getAllFood(location,renderRadius); // Avoid recalculating it
+        for (FoodData<Integer,Direction> food : allFood) {
+            Image image = ImageBank.getFoodImage(food.getFoodApparence());
             if(image != null){
                 ImageView imageView = new ImageView(image);
                 imageView.setX(D_X + food.getCenter().getX().doubleValue() - food.getRadius());

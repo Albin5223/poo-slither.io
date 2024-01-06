@@ -3,10 +3,12 @@ package externData;
 import javafx.scene.paint.Color;
 
 public enum OurColors {
-    RED, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, BROWN, GRAY, WHITE;
+    RED, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, BROWN, GRAY, WHITE, SHIELD, POISON, SKULL;
+
+    public static int NB_SPECIALS = 3;
 
     public static OurColors getRandomColor(){
-        int random = (int) (Math.random() * OurColors.values().length);
+        int random = (int) (Math.random() * (OurColors.values().length - NB_SPECIALS));
         return OurColors.values()[random];
     }
 

@@ -10,9 +10,9 @@ import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
+import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.Food;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.plateau.Snake;
 import model.plateau.Plateau;
@@ -96,7 +96,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public List<Food<Integer,Direction>> getAllFood(Coordinate<Integer,Direction> coord, double radius) {
+    public List<FoodData<Integer,Direction>> getAllFood(Coordinate<Integer,Direction> coord, double radius) {
         return plateau.getFoods().getRenderZone(coord, radius);
     }
 
@@ -171,7 +171,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
     }
 
     @Override
-    public Snake<Integer,Direction> getMainSnake() {
+    public Coordinate<Integer,Direction> getMainSnakeCenter() {
         return null;
     }
 

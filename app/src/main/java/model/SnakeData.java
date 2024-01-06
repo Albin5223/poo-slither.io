@@ -7,45 +7,55 @@ import model.skins.Skin;
 
 import java.util.ArrayList;
 
-public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
+public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements java.io.Serializable {
 
-    private Snake<Type, O> snake;
+    private Coordinate<Type, O> head;
+    private ArrayList<Coordinate<Type, O>> tail;
+    private Skin skin;
+    private boolean shielded;
+    private boolean poisoned;
+    private double radius;
+    private O orientation;
 
     public SnakeData(Snake<Type, O> snake) {
-        this.snake = snake;
+        this.head = snake.getHead().getCenter();
+        this.tail = new ArrayList<Coordinate<Type, O>>();
+        for (Snake<Type,O>.SnakePart snakePart : snake.getTail()) {
+            this.tail.add(snakePart.getCenter());
+        }
+        this.skin = snake.getSkin();
+        this.shielded = snake.isShielded();
+        this.poisoned = snake.isPoisoned();
+        this.radius = snake.getHitboxRadius();
+        this.orientation = snake.getHead().getOrientation();
     }
 
     public Skin getSkin() {
-        return snake.getSkin();
+        return skin;
     }
 
     public boolean isShielded() {
-        return snake.isShielded();
+        return shielded;
     }
 
     public boolean isPoisoned() {
-        return snake.isPoisoned();
+        return poisoned;
     }
 
     public Coordinate<Type, O> getHead() {
-        return snake.getHead().getCenter();
+        return head;
     }
 
     public O getOrientation() {
-        return snake.getHead().getOrientation();
+        return orientation;
     }
 
     public double getRadius() {
-        return snake.getHitboxRadius();
+        return radius;
     }
 
     public ArrayList<Coordinate<Type, O>> getTail() {
-        ArrayList<Snake<Type,O>.SnakePart> tail = snake.getTail();
-        ArrayList<Coordinate<Type, O>> tailCoordinate = new ArrayList<Coordinate<Type, O>>();   // TODO : peut-être faire un map
-        for (Snake<Type,O>.SnakePart snakePart : tail) {
-            tailCoordinate.add(snakePart.getCenter());
-        }
-        return tailCoordinate;
+        return tail;
     }
     
     

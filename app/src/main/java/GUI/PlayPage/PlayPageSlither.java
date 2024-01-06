@@ -18,9 +18,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
-import model.foods.Food;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.skins.Skin; 
 
@@ -72,9 +72,9 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
          * ATTENTION :
          * Quand on passera à la version ou il y a un snake principal à suivre, il faudra placer le centre sur ce snake
          */
-        List<Food<Double,Angle>> allFood = data.getAllFood(border.getCenter(),border.map_radius);   // Avoid recalculating it
-        for (Food<Double,Angle> food : allFood) {
-            Image image = food.getImage();
+        List<FoodData<Double,Angle>> allFood = data.getAllFood(border.getCenter(),border.map_radius);   // Avoid recalculating it
+        for (FoodData<Double,Angle> food : allFood) {
+            Image image = ImageBank.getFoodImage(food.getFoodApparence());
             if(image != null){
                 ImageView imageView = new ImageView(image);
                 imageView.setX(D_X + food.getCenter().getX().doubleValue() - food.getRadius());

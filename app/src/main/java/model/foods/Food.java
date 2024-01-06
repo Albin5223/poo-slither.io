@@ -2,8 +2,8 @@ package model.foods;
 
 import java.io.Serializable;
 
+import externData.OurColors;
 import interfaces.Orientation;
-import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
@@ -38,9 +38,7 @@ public abstract class Food<Type extends Number & Comparable<Type>, O extends Ori
         return probability;
     }
 
-    public abstract Image getImage();
-
     public abstract FoodType getFoodType();
-
+    public abstract OurColors getColor();
     public abstract void actOnSnake(Snake<Type,O> snake);
 }

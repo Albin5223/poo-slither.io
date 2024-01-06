@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import configuration.ConfigurationFoodDouble;
-import externData.ImageBank;
 import externData.OurColors;
-import externData.OurSpecials;
 import interfaces.Orientation.Angle;
-import javafx.scene.image.Image;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.Snake;
@@ -68,8 +65,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getCircleImage(color);
+        public OurColors getColor() {
+            return color;
         }
     }
 
@@ -93,8 +90,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getCircleImage(color);
+        public OurColors getColor() {
+            return color;
         }
     }
 
@@ -115,8 +112,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.POISON);
+        public OurColors getColor() {
+            return OurColors.POISON;
         }
     }
 
@@ -137,8 +134,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.SKULL);
+        public OurColors getColor() {
+            return OurColors.SKULL;
         }
     }
 
@@ -191,8 +188,8 @@ public class FoodFactoryDouble extends FoodFactory<Double,Angle> {
         }
 
         @Override
-        public Image getImage() {
-            return ImageBank.getSpecialImage(OurSpecials.SHIELD);
+        public OurColors getColor() {
+            return OurColors.SHIELD;
         }
     }
 }
