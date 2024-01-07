@@ -171,7 +171,12 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public Coordinate<Double,Angle> getMainSnakeCenter() {
-        return null;
+        if(players.size() == 1){
+            return players.get(0).getSnake().getHead().getCenter();
+        }
+        else{
+            return null;
+        }
     }
 
 }

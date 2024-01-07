@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import GUI.Window;
-import client.GUI.PlayPageSnakeOnline;
+import GUI.PlayPage.PlayPageSnake;
 import interfaces.Data;
 import interfaces.GameBorder;
 import interfaces.Observable;
@@ -97,14 +97,14 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
         }
     }
 
-    PlayPageSnakeOnline playPageSnakeOnline;
-    public PlayPageSnakeOnline getPlayPageSnakeOnline() {
+    PlayPageSnake playPageSnakeOnline;
+    public PlayPageSnake getPlayPageSnakeOnline() {
         return playPageSnakeOnline;
     }
     ArrayList<Observer<Integer, Direction>> observers = new ArrayList<Observer<Integer, Direction>>();
 
     public Client(){
-        playPageSnakeOnline = new PlayPageSnakeOnline();
+        playPageSnakeOnline = new PlayPageSnake();
         observers.add(playPageSnakeOnline);
     }
     

@@ -4,6 +4,7 @@ package GUI.PlayPage;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.Window;
 import externData.ImageBank;
 import externData.OurColors;
 import interfaces.Data;
@@ -21,19 +22,11 @@ import javafx.scene.shape.Circle;
 import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
+import model.coordinate.CoordinateDouble;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.skins.Skin; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
-
-    private int D_X;
-    private int D_Y;
-
-    public PlayPageSlither(int D_X, int D_Y) {
-        this.D_X = D_X/2;
-        this.D_Y = D_Y/2;
-        
-    }
 
     private void shieldEffect(ImageView imageView){
         Glow glow = new Glow();
@@ -62,6 +55,14 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
     public void update(Data<Double,Angle> data) {
         this.getChildren().clear();
 
+        Coordinate<Double,Angle> location = data.getMainSnakeCenter();
+        if(location == null){
+            location = new CoordinateDouble(0.,0.);
+        }
+
+        int D_X = (int) (Window.WITDH/2 - location.getX().doubleValue());
+        int D_Y = (int) (Window.HEIGHT/2 - location.getY().doubleValue());
+
         BorderDouble border = (BorderDouble) data.getGameBorder();
 
         /*
@@ -72,7 +73,8 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
          * ATTENTION :
          * Quand on passera à la version ou il y a un snake principal à suivre, il faudra placer le centre sur ce snake
          */
-        List<FoodData<Double,Angle>> allFood = data.getAllFood(border.getCenter(),border.map_radius);   // Avoid recalculating it
+        double renderRadius = Math.min(Window.HEIGHT, Window.WITDH);
+        List<FoodData<Double,Angle>> allFood = data.getAllFood(location,renderRadius);   // Avoid recalculating it
         for (FoodData<Double,Angle> food : allFood) {
             Image image = ImageBank.getFoodImage(food.getFoodApparence());
             if(image != null){

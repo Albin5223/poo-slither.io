@@ -3,10 +3,12 @@ package GUI.PlayPage;
 import model.FoodData;
 import model.SnakeData;
 import model.coordinate.Coordinate;
+import model.coordinate.CoordinateInteger;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.Window;
 import externData.ImageBank;
 import externData.OurColors;
 import interfaces.Data;
@@ -26,15 +28,6 @@ import model.skins.Skin;
 import javafx.scene.paint.Color;
 
 public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
-
-    private int D_X;
-    private int D_Y;
-
-    public PlayPageSnake(int D_X, int D_Y) {
-        this.D_X = D_X;
-        this.D_Y = D_Y;   
-    }
-
     
     private void shieldEffect(ImageView imageView){
         Glow glow = new Glow();
@@ -63,9 +56,18 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
     public void update(Data<Integer,Direction> data) {
         this.getChildren().clear();
 
+        Coordinate<Integer,Direction> location = data.getMainSnakeCenter();
+        if(location == null){
+            location = new CoordinateInteger(0,0);
+        }
+
+        int D_X = (int) (Window.WITDH/2 - location.getX().doubleValue());
+        int D_Y = (int) (Window.HEIGHT/2 - location.getY().doubleValue());
+
         BorderInteger border = (BorderInteger) data.getGameBorder();
 
-        List<FoodData<Integer,Direction>> allFood = data.getAllFood(border.getCenter(),border.getMinRadius()); // Avoid recalculating it
+        double renderRadius = Math.min(Window.HEIGHT, Window.WITDH);
+        List<FoodData<Integer,Direction>> allFood = data.getAllFood(location,renderRadius); // Avoid recalculating it
         for (FoodData<Integer,Direction> food : allFood) {
             Image image = ImageBank.getFoodImage(food.getFoodApparence());
             if(image != null){

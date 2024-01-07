@@ -16,6 +16,9 @@ public class HumanSlitherPlayer implements HumanPlayer{
         this.controler = controler;
     }
 
+    public Snake<Double,Angle> getSnake(){
+        return snake;
+    }
 
     @Override
     public void keyPressed(KeyEvent ev) {

@@ -17,6 +17,10 @@ public class HumanSnakePlayer implements HumanPlayer{
         this.controler = controler;
     }
 
+    public SnakeInteger getSnake(){
+        return snake;
+    }
+
 
     @Override
     public void keyPressed(KeyEvent ev) {

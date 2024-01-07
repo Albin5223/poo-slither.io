@@ -1,7 +1,7 @@
 package GUI;
 
+import GUI.PlayPage.PlayPageSnake;
 import client.Client;
-import client.GUI.PlayPageSnakeOnline;
 import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationFoodInteger;
 import configuration.ConfigurationSnakeDouble;
@@ -48,7 +48,7 @@ public class Window {
     public void setClientPseudo(String pseudo){client.setPseudo(pseudo);}
     public void setClientIp(String ip){client.setIp(ip);}
     public void setClientSkin(Skin skin){client.setSkin(skin);}
-    public PlayPageSnakeOnline getClientPlayPageSnakeOnline() {return client.getPlayPageSnakeOnline();}
+    public PlayPageSnake getClientPlayPageSnakeOnline() {return client.getPlayPageSnakeOnline();}
 
     private Task<Void> clientTask = new Task<Void>() {
         @Override

@@ -70,7 +70,7 @@ public class PageMainOptionOffline extends Page {
         clear();
         Scene scene = window.getScene();
 
-        PlayPageSlither playPageSlither = new PlayPageSlither((int) scene.getWidth(),(int)scene.getHeight());
+        PlayPageSlither playPageSlither = new PlayPageSlither();
         window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.configFoodSlither, window.configSnakeSlither));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
@@ -112,7 +112,7 @@ public class PageMainOptionOffline extends Page {
         clear();
         Scene scene = window.getScene();
 
-        PlayPageSnake playPageSnake = new PlayPageSnake((int) scene.getWidth()/2,(int)scene.getHeight()/2);
+        PlayPageSnake playPageSnake = new PlayPageSnake();
         window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.configFoodSnake, window.configSnakeSnake));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){

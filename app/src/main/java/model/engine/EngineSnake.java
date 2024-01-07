@@ -174,7 +174,12 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public Coordinate<Integer,Direction> getMainSnakeCenter() {
-        return null;
+        if(players.size() == 1){
+            return players.get(0).getSnake().getHead().getCenter();
+        }
+        else{
+            return null;
+        }
     }
 
     
