@@ -2,6 +2,10 @@ package GUI;
 
 import client.Client;
 import client.GUI.PlayPageSnakeOnline;
+import configuration.ConfigurationFoodDouble;
+import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeDouble;
+import configuration.ConfigurationSnakeInteger;
 import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -62,7 +66,12 @@ public class Window {
     }
 
     private EngineSlither offlineSlither;
+    public final ConfigurationFoodDouble configFoodSlither = new ConfigurationFoodDouble();
+    public final ConfigurationSnakeDouble configSnakeSlither = new ConfigurationSnakeDouble();
+
     private EngineSnake offlineSnake;
+    public final ConfigurationFoodInteger configFoodSnake = new ConfigurationFoodInteger();
+    public final ConfigurationSnakeInteger configSnakeSnake = new ConfigurationSnakeInteger();
 
     public static final Rectangle2D screen = Screen.getPrimary().getBounds();
     public static final int WITDH = (int) screen.getWidth();

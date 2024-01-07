@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import exceptions.ExceptionCollision;
 import exceptions.ExceptionCollisionWithFood;
 import exceptions.ExceptionCollisionWithSnake;
+import interfaces.ConfigurationSnake;
 import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.coordinate.Grid;
-import model.foods.DeathFood;
 import model.foods.Food;
 import model.foods.FoodFactory;
+
 import java.io.Serializable;
 
 public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable permits PlateauDouble, PlateauInteger {
@@ -23,9 +24,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     
     protected final FoodFactory<Type,O> foodFactory;
     protected final GameBorder<Type,O> border;
-
-    protected final int MAX_FOOD_COEF = 2;
-    protected final int NB_FOOD;
+    protected final ConfigurationSnake snakeConfig;
+    public ConfigurationSnake getSnakeConfig() {return snakeConfig;}
 
     /**
      * The lock used to synchronize the access to the board.
@@ -35,10 +35,10 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     private Objet lock = new Objet();
 
 
-    protected Plateau(int nbFood, FoodFactory<Type,O> foodFactory, GameBorder<Type,O> border) {
-        this.NB_FOOD = nbFood;
+    protected Plateau(FoodFactory<Type,O> foodFactory, ConfigurationSnake snakeConfig, GameBorder<Type,O> border) {
         this.foodFactory = foodFactory;
         this.border = border;
+        this.snakeConfig = snakeConfig;
         
         this.addAllFood();
     }
@@ -104,9 +104,9 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
 
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
-            ArrayList<DeathFood<Type,O>> deathFoods = foodFactory.getDeathFoods(snake);
-            if(foodGrid.size() > MAX_FOOD_COEF*NB_FOOD){return;}
-            for(DeathFood<Type,O> food : deathFoods){
+            ArrayList<FoodFactory<Type,O>.DeathFood> deathFoods = foodFactory.getDeathFoods(snake);
+            if(foodGrid.size() > foodFactory.getFoodConfig().getNbFood()*foodFactory.getFoodConfig().getMaxFoodCoef()){return;}
+            for(FoodFactory<Type,O>.DeathFood food : deathFoods){
                 try {
                     addFood(food);
                 } catch ( ExceptionCollisionWithFood e ) {
@@ -134,7 +134,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
     }
 
     private void addAllFood() {
-        for(int i = 0; i < NB_FOOD; i++){
+        for(int i = 0; i < foodFactory.getFoodConfig().getNbFood(); i++){
             addOneFood();
         }
     }

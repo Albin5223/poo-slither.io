@@ -4,11 +4,12 @@ import interfaces.GameBorder;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
-import model.foods.FoodFactoryInteger;
+import model.foods.FoodFactory;
 
 import java.io.Serializable;
 import java.util.Random;
 
+import configuration.ConfigurationFoodInteger;
 import configuration.ConfigurationSnakeInteger;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
@@ -21,12 +22,20 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         public final int yMin;
         public final int yMax;
 
-        public BorderInteger(int xMin, int xMax, int yMin, int yMax) {
+        public final int snakeGap;
+        public final int snakeSize;
+        public final boolean isAlignWithSnake;
+
+        public BorderInteger(int xMin, int xMax, int yMin, int yMax, int snakeGap, int snakeSize, boolean isAlignWithSnake) {
             this.xMin = xMin;
             this.xMax = xMax;
 
             this.yMin = yMin;
             this.yMax = yMax;
+
+            this.snakeGap = snakeGap;
+            this.snakeSize = snakeSize;
+            this.isAlignWithSnake = isAlignWithSnake;
         }
 
         public int getxMin() {
@@ -67,13 +76,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
 
         private Coordinate<Integer, Direction> getRandomCoordinateAlignWithSnake(){
-            int stepSize = ConfigurationSnakeInteger.SNAKE_GAP_BETWEEN_TAIL;
+            int xRange = (xMax - xMin) / snakeGap;
+            int yRange = (yMax - yMin) / snakeGap;
 
-            int xRange = (xMax - xMin) / stepSize;
-            int yRange = (yMax - yMin) / stepSize;
-
-            int x = (new Random().nextInt(xRange) * stepSize) + xMin;
-            int y = (new Random().nextInt(yRange) * stepSize) + yMin;
+            int x = (new Random().nextInt(xRange) * snakeGap) + xMin;
+            int y = (new Random().nextInt(yRange) * snakeGap) + yMin;
             return new CoordinateInteger(x,y);
         }
 
@@ -85,7 +92,7 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
         @Override
         public Coordinate<Integer, Direction> getRandomCoordinate() {
-            if(ConfigurationSnakeInteger.IS_ALIGN_WITH_SNAKE){
+            if(isAlignWithSnake){
                 return getRandomCoordinateAlignWithSnake();
             }
             else{
@@ -110,22 +117,13 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
     }
 
-    //TODO : make a ratio of the size of the map
-    private final static int NB_FOOD = 1000;
-
-    public PlateauInteger(int nbFood, FoodFactoryInteger foodFactory, BorderInteger border) {
-        super(nbFood, foodFactory, border);
+    public PlateauInteger(FoodFactory<Integer,Direction> foodFactory, ConfigurationSnakeInteger config, BorderInteger border) {
+        super(foodFactory, config, border);
     }
 
-    public static PlateauInteger createPlateauSnake(int width, int height){
-        BorderInteger border = new BorderInteger(
-            -width/2, 
-            width/2, 
-            -height/2,
-            height/2
-        );
-
-        PlateauInteger plateau = new PlateauInteger(NB_FOOD, FoodFactoryInteger.build(), border);
+    public static PlateauInteger createPlateauSnake(int width, int height, ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger snakeConfig){
+        BorderInteger border = new BorderInteger(-width/2, width/2, -height/2,height/2, snakeConfig.getGapBetweenTail(), snakeConfig.getBirthHitboxRadius()*2, snakeConfig.isAlignWithSnake());
+        PlateauInteger plateau = new PlateauInteger(new FoodFactory<Integer,Direction>(foodConfig), snakeConfig, border);
         return plateau;
     }
 }

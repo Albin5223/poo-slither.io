@@ -7,8 +7,6 @@ import GUI.customButton.ButtonPixelFont;
 import GUI.optionView.OptionConfigPane;
 import GUI.optionView.PlayerChoosePane;
 import GUI.optionView.SetOfConfiguration;
-import configuration.ConfigurationSnakeDouble;
-import configuration.ConfigurationSnakeInteger;
 import configuration.TouchControler;
 import controleur.ControlerSlither;
 import controleur.ControlerSnake;
@@ -40,30 +38,30 @@ public class PageMainOptionOffline extends Page {
     public void valideConfig(){
         if(isSnake){
             if(optionConfigPane.isReachableWallActivated()){
-                ConfigurationSnakeInteger.TRAVERSABLE_WALL = true;
+                window.configSnakeSnake.setTraversableWall(true);
             }
             if(optionConfigPane.isCollitionWithMeActivated()){
-                ConfigurationSnakeInteger.CAN_COLLIDING_WITH_HIMSELF = true;
+                window.configSnakeSnake.setCollidingWithHimself(true);
             }
             if(optionConfigPane.greedyDeathActivated()){
-                ConfigurationSnakeInteger.IS_DEATH_FOOD = true;
+                window.configSnakeSnake.setDeathFood(true);
             }
             if(optionConfigPane.growingSnakeActivated()){
-                ConfigurationSnakeInteger.RADIUS_IS_GROWING = true;
+                window.configSnakeSnake.setRadiusGrowing(true);
             }
         }
         else{
             if(optionConfigPane.isReachableWallActivated()){
-                ConfigurationSnakeDouble.IS_TRAVERSABLE_WALL = true;
+                window.configSnakeSlither.setTraversableWall(true);
             }
             if(optionConfigPane.isCollitionWithMeActivated()){
-                ConfigurationSnakeDouble.CAN_COLLIDING_WITH_HIMSELF = true;
+                window.configSnakeSlither.setCollidingWithHimself(true);
             }
             if(optionConfigPane.greedyDeathActivated()){
-                ConfigurationSnakeDouble.IS_DEATH_FOOD = true;
+                window.configSnakeSlither.setDeathFood(true);
             }
             if(optionConfigPane.growingSnakeActivated()){
-                ConfigurationSnakeDouble.RADIUS_IS_GROWING = true;
+                window.configSnakeSlither.setRadiusGrowing(true);
             }
         }
     }
@@ -73,7 +71,7 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSlither playPageSlither = new PlayPageSlither((int) scene.getWidth(),(int)scene.getHeight());
-        window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2));
+        window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.configFoodSlither, window.configSnakeSlither));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
             KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
@@ -115,7 +113,7 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSnake playPageSnake = new PlayPageSnake((int) scene.getWidth()/2,(int)scene.getHeight()/2);
-        window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight()));
+        window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.configFoodSnake, window.configSnakeSnake));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
             KeyboardControler<Integer,Direction> controler = new ControlerSnake (SetOfConfiguration.commandMapingPanes.get(i));

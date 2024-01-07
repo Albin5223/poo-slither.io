@@ -3,6 +3,8 @@ package model.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import configuration.ConfigurationFoodDouble;
+import configuration.ConfigurationSnakeDouble;
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -61,9 +63,9 @@ public class EngineSlither implements Engine<Double,Angle>{
         };
     }
 
-    public static EngineSlither createGame(int radius){
+    public static EngineSlither createGame(int radius, ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble snakeConfig){
         ArrayList<SnakeDouble> s = new ArrayList<>();
-        PlateauDouble p = PlateauDouble.createPlateauSlitherio(radius);
+        PlateauDouble p = PlateauDouble.createPlateauSlitherio(radius, foodConfig, snakeConfig);
         return new EngineSlither(s,p);
     }
 
@@ -75,7 +77,7 @@ public class EngineSlither implements Engine<Double,Angle>{
         
     }
 
-    public void addPlayer(KeyboardControler<Double,Angle> snakeControler){
+    public void addPlayer(KeyboardControler<Double,Angle> snakeControler ){
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
         HumanSlitherPlayer newPlayer = new HumanSlitherPlayer(newSnake, snakeControler);
         players.add(newPlayer);

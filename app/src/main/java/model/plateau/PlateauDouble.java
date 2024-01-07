@@ -7,7 +7,8 @@ import interfaces.GameBorder;
 import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
-import model.foods.FoodFactoryDouble;
+import model.foods.FoodFactory;
+import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationSnakeDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
@@ -42,7 +43,7 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         @Override
         public Coordinate<Double, Angle> getRandomCoordinate() {
             double angle = new Random().nextDouble() * 2 * Math.PI;
-            double radius = map_radius * Math.sqrt(new Random().nextDouble()) * ConfigurationSnakeDouble.RANDOM_RATIO;
+            double radius = map_radius * Math.sqrt(new Random().nextDouble()) * 0.9;
             double x = map_center.getX() + radius * Math.cos(angle);
             double y = map_center.getY() + radius * Math.sin(angle);
             return new CoordinateDouble(x, y);
@@ -57,15 +58,13 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         }
     }
 
-    private final static int NB_FOOD = 100;
-
-    public PlateauDouble(int nbFood, FoodFactoryDouble foodFactory, BorderDouble border) {
-        super(nbFood, foodFactory, border);
+    public PlateauDouble(FoodFactory<Double,Angle> foodFactory, ConfigurationSnakeDouble config, BorderDouble border) {
+        super(foodFactory, config, border);
     }
 
-    public static PlateauDouble createPlateauSlitherio(int radius){
+    public static PlateauDouble createPlateauSlitherio(int radius, ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble snakeConfig){
         BorderDouble border = new BorderDouble(new CoordinateDouble(0.0,0.0), radius);
-        PlateauDouble plateau = new PlateauDouble(NB_FOOD, FoodFactoryDouble.build(), border);
+        PlateauDouble plateau = new PlateauDouble(new FoodFactory<Double,Angle>(foodConfig), snakeConfig , border);
         return plateau;
     }
 }

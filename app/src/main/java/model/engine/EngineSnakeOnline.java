@@ -2,6 +2,8 @@ package model.engine;
 
 import java.util.ArrayList;
 
+import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeInteger;
 import interfaces.Orientation.Direction;
 import model.plateau.PlateauInteger;
 import model.plateau.Snake;
@@ -25,8 +27,8 @@ public class EngineSnakeOnline extends EngineSnake{
         snakeMover.start();
     }
 
-    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height,Server server){
-        PlateauInteger plateau = PlateauInteger.createPlateauSnake(width, height);
+    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height,ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger config,Server server){
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(width, height, foodConfig, config);
         return new EngineSnakeOnline(plateau,server);
     }
 

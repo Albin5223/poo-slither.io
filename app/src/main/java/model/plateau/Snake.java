@@ -92,20 +92,20 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The board where the snake is */
     protected Plateau<Type,O> plateau;
 
-    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection, int gap_between_tail, int hitboxRadius, int nbTail, int maxFoodCharging, int defaultSpeed, int boostSpeed, int death_food_per_segment, boolean is_traversable_wall, boolean is_droping_food_on_death, boolean is_colliding_with_himself, boolean radius_is_growing) throws ExceptionCollision {
-        this.GAP_BETWEEN_TAIL = gap_between_tail;
-        this.BIRTH_HITBOX_RADIUS = hitboxRadius;
-        this.currentHitboxRadius = hitboxRadius;
-        this.BIRTH_LENGTH = nbTail;
-        this.MAX_FOOD_CHARGING = maxFoodCharging;
-        this.DEFAULT_SPEED = defaultSpeed;
-        this.BOOST_SPEED = boostSpeed;
-        this.currentSpeed = defaultSpeed;
-        this.DEATH_FOOD_PER_SEGMENT = death_food_per_segment;
-        this.IS_TRAVERSABLE_WALL = is_traversable_wall;
-        this.IS_DROPING_FOOD_ON_DEATH = is_droping_food_on_death;
-        this.CAN_COLLIDING_WITH_HIMSELF = is_colliding_with_himself;
-        this.RADIUS_IS_GROWING = radius_is_growing;
+    protected Snake(Coordinate<Type,O> location, Plateau<Type,O> plateau, O startingDirection) throws ExceptionCollision {
+        this.GAP_BETWEEN_TAIL = plateau.getSnakeConfig().getGapBetweenTail();
+        this.BIRTH_HITBOX_RADIUS = plateau.getSnakeConfig().getBirthHitboxRadius();
+        this.currentHitboxRadius = BIRTH_HITBOX_RADIUS;
+        this.BIRTH_LENGTH = plateau.getSnakeConfig().getBirthLength();
+        this.MAX_FOOD_CHARGING = plateau.getSnakeConfig().getMaxFoodCharging();
+        this.DEFAULT_SPEED = plateau.getSnakeConfig().getDefaultSpeed();
+        this.BOOST_SPEED = plateau.getSnakeConfig().getBoostSpeed();
+        this.currentSpeed = DEFAULT_SPEED;
+        this.DEATH_FOOD_PER_SEGMENT = plateau.getSnakeConfig().getDeathFoodPerSegment();
+        this.IS_TRAVERSABLE_WALL = plateau.getSnakeConfig().isTraversableWall();
+        this.IS_DROPING_FOOD_ON_DEATH = plateau.getSnakeConfig().isDeathFood();
+        this.CAN_COLLIDING_WITH_HIMSELF = plateau.getSnakeConfig().isCollidingWithHimself();
+        this.RADIUS_IS_GROWING = plateau.getSnakeConfig().isRadiusGrowing();
         this.head = new SnakePart(location.clone(), startingDirection);
         this.tail = new ArrayList<SnakePart>();
 

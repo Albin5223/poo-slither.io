@@ -3,6 +3,8 @@ package model.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeInteger;
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
@@ -71,9 +73,9 @@ public class EngineSnake implements Engine<Integer,Direction> {
         return plateau;
     }
 
-    public static EngineSnake createGame(int width, int height){
+    public static EngineSnake createGame(int width, int height, ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger config){
         ArrayList<SnakeInteger> s = new ArrayList<SnakeInteger>();
-        PlateauInteger p = PlateauInteger.createPlateauSnake(width, height);
+        PlateauInteger p = PlateauInteger.createPlateauSnake(width, height, foodConfig, config);
         return new EngineSnake(s,p);
     }
 

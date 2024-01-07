@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeInteger;
 import interfaces.Orientation.Direction;
 import model.FoodData;
 import model.SnakeData;
@@ -25,6 +27,9 @@ import model.plateau.PlateauInteger.BorderInteger;
 import model.skins.Skin;
 
 public class Server implements Runnable{
+
+    private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger();
+    private ConfigurationSnakeInteger configSnake = new ConfigurationSnakeInteger();
 
     private ArrayList<ConnexionHandle> clients;
     private ServerSocket server;
@@ -153,7 +158,7 @@ public class Server implements Runnable{
 
     public Server(){
         clients = new ArrayList<ConnexionHandle>();
-        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000,this);
+        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000, configFood, configSnake ,this);
     }
 
     public void sendInformationsToDrawToAll(){
