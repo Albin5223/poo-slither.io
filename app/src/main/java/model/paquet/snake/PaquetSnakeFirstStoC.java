@@ -2,15 +2,17 @@ package model.paquet.snake;
 
 import java.io.Serializable;
 
-import model.plateau.PlateauInteger.BorderInteger;
+import interfaces.GameBorder;
 
 public class PaquetSnakeFirstStoC implements Serializable {
 
-    private BorderInteger border;
+    private GameBorder <?,?> border;
 
-    public BorderInteger getBorder() {return border;}
+    public GameBorder<?,?> getBorder() {
+        return border;
+    }
 
-    public PaquetSnakeFirstStoC(BorderInteger border) {
+    public PaquetSnakeFirstStoC(GameBorder<?,?> border) {
         this.border = border;
     }
     

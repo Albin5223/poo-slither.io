@@ -3,14 +3,13 @@ package server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import configuration.ConfigurationFoodInteger;
 import configuration.ConfigurationSnakeInteger;
 import interfaces.Orientation.Direction;
@@ -26,14 +25,14 @@ import model.plateau.SnakeInteger;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.skins.Skin;
 
-public class Server implements Runnable{
+public class ServerSnake implements ServerGen{
 
     private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger();
     private ConfigurationSnakeInteger configSnake = new ConfigurationSnakeInteger();
 
     private ArrayList<ConnexionHandle> clients;
     private ServerSocket server;
-    public final static int port = 3000;
+    
 
     private ExecutorService pool;
     private EngineSnakeOnline engine;
@@ -156,17 +155,33 @@ public class Server implements Runnable{
     }
 
 
-    public Server(){
+    public ServerSnake(){
         clients = new ArrayList<ConnexionHandle>();
         engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000, configFood, configSnake ,this);
     }
 
+    @Override
+    public ArrayList<ConnexionHandle> getClients(){
+        return clients;
+    }
+
+    @Override
     public void sendInformationsToDrawToAll(){
         for(ConnexionHandle client : clients){
             if(client != null){
                 client.sendInformationsToDraw();
             }
         }
+    }
+    @Override
+    public String getIp(){
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            return inetAddress.getHostAddress().toString();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return "ERROR : IP NOT FOUND";
     }
 
     @Override
@@ -189,9 +204,8 @@ public class Server implements Runnable{
         }
     }
 
-
+    @Override
     public void shutdown(){
-
         if(!Thread.currentThread().isInterrupted()){    // Garantie
             Thread.currentThread().interrupt();
         }
@@ -207,15 +221,5 @@ public class Server implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getIp(){
-        try {
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            return inetAddress.getHostAddress().toString();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return "ERROR : IP NOT FOUND";
     }
 }

@@ -2,7 +2,6 @@ package model.paquet.snake;
 
 import java.util.ArrayList;
 
-import interfaces.Orientation.Direction;
 import model.FoodData;
 import model.SnakeData;
 
@@ -10,17 +9,17 @@ import java.io.Serializable;
 
 public class PaquetSnakeStoC implements Serializable{
     
-    private SnakeData<Integer, Direction> snakeData;
-    private ArrayList<SnakeData<Integer, Direction>> allSnake;
-    private ArrayList<FoodData<Integer, Direction>> allFood;
+    private SnakeData<?, ?> snakeData;
+    private ArrayList<SnakeData<?, ?>> allSnake;
+    private ArrayList<FoodData<?, ?>> allFood;
 
-    public SnakeData<Integer, Direction> getSnakeData() {return snakeData;}
-    public ArrayList<SnakeData<Integer, Direction>> getAllSnake() {return allSnake;}
-    public ArrayList<FoodData<Integer, Direction>> getAllFood() {return allFood;}
+    public SnakeData<?, ?> getSnakeData() {return snakeData;}
+    public ArrayList<SnakeData<?, ?>> getAllSnake() {return allSnake;}
+    public ArrayList<FoodData<?, ?>> getAllFood() {return allFood;}
 
-    public PaquetSnakeStoC(SnakeData<Integer, Direction> snakeData, ArrayList<SnakeData<Integer, Direction>> allSnake, ArrayList<FoodData<Integer, Direction>> allFood) {
+    public PaquetSnakeStoC(SnakeData<?, ?> snakeData, ArrayList<SnakeData<?, ?>> snakesToDraw, ArrayList<FoodData<?, ?>> foodsToDraw) {
         this.snakeData = snakeData;
-        this.allSnake = allSnake;
-        this.allFood = allFood;
+        this.allSnake = snakesToDraw;
+        this.allFood = foodsToDraw;
     }
 }

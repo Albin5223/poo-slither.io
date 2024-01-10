@@ -26,7 +26,7 @@ import model.player.Bot.BotSlitherPlayer;
 
 public class EngineSlither implements Engine<Double,Angle>{
     
-    private PlateauDouble plateau;
+    protected PlateauDouble plateau;
     ArrayList<SnakeMover<Double,Angle>> snakeMovers;
     ArrayList<Observer<Double,Angle>> observers;
     ArrayList<HumanSlitherPlayer> players;
@@ -35,7 +35,7 @@ public class EngineSlither implements Engine<Double,Angle>{
     private AnimationTimer animationEffect;
     private long lastUpdate = 0;
 
-    private EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
+    protected EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakeMovers = new ArrayList<SnakeMover<Double,Angle>>();
         for(SnakeDouble snake : snakes){
             this.snakeMovers.add(new SnakeMover<Double,Angle>(snake,this,null));

@@ -15,11 +15,13 @@ import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
 import model.skins.Skin;
-import server.Server;
+import server.ServerGen;
+import server.ServerSlither;
+import server.ServerSnake;
 
 public class Window {
 
-    private Server serverSnake = new Server();
+    private ServerGen serverSnake = new ServerSnake();
     private Thread serverSnakeThread = new Thread(serverSnake);
     public void startServerSnake(){serverSnakeThread.start();}
     public void stopServerSnake(){
@@ -31,7 +33,9 @@ public class Window {
     }
     public String getServerSnakeIp(){return serverSnake.getIp();}
 
-    private Server serverSlither = new Server();
+
+
+    private ServerGen serverSlither = new ServerSlither();
     private Thread serverSlitherThread = new Thread(serverSlither);
     public void startServerSlither(){serverSlitherThread.start();}
     public void stopServerSlither(){
@@ -40,6 +44,8 @@ public class Window {
     }
     public boolean isServerSlitherDone(){return !serverSlitherThread.isAlive();}
     public String getServerSlitherIp(){return serverSlither.getIp();}
+
+
 
     private Client client = new Client();
     public Client getClient() {
@@ -65,6 +71,8 @@ public class Window {
         clientThread = new Thread(clientTask);
     }
 
+
+    
     private EngineSlither offlineSlither;
     public final ConfigurationFoodDouble configFoodSlither = new ConfigurationFoodDouble();
     public final ConfigurationSnakeDouble configSnakeSlither = new ConfigurationSnakeDouble();

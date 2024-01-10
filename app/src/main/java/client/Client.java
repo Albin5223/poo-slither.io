@@ -25,8 +25,8 @@ import model.paquet.snake.PaquetSnakeFirstStoC;
 import model.paquet.snake.PaquetSnakeCtoS;
 import model.paquet.snake.PaquetSnakeStoC;
 import model.plateau.PlateauInteger.BorderInteger;
-import model.skins.Skin;
-import server.Server;
+import model.skins.Skin;    
+import server.ServerGen;
 
 public class Client implements Runnable, Data<Integer,Direction>,Observable<Integer,Direction>{
 
@@ -111,7 +111,7 @@ public class Client implements Runnable, Data<Integer,Direction>,Observable<Inte
     @Override
     public void run() {
         try {
-            client = new Socket(ip, Server.port);
+            client = new Socket(ip, ServerGen.port);
             
             ois = new ObjectInputStream(client.getInputStream());
             oos = new ObjectOutputStream(client.getOutputStream());
