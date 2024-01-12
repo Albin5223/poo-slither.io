@@ -3,15 +3,15 @@ package model;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
-import model.skins.Skin;
+import model.skins.SkinFactory.SkinType;
 
 import java.util.ArrayList;
 
-public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements java.io.Serializable {
+public class SnakeData<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     private Coordinate<Type, O> head;
     private ArrayList<Coordinate<Type, O>> tail;
-    private Skin skin;
+    private SkinType skin;
     private boolean shielded;
     private boolean poisoned;
     private double radius;
@@ -30,7 +30,7 @@ public class SnakeData<Type extends Number & Comparable<Type>, O extends Orienta
         this.orientation = snake.getHead().getOrientation();
     }
 
-    public Skin getSkin() {
+    public SkinType getSkinType() {
         return skin;
     }
 

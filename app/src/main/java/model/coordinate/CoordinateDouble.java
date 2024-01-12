@@ -5,7 +5,8 @@ import interfaces.Orientation.Angle;
 public class CoordinateDouble extends Coordinate<Double,Angle> {
 
     public CoordinateDouble(Double x, Double y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     @Override

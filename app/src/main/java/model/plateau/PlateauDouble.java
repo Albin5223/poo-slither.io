@@ -1,6 +1,5 @@
 package model.plateau;
 
-import java.io.Serializable;
 import java.util.Random;
 
 import interfaces.GameBorder;
@@ -13,7 +12,7 @@ import configuration.ConfigurationSnakeDouble;
 
 public final class PlateauDouble extends Plateau<Double,Angle>{
 
-    public static class BorderDouble implements GameBorder<Double,Angle>, Serializable {
+    public static class BorderDouble implements GameBorder<Double,Angle> {
 
         public final CoordinateDouble map_center;
         public final double map_radius;

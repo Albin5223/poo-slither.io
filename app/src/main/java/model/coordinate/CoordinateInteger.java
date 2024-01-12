@@ -5,7 +5,8 @@ import interfaces.Orientation.Direction;
 public class CoordinateInteger extends Coordinate<Integer,Direction>  {
 
     public CoordinateInteger(Integer x, Integer y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     @Override

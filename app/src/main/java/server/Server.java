@@ -1,8 +1,8 @@
 package server;
 
+
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,11 +11,23 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.objenesis.strategy.StdInstantiatorStrategy;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
+
 import configuration.ConfigurationFoodInteger;
 import configuration.ConfigurationSnakeInteger;
+import externData.OurColors;
+import interfaces.GameBorder;
 import interfaces.Orientation.Direction;
+import interfaces.Turnable;
 import model.FoodData;
 import model.SnakeData;
+import model.coordinate.Coordinate;
+import model.coordinate.CoordinateInteger;
 import model.engine.EngineSnakeOnline;
 import model.paquet.snake.PaquetSnakeCtoS;
 import model.paquet.snake.PaquetSnakeFirstCtoS;
@@ -24,7 +36,7 @@ import model.paquet.snake.PaquetSnakeStoC;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
 import model.plateau.PlateauInteger.BorderInteger;
-import model.skins.Skin;
+import model.skins.SkinFactory.SkinType;
 
 public class Server implements Runnable{
 
@@ -45,12 +57,13 @@ public class Server implements Runnable{
         private int window_width;
         private int window_height;
         
-        private ObjectInputStream ois;
-        private ObjectOutputStream oos;
+        private Output writer;
+        private Input reader;
         private String name;
         private SnakeInteger snake;
-        private Skin skin;
-        
+        private SkinType skin;
+
+        private Kryo kryo = new Kryo();
 
         public ConnexionHandle(Socket client){
             this.client = client;
@@ -59,8 +72,30 @@ public class Server implements Runnable{
         public void run() {
             try{
                 
-                oos = new ObjectOutputStream(client.getOutputStream());
-                ois = new ObjectInputStream(client.getInputStream());
+                writer = new Output(client.getOutputStream());
+                reader = new Input(client.getInputStream());
+
+                kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+
+                kryo.register(PaquetSnakeFirstCtoS.class);
+                kryo.register(PaquetSnakeFirstStoC.class);
+                kryo.register(PaquetSnakeCtoS.class);
+                kryo.register(PaquetSnakeStoC.class);
+                kryo.register(BorderInteger.class);
+                kryo.register(SnakeData.class);
+                kryo.register(FoodData.class);
+                kryo.register(SkinType.class);
+                kryo.register(Direction.class);
+                kryo.register(ArrayList.class);
+                kryo.register(Integer.class);
+                kryo.register(Boolean.class);
+                kryo.register(Double.class);
+                kryo.register(String.class);
+                kryo.register(Coordinate.class);
+                kryo.register(Turnable.Turning.class);
+                kryo.register(OurColors.class);
+                kryo.register(CoordinateInteger.class);
+                kryo.register(GameBorder.class);
 
                 /*
                  * Ordre à suivre :
@@ -72,7 +107,8 @@ public class Server implements Runnable{
                 try{
 
                     // Etape 1 : Attendre que le client envoie son nom, skin et les dimensions de la fenêtre
-                    PaquetSnakeFirstCtoS paquet = (PaquetSnakeFirstCtoS) ois.readObject();
+                    PaquetSnakeFirstCtoS paquet = kryo.readObject(reader, PaquetSnakeFirstCtoS.class);
+
                     name = paquet.getMessage();
                     skin = paquet.getSkin();
                     window_width = paquet.getWindow_width();
@@ -80,15 +116,15 @@ public class Server implements Runnable{
                     System.out.println("New client : " + name + " with skin " + skin + " and window size : [" + window_width + "x" + window_height+"]");
 
                     // Etape 2 : Envoyer la border au client
-                    oos.reset();
-                    oos.writeObject(new PaquetSnakeFirstStoC((BorderInteger) engine.getPlateau().getBorder()));
+                    kryo.writeObject(writer, new PaquetSnakeFirstStoC((BorderInteger) engine.getPlateau().getBorder()));
+                    writer.flush();
                     
                     // Etape 3 : Créer son snake avec le plateau du serveur
                     snake = SnakeInteger.createSnakeInteger((PlateauInteger) engine.getPlateau());
                     snake.setSkin(skin);
                     System.out.println("Snake created in "+ snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
                 }
-                catch (IOException e){
+                catch (Exception e){
                     System.out.println("Echec de l'envoie");
                     e.printStackTrace();
                 }
@@ -105,8 +141,8 @@ public class Server implements Runnable{
                  * - Changer les données du snake du serveur
                  */
                 while(!Thread.currentThread().isInterrupted()){
-                    System.out.println("Waiting for "+name+" to send informations");
-                    PaquetSnakeCtoS message = (PaquetSnakeCtoS) ois.readObject();
+                    //System.out.println("Waiting for "+name+" to send informations");
+                    PaquetSnakeCtoS message = kryo.readObject(reader, PaquetSnakeCtoS.class);
                     if(message.isQuit()){
                         close();
                         break;
@@ -118,22 +154,18 @@ public class Server implements Runnable{
             }catch(IOException e){
                 System.out.println("Echec");
                 e.printStackTrace();        
-            }
-            catch(ClassNotFoundException e){
-                System.out.println("Objet non trouve");
-            }
-        
+            }        
         }
 
         public void sendInformationsToDraw(){
-            SnakeData<Integer,Direction> snakeData = new SnakeData<>(snake);
+            SnakeData<Integer,Direction> snakeData = new SnakeData<Integer,Direction>(snake);
             ArrayList<SnakeData<Integer,Direction>> snakesToDraw = engine.getAllSnake();
             ArrayList<FoodData<Integer,Direction>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
             try {
-                oos.reset();
-                oos.writeObject(new PaquetSnakeStoC(snakeData, snakesToDraw, foodsToDraw));
-                System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
-            } catch (IOException e) {
+                kryo.writeObject(writer, new PaquetSnakeStoC(snakeData, snakesToDraw, foodsToDraw));
+                writer.flush();
+                //System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
+            } catch (Exception e) {
                 System.out.println("Failed sending to "+this.name);
                 e.printStackTrace();
             }
@@ -144,8 +176,8 @@ public class Server implements Runnable{
             engine.removeSnake(snake);
             System.out.println("Client "+name+" disconnected, "+clients.size()+" clients remaining");
             try {
-                ois.close();
-                oos.close();
+                reader.close();
+                writer.close();
                 if(!client.isClosed()){
                     client.close();
                 }

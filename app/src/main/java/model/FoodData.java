@@ -5,7 +5,7 @@ import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.foods.Food;
 
-public class FoodData<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements java.io.Serializable {
+public class FoodData<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     private Coordinate<Type, O> center;
     private double radius;

@@ -1,6 +1,5 @@
 package model.coordinate;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import model.FoodData;
 import model.foods.Food;
 import model.plateau.Snake;
 
-public class Grid<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable{
+public class Grid<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
     private static final int gridSize = 200;
     private final HashMap<Coordinate<Type, O>, List<Food<Type, O>>> grid = new HashMap<>();
     private final List<Food<Type, O>> allFood = new ArrayList<>();

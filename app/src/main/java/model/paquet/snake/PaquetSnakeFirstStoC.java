@@ -1,10 +1,8 @@
 package model.paquet.snake;
 
-import java.io.Serializable;
-
 import model.plateau.PlateauInteger.BorderInteger;
 
-public class PaquetSnakeFirstStoC implements Serializable {
+public class PaquetSnakeFirstStoC {
 
     private BorderInteger border;
 

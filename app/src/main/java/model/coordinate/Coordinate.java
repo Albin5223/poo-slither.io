@@ -1,18 +1,12 @@
 package model.coordinate;
 
 import java.util.Objects;
-import java.io.Serializable;
 import interfaces.Orientation;
 
-public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable,Serializable {
+public abstract class Coordinate<Type extends Number, O extends Orientation<O>> implements Cloneable {
     
     protected Type x;
     protected Type y;
-
-    public Coordinate(Type x, Type y) {
-        this.x = x;
-        this.y = y;
-    }
 
     public Type getX() {
         return x;
@@ -30,16 +24,19 @@ public abstract class Coordinate<Type extends Number, O extends Orientation<O>> 
         return "(" + this.x + "," + this.y + ")";
     }
 
-    public double distanceTo(Coordinate<Type,?> other) {
+    public double distanceTo(Coordinate<Type,O> other) {
         return Math.sqrt(Math.pow(this.x.doubleValue() - other.getX().doubleValue(), 2) + Math.pow(this.y.doubleValue() - other.getY().doubleValue(), 2));
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof Coordinate<?,?>) {
-            Coordinate<?,?> other = (Coordinate<?,?>) obj;
-            return this.x.equals(other.getX()) && this.y.equals(other.getY());
+        if (this == obj) {
+            return true;
         }
-        return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Coordinate<?,?> other = (Coordinate<?,?>) obj;
+        return Objects.equals(x, other.getX()) && Objects.equals(y, other.getY());
     }
 
     public abstract Coordinate<Type,O> clone();

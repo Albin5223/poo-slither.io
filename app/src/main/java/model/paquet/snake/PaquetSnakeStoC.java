@@ -6,9 +6,7 @@ import interfaces.Orientation.Direction;
 import model.FoodData;
 import model.SnakeData;
 
-import java.io.Serializable;
-
-public class PaquetSnakeStoC implements Serializable{
+public class PaquetSnakeStoC {
     
     private SnakeData<Integer, Direction> snakeData;
     private ArrayList<SnakeData<Integer, Direction>> allSnake;

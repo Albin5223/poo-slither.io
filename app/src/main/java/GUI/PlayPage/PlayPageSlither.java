@@ -24,7 +24,8 @@ import model.SnakeData;
 import model.coordinate.Coordinate;
 import model.coordinate.CoordinateDouble;
 import model.plateau.PlateauDouble.BorderDouble;
-import model.skins.Skin; 
+import model.skins.Skin;
+import model.skins.SkinFactory; 
 
 public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
 
@@ -95,7 +96,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
         ArrayList<SnakeData<Double,Angle>> allSnakes = data.getAllSnake(); // Avoid recalculating it
         for(SnakeData<Double,Angle> snakeData : allSnakes){
 
-            Skin skin = snakeData.getSkin();
+            Skin skin = SkinFactory.build(snakeData.getSkinType());
             ArrayList<OurColors> tail_pattern = skin.getTailPattern();
             int tail_pattern_size = tail_pattern.size();
 
@@ -132,7 +133,7 @@ public class PlayPageSlither extends Pane implements Observer<Double, Angle>{
             double y_head = D_Y + snakeData.getHead().getY().intValue();
 
             // Drawing the head
-            OurColors head_color = snakeData.getSkin().getHeadColor();
+            OurColors head_color = skin.getHeadColor();
             Image image = ImageBank.getCircleEyesImage(head_color);
             if(image != null){
                 ImageView imageView = new ImageView(image);

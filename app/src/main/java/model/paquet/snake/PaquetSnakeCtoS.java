@@ -1,10 +1,8 @@
 package model.paquet.snake;
 
-import java.io.Serializable;
-
 import interfaces.Turnable;
 
-public class PaquetSnakeCtoS implements Serializable {
+public class PaquetSnakeCtoS {
     
     private Turnable.Turning turning;
     private boolean boost = false;

@@ -9,8 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.skins.Skin;
-import model.skins.SkinFlag;
+import model.skins.SkinFactory.SkinType;
 
 public class SkinSelectorPage extends Page {
 
@@ -19,7 +18,7 @@ public class SkinSelectorPage extends Page {
     private static final int IMAGE_SIZE = 600;
 
     private int currentSkin = 0;
-    private Skin[] allSkins = {SkinFlag.buildFrance(), SkinFlag.buildGermany(), SkinFlag.buildItaly()};
+    private SkinType[] allSkins = {SkinType.FRANCE, SkinType.GERMANY, SkinType.ITALY};
     private String[] allSkinNames = {"FRANCE", "GERMANY", "ITALY"};
     private Image[] allSlitherImages = {ImageBank.skin_slither_france, ImageBank.skin_slither_germany, ImageBank.skin_slither_italy};
     private Image[] allSnakeImages = {ImageBank.skin_snake_france, ImageBank.skin_snake_germany, ImageBank.skin_snake_italy};

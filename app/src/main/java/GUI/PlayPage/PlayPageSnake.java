@@ -25,6 +25,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.plateau.PlateauInteger.BorderInteger;
 import model.skins.Skin;
+import model.skins.SkinFactory;
 import javafx.scene.paint.Color;
 
 public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
@@ -89,7 +90,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
         for(SnakeData<Integer,Direction> snakeData : allSnakes){
             int witdh = (int) (snakeData.getRadius()*2);
 
-            Skin skin = snakeData.getSkin();
+            Skin skin = SkinFactory.build(snakeData.getSkinType());
             ArrayList<OurColors> tail_pattern = skin.getTailPattern();
             int tail_pattern_size = tail_pattern.size();
 
@@ -129,7 +130,7 @@ public class PlayPageSnake extends Pane implements Observer<Integer, Direction>{
             int y_head = D_Y + snakeData.getHead().getY().intValue() - witdh/2;
 
             // Drawing the head
-            OurColors head_color = snakeData.getSkin().getHeadColor();
+            OurColors head_color = skin.getHeadColor();
             Image image = ImageBank.getSquareEyesImage(head_color);
             if(image != null){
                 ImageView imageView = new ImageView(image);

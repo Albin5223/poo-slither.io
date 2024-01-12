@@ -14,7 +14,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
-import model.skins.Skin;
+import model.skins.SkinFactory.SkinType;
 import server.Server;
 
 public class Window {
@@ -47,7 +47,7 @@ public class Window {
     }
     public void setClientPseudo(String pseudo){client.setPseudo(pseudo);}
     public void setClientIp(String ip){client.setIp(ip);}
-    public void setClientSkin(Skin skin){client.setSkin(skin);}
+    public void setClientSkin(SkinType skin){client.setSkin(skin);}
     public PlayPageSnake getClientPlayPageSnakeOnline() {return client.getPlayPageSnakeOnline();}
 
     private Task<Void> clientTask = new Task<Void>() {

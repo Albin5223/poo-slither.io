@@ -8,7 +8,7 @@ public class SkinFlag extends Skin {
 
     private static final int COLOR_LENGTH = 3;
 
-    public SkinFlag(OurColors head_color, ArrayList<OurColors> tail_pattern) {
+    private SkinFlag(OurColors head_color, ArrayList<OurColors> tail_pattern) {
         super(head_color, tail_pattern);
     }
 
