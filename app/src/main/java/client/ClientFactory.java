@@ -29,6 +29,7 @@ public interface ClientFactory<Type extends Number & Comparable<Type>, O extends
     public List<FoodData<Type, O>> getAllFood(Coordinate<Type, O> coordinate, double radius);
     public Coordinate<Type, O> getMainSnakeCenter();
     public void setKeyCode(KeyEvent ev);
+    public void setReleasedKeyCode(KeyEvent ev);
 
 
     

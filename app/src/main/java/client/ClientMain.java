@@ -25,13 +25,15 @@ import model.paquet.snake.PaquetSnakeFirstStoC;
 import model.skins.Skin;
 import server.ServerMain;
 
-public class ClientMain <Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Runnable, Data<Type,O>,Observable<Type,O> {
+public final class ClientMain <Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Runnable, Data<Type,O>,Observable<Type,O> {
 
     private String pseudo;
     private String ip;
     private Skin skin;
 
-    ArrayList<Observer<Type, O>> observers = new ArrayList<Observer<Type, O>>();
+    private Object lock = new Object();
+
+    private ArrayList<Observer<Type, O>> observers = new ArrayList<Observer<Type, O>>();
     private ClientFactory<Type,O> clientFactory;
     private Socket client;
     private ObjectInputStream ois;
@@ -43,6 +45,7 @@ public class ClientMain <Type extends Number & Comparable<Type>, O extends Orien
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         try {
             client = new Socket(ip, ServerMain.port);
@@ -60,7 +63,7 @@ public class ClientMain <Type extends Number & Comparable<Type>, O extends Orien
             oos.writeObject(new PaquetSnakeFirstCtoS(pseudo,skin, Window.WITDH, Window.HEIGHT));
 
             // Etape 2 : On reçoit la border du serveur
-            PaquetSnakeFirstStoC<Type,O> paquet = (PaquetSnakeFirstStoC) ois.readObject();
+            PaquetSnakeFirstStoC<Type,O> paquet = (PaquetSnakeFirstStoC<Type,O>) ois.readObject();
             clientFactory.setBorder(paquet.getBorder());
             System.out.println("Border received : " + clientFactory.getBorder());
     
@@ -73,10 +76,10 @@ public class ClientMain <Type extends Number & Comparable<Type>, O extends Orien
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     // On recoit nos informations pour dessiner notre page (foods, snakes,...)
-                    System.out.println("Client : waiting for info");
+                    //System.out.println("Client : waiting for info");
                     
                     clientFactory.readObject(ois);
-                    System.out.println("Client : info received");
+                    //System.out.println("Client : info received");
                     
                     // On met à jour notre page
                     Platform.runLater(() -> notifyObservers());
@@ -84,10 +87,7 @@ public class ClientMain <Type extends Number & Comparable<Type>, O extends Orien
                     // On envoie au serveur nos informations (turning, boosting, ...)
                     oos.reset();
                     clientFactory.writeObject(oos);
-                    
-                    if(clientFactory.getTurning() != Turning.FORWARD){clientFactory.setTurning(Turning.FORWARD);}
-                    clientFactory.setBoosting(false);
-    
+                    clientFactory.setTurning(Turning.FORWARD);
                 } catch (ClassNotFoundException e) {
                     System.out.println("Echec de la lecture");
                     e.printStackTrace();
@@ -176,9 +176,15 @@ public class ClientMain <Type extends Number & Comparable<Type>, O extends Orien
     }
 
     public void setKeyCode(KeyEvent ev){
-        clientFactory.setKeyCode(ev);
+        synchronized(lock){
+            clientFactory.setKeyCode(ev);
+        }
     }
 
-
+    public void setReleasedKeyCode(KeyEvent ev){
+        synchronized(lock){
+            clientFactory.setReleasedKeyCode(ev);
+        }
+    }
     
 }

@@ -37,7 +37,7 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
 
     public ConcreteServerSlither(){
         clients = new ArrayList<ServerMain<Double,Angle>.ConnexionHandle>();
-        engine = EngineSlitherOnline.createEngineSlitherOnline(4000, configFood, configSnake ,this);
+        engine = EngineSlitherOnline.createEngineSlitherOnline(4000, configFood, configSnake);
     }
 
 

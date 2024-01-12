@@ -21,12 +21,10 @@ import model.paquet.snake.PaquetSnakeStoC;
 import model.plateau.PlateauInteger.BorderInteger;
 
 public class ClientSnake implements ClientFactory<Integer,Direction> {
-    
-    
 
     private BorderInteger border;
     private SnakeData<Integer, Direction> snakeData;
-    PlayPageSnake playPageSnake;
+    private PlayPageSnake playPageSnake;
     
 
     private ArrayList<SnakeData<Integer, Direction>> snakesToDraw;
@@ -71,6 +69,7 @@ public class ClientSnake implements ClientFactory<Integer,Direction> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException{
         
         PaquetSnakeStoC<Integer,Direction> message = (PaquetSnakeStoC<Integer,Direction>) ois.readObject();
@@ -125,6 +124,15 @@ public class ClientSnake implements ClientFactory<Integer,Direction> {
         }
         else if(ev.getCode() == this.BOOST){
             boosting = true;
+        }
+    }
+
+    @Override
+    public void setReleasedKeyCode(KeyEvent ev){
+        if (ev.getCode() == this.LEFT || ev.getCode() == this.RIGHT) {
+            turning = Turning.FORWARD;
+        } else if (ev.getCode() == this.BOOST) {
+            boosting = false;
         }
     }
 

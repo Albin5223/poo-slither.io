@@ -37,7 +37,7 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
 
     public ConcreteServerSnake(){
         clients = new ArrayList<ServerMain<Integer,Direction>.ConnexionHandle>();
-        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000, configFood, configSnake ,this);
+        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000, configFood, configSnake);
     }
 
     @Override
@@ -114,6 +114,7 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
         
         try {
             server = new ServerSocket(ServerMain.port);
+            server.setPerformancePreferences(0, 1, 0);
             engine.run();
             pool = Executors.newCachedThreadPool();
 
@@ -136,11 +137,11 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     @Override
     public void sendObject(ObjectOutputStream oos,Snake<Integer,Direction> snake,int window_width, int window_height) {
 
-        SnakeData<Integer,Direction> snakeData = new SnakeData<>(snake);
+        SnakeData<Integer,Direction> snakeData = new SnakeData<Integer, Direction>(snake);
         ArrayList<SnakeData<Integer,Direction>> snakesToDraw = engine.getAllSnake();
         ArrayList<FoodData<Integer,Direction>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
         
-        PaquetSnakeStoC<Integer,Direction> paquet = new PaquetSnakeStoC<>(snakeData, snakesToDraw, foodsToDraw);
+        PaquetSnakeStoC<Integer,Direction> paquet = new PaquetSnakeStoC<Integer, Direction>(snakeData, snakesToDraw, foodsToDraw);
 
         try {
             oos.writeObject(paquet);

@@ -6,8 +6,10 @@ import model.paquet.snake.PaquetSnakeFirstStoC;
 import model.plateau.Snake;
 import model.skins.Skin;
 import java.net.Socket;
+import java.net.SocketException;
 
 import interfaces.Orientation;
+import interfaces.Turnable.Turning;
 
 import java.io.ObjectInputStream;
 import java.io.IOException;
@@ -37,10 +39,25 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         private Snake<Type,O> snake;
         private Skin skin;
         
+        private Thread frameRate = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while(!Thread.currentThread().isInterrupted()){
+                    sendInformationsToDraw();
+                    try {
+                        Thread.sleep(1000/60);  // 60 fps
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+        });
 
-        public ConnexionHandle(Socket client){
+        public ConnexionHandle(Socket client) throws SocketException{
             this.client = client;
+            client.setTcpNoDelay(true);
         }
+
         @Override
         public void run() {
             try{
@@ -79,9 +96,12 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                     e.printStackTrace();
                 }
 
-                // Etape 5 : On ajoute son snake au moteur de jeu
+                // Etape 4 : On ajoute son snake au moteur de jeu
                 server.addSnake(snake);
                 System.out.println("Snake added to engine");
+
+                // Etape 5 : On lance le thread du frame rate
+                frameRate.start();
                 
                 // Etape 6 : On commence les échanges de données
                 /*
@@ -91,14 +111,16 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                  * - Changer les données du snake du serveur
                  */
                 while(!Thread.currentThread().isInterrupted()){
-                    System.out.println("Waiting for "+name+" to send informations");
+                    //System.out.println("Waiting for "+name+" to send informations");
                     PaquetSnakeCtoS message = (PaquetSnakeCtoS) ois.readObject();
                     if(message.isQuit()){
                         close();
                         break;
                     }
                     snake.setBoosting(message.isBoost());
-                    snake.setTurning(message.getTurning());            
+                    if(snake.getCurrentTurning() == Turning.FORWARD){
+                        snake.setTurning(message.getTurning());
+                    }
                 }
 
             }catch(IOException e){
@@ -118,7 +140,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                 
                 server.sendObject(oos,snake,window_width,window_height);
                 //oos.writeObject(server.getPaquetSnakeStoC(snake, window_width, window_height));
-                System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
+                //System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
             } catch (IOException e) {
                 System.out.println("Failed sending to "+this.name);
                 e.printStackTrace();
@@ -126,6 +148,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         }
 
         public void close(){
+            frameRate.interrupt();
             server.removeClient(this);
             server.removeSnake(snake);
             System.out.println("Client "+name+" disconnected, "+server.sizeOfClient()+" clients remaining");
@@ -141,11 +164,6 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         }
     }
 
-
-    public void sendInformationsToDrawToAll(){
-        server.sendInformationsToDrawToAll();
-    }
-
     public String getIp(){
         return server.getIp();
     }
@@ -156,21 +174,21 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
 
     @Override
     public void run() {
-        server.run();
 
-        
+        try{
+            server.run();
             while(!Thread.currentThread().isInterrupted()){
                 Socket client;
-                try {
-                    client = server.getServerSocket().accept();
-                    ConnexionHandle handle = new ConnexionHandle(client);
-                    server.add(handle);
-                } catch (IOException e) {
-                    System.out.println("Server closed");
-                }
-                
-                
+            
+                client = server.getServerSocket().accept();
+                ConnexionHandle handle = new ConnexionHandle(client);
+                server.add(handle);
             }
+        } 
+        catch (IOException e) {
+            System.out.println("Server closed");
+        }
+        
     }
 
     

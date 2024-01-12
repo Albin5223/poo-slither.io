@@ -110,6 +110,15 @@ public class Window {
         }
     }
 
+    public void setReleasedKeyCodeClient(KeyEvent ev, boolean isSnake){
+        if(isSnake){
+            gameHandler.setReleasedKeyCodeClientSnake(ev);
+        }
+        else{
+            //gameHandler.setReleasedKeyCodeClientSlither(ev);
+        }
+    }
+
     public void stopClient(boolean isSnake){
         if(isSnake){
             gameHandler.stopClientSnake();

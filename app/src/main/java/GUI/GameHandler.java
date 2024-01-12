@@ -129,6 +129,10 @@ public class GameHandler {
         public void setKeyCode(KeyEvent ev){
             clientMain.setKeyCode(ev);
         }
+
+        public void setReleasedKeyCode(KeyEvent ev){
+            clientMain.setReleasedKeyCode(ev);
+        }
     }
 
     public void setKeyCodeClientSnake(KeyEvent ev){
@@ -195,6 +199,10 @@ public class GameHandler {
 
     public EngineSnake getOfflineSnake() {
         return offlineSnake;
+    }
+
+    public void setReleasedKeyCodeClientSnake(KeyEvent ev){
+        networkHandlerSnake.setReleasedKeyCode(ev);
     }
 
 

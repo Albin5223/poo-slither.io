@@ -78,6 +78,10 @@ public class SkinSelectorPage extends Page {
                 }
                 window.setKeyCodeClient(ev,isSnake);
             });
+
+            window.getScene().setOnKeyReleased(ev ->{
+                window.setReleasedKeyCodeClient(ev,isSnake);
+            });
             
             if(isSnake){
                 window.getLayout().getChildren().add(window.getClientSnakePlayPage());
