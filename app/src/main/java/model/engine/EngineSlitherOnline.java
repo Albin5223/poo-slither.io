@@ -27,7 +27,7 @@ public class EngineSlitherOnline extends EngineSlither{
         snakeMover.start();
     }
 
-    public static EngineSlitherOnline createEngineSnakeOnline(int rayon,ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble config,ServerFactory<Double,Angle> server){
+    public static EngineSlitherOnline createEngineSlitherOnline(int rayon,ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble config,ServerFactory<Double,Angle> server){
         PlateauDouble plateau = PlateauDouble.createPlateauSlitherio(rayon, foodConfig, config);
         return new EngineSlitherOnline(plateau,server);
     }
