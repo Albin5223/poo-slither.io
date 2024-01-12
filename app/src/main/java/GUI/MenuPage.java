@@ -43,8 +43,7 @@ public class MenuPage extends Page {
         });
         
         exitButton.setOnAction(e -> {
-            window.stopServerSnake();
-            window.stopServerSlither();
+            window.stopServer();
             window.stopClient();
             window.getPrimaryStage().close();
         });

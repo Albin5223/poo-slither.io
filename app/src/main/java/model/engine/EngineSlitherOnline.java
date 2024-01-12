@@ -7,14 +7,14 @@ import configuration.ConfigurationSnakeDouble;
 import interfaces.Orientation.Angle;
 import model.plateau.PlateauDouble;
 import model.plateau.Snake;
-import server.ServerGen;
+import server.ServerFactory;
 
 public class EngineSlitherOnline extends EngineSlither{
 
-    private ServerGen server;
+    private ServerFactory<Double,Angle> server;
 
 
-    protected EngineSlitherOnline(PlateauDouble plateau,ServerGen server) {
+    protected EngineSlitherOnline(PlateauDouble plateau,ServerFactory<Double,Angle> server) {
         super(new ArrayList<>(), plateau);
         this.server = server;
     }
@@ -27,7 +27,7 @@ public class EngineSlitherOnline extends EngineSlither{
         snakeMover.start();
     }
 
-    public static EngineSlitherOnline createEngineSnakeOnline(int rayon,ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble config,ServerGen server){
+    public static EngineSlitherOnline createEngineSnakeOnline(int rayon,ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble config,ServerFactory<Double,Angle> server){
         PlateauDouble plateau = PlateauDouble.createPlateauSlitherio(rayon, foodConfig, config);
         return new EngineSlitherOnline(plateau,server);
     }

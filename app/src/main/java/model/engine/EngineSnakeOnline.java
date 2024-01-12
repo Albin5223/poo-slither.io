@@ -7,14 +7,14 @@ import configuration.ConfigurationSnakeInteger;
 import interfaces.Orientation.Direction;
 import model.plateau.PlateauInteger;
 import model.plateau.Snake;
-import server.ServerGen;
+import server.ServerFactory;
 
 public class EngineSnakeOnline extends EngineSnake{
 
-    private ServerGen server;
+    private ServerFactory<Integer,Direction> server;
 
 
-    protected EngineSnakeOnline(PlateauInteger plateau,ServerGen server) {
+    protected EngineSnakeOnline(PlateauInteger plateau,ServerFactory<Integer,Direction> server) {
         super(new ArrayList<>(), plateau);
         this.server = server;
     }
@@ -27,7 +27,7 @@ public class EngineSnakeOnline extends EngineSnake{
         snakeMover.start();
     }
 
-    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height,ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger config,ServerGen server){
+    public static EngineSnakeOnline createEngineSnakeOnline(int width, int height,ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger config,ServerFactory<Integer,Direction> server){
         PlateauInteger plateau = PlateauInteger.createPlateauSnake(width, height, foodConfig, config);
         return new EngineSnakeOnline(plateau,server);
     }

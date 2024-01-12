@@ -38,30 +38,30 @@ public class PageMainOptionOffline extends Page {
     public void valideConfig(){
         if(isSnake){
             if(optionConfigPane.isReachableWallActivated()){
-                window.configSnakeSnake.setTraversableWall(true);
+                window.getConfigSnakeSnake().setTraversableWall(true);
             }
             if(optionConfigPane.isCollitionWithMeActivated()){
-                window.configSnakeSnake.setCollidingWithHimself(true);
+                window.getConfigSnakeSnake().setCollidingWithHimself(true);
             }
             if(optionConfigPane.greedyDeathActivated()){
-                window.configSnakeSnake.setDeathFood(true);
+                window.getConfigSnakeSnake().setDeathFood(true);
             }
             if(optionConfigPane.growingSnakeActivated()){
-                window.configSnakeSnake.setRadiusGrowing(true);
+                window.getConfigSnakeSnake().setRadiusGrowing(true);
             }
         }
         else{
             if(optionConfigPane.isReachableWallActivated()){
-                window.configSnakeSlither.setTraversableWall(true);
+                window.getConfigSnakeSlither().setTraversableWall(true);
             }
             if(optionConfigPane.isCollitionWithMeActivated()){
-                window.configSnakeSlither.setCollidingWithHimself(true);
+                window.getConfigSnakeSlither().setCollidingWithHimself(true);
             }
             if(optionConfigPane.greedyDeathActivated()){
-                window.configSnakeSlither.setDeathFood(true);
+                window.getConfigSnakeSlither().setDeathFood(true);
             }
             if(optionConfigPane.growingSnakeActivated()){
-                window.configSnakeSlither.setRadiusGrowing(true);
+                window.getConfigSnakeSlither().setRadiusGrowing(true);
             }
         }
     }
@@ -71,7 +71,7 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSlither playPageSlither = new PlayPageSlither();
-        window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.configFoodSlither, window.configSnakeSlither));
+        window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.getConfigFoodDouble(), window.getConfigSnakeSlither()));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
             KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
@@ -113,7 +113,7 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSnake playPageSnake = new PlayPageSnake();
-        window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.configFoodSnake, window.configSnakeSnake));
+        window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.getConfigFoodSnake(), window.getConfigSnakeSnake()));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
             KeyboardControler<Integer,Direction> controler = new ControlerSnake (SetOfConfiguration.commandMapingPanes.get(i));

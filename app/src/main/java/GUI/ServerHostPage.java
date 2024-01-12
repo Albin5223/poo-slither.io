@@ -51,16 +51,13 @@ public class ServerHostPage extends Page {
 
     private void createPageRunningServer(VBox layout) {
 
-        IP = new ButtonNotClickeablePixelFont("IP : " + (isSnake ? window.getServerSnakeIp() : window.getServerSlitherIp()), 70);
+        IP = new ButtonNotClickeablePixelFont("IP : " + window.getServerIp(isSnake), 70);
 
         stopServer = new ButtonPixelFont("STOP SERVER", 70, true);
         stopServer.setOnAction(e -> {
-            if(isSnake){
-                window.stopServerSnake();
-            }
-            else{
-                window.stopServerSlither();
-            }
+            
+            window.stopServer(isSnake);
+            
             window.switchToServerHostPage(isSnake);
         });
         layout.getChildren().addAll(IP,stopServer);
@@ -72,12 +69,9 @@ public class ServerHostPage extends Page {
     private void createPageDoneServer(VBox layout) {
         startServer = new ButtonPixelFont("START SERVER", 70, true);
         startServer.setOnAction(e -> {
-            if (isSnake) {
-                window.startServerSnake();
-            }
-            else{
-                window.startServerSlither();
-            }
+            
+            window.startServer(isSnake);
+            
             window.switchToServerHostPage(isSnake);
         });
         layout.getChildren().add(startServer);

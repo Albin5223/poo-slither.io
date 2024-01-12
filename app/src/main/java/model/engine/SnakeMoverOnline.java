@@ -5,13 +5,13 @@ import interfaces.Engine;
 import interfaces.Orientation;
 import model.plateau.Snake;
 import model.player.Bot.BotPlayer;
-import server.ServerGen;
+import server.ServerFactory;
 
 public class SnakeMoverOnline<Type extends Number & Comparable<Type>, O extends Orientation<O>> extends SnakeMover<Type,O>{
 
-    ServerGen server;
+    ServerFactory<Type,O> server;
 
-    public SnakeMoverOnline(Snake<Type, O> snake, Engine<Type, O> engine, BotPlayer bot,ServerGen server) {
+    public SnakeMoverOnline(Snake<Type, O> snake, Engine<Type, O> engine, BotPlayer bot,ServerFactory<Type,O> server) {
         super(snake, engine, bot);
         this.server = server;
         
