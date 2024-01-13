@@ -12,6 +12,16 @@ public class SetOfConfiguration {
     private static int numberOfHumanPlayer;
     private static int numberOfBotPlayer;
 
+    private static int indexOfPlayerMouse = -1;
+
+    public static void setIndexOfPlayerMouse(int indexOfPlayerMouse) {
+        SetOfConfiguration.indexOfPlayerMouse = indexOfPlayerMouse;
+    }
+
+    public static int getIndexOfPlayerMouse() {
+        return indexOfPlayerMouse;
+    }
+
     public static ArrayList<TouchControler> commandMapingPanes = new ArrayList<>();
 
 
@@ -42,6 +52,7 @@ public class SetOfConfiguration {
         numberOfBotPlayer = 0;
         numberOfPlayer = 0;
         commandMapingPanes.clear();
+        indexOfPlayerMouse = -1;
     }
 
 

@@ -1,8 +1,5 @@
 package GUI;
 
-
-import GUI.PlayPage.PlayPageSlither;
-import GUI.PlayPage.PlayPageSnake;
 import client.ClientFactory;
 import client.ClientMain;
 import client.ClientSlither;
@@ -144,62 +141,12 @@ public class GameHandler {
         }
     }
 
-    public void setKeyCodeClientSnake(KeyEvent ev){
-        networkHandlerSnake.setKeyCode(ev);
-    } 
-
-
-    public boolean isServerSnakeDone(){
-        return networkHandlerSnake.isServerDone();
-    }
-
-    public void startServerSnake(){
-        networkHandlerSnake.startServer();
-    }
-
-    public void startClientSnake(){
-        networkHandlerSnake.startClient();
-    }
-
-    public void stopClientSnake(){
-        networkHandlerSnake.stopClient();
-    }
-
-    public void stopServerSnake(){
-        networkHandlerSnake.stopServer();
-    }
-
-
-    public String getServerSnakeIp(){
-        return networkHandlerSnake.getServerIp();
-    }
-
-    public void setClientSnakePseudo(String pseudo){
-        networkHandlerSnake.setClientPseudo(pseudo);
-    }
-
-    public void setClientSnakeIp(String ip){
-        networkHandlerSnake.setClientIp(ip);
-    }
-
-    public void setClientSnakeclientSnakeSkin(Skin skin){
-        networkHandlerSnake.setClientSkin(skin);
-    }
-
-    public PlayPageSnake getClientSnakePlayPage() {
-        return clientSnake.getPlayPage();
-    }
-    
-    public void setClientSnakeSkin(Skin skin){
-        networkHandlerSnake.setClientSkin(skin);
+    public void setOfflineSnake(EngineSnake offlineSnake) {
+        this.offlineSnake = offlineSnake;
     }
 
     public void setOfflineSlither(EngineSlither offlineSlither) {
         this.offlineSlither = offlineSlither;
-    }
-
-    public void setOfflineSlither(EngineSnake offlineSnake) {
-        this.offlineSnake = offlineSnake;
     }
 
     public EngineSlither getOfflineSlither() {
@@ -210,60 +157,20 @@ public class GameHandler {
         return offlineSnake;
     }
 
-    public void setReleasedKeyCodeClientSnake(KeyEvent ev){
-        networkHandlerSnake.setReleasedKeyCode(ev);
+
+    public NetworkHandler<Double, Angle> getNetworkHandlerSlither() {
+        return networkHandlerSlither;
     }
 
-
-
-
-
-
-    public boolean isServerSlitherDone(){
-        return networkHandlerSlither.isServerDone();
+    public NetworkHandler<Integer, Direction> getNetworkHandlerSnake() {
+        return networkHandlerSnake;
     }
 
-    public void setKeyCodeClientSlither(KeyEvent ev){
-        networkHandlerSlither.setKeyCode(ev);
+    public ClientSlither getClientSlither() {
+        return clientSlither;
     }
 
-    public void setClientSlitherSkin(Skin skin){
-        networkHandlerSlither.setClientSkin(skin);
-    }
-
-    public void startClientSlither(){
-        networkHandlerSlither.startClient();
-    }
-
-    public String getServerSlitherIp(){
-        return networkHandlerSlither.getServerIp();
-    }
-
-    public void stopClientSlither(){
-        networkHandlerSlither.stopClient();
-    }
-
-    public void setClientSlitherIp(String ip){
-        networkHandlerSlither.setClientIp(ip);
-    }
-
-    public void setReleasedKeyCodeClientSlither(KeyEvent ev){
-        networkHandlerSlither.setReleasedKeyCode(ev);
-    }
-
-    public PlayPageSlither getClientSlitherPlayPage(){
-        return clientSlither.getPlayPageSlither();
-    }
-
-    public void stopServerSlither(){
-        networkHandlerSlither.stopServer();
-    }
-
-    public void startServerSlither(){
-        networkHandlerSlither.startServer();
-    }
-
-    public void setClientSlitherPseudo(String pseudo){
-        networkHandlerSlither.setClientPseudo(pseudo);
+    public ClientSnake getClientSnake() {
+        return clientSnake;
     }
 }

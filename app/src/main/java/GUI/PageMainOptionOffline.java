@@ -1,5 +1,6 @@
 package GUI;
 
+
 import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
 import GUI.customButton.ButtonNotClickeablePixelFont;
@@ -15,10 +16,12 @@ import externData.ImageBank;
 import interfaces.HumanPlayer;
 import interfaces.Orientation.Angle;
 import interfaces.Orientation.Direction;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
@@ -26,6 +29,7 @@ import model.engine.EngineSnake;
 public class PageMainOptionOffline extends Page {
 
     private boolean isSnake;
+    public static boolean mouseActivated;
 
     OptionConfigPane optionConfigPane;
 
@@ -72,10 +76,44 @@ public class PageMainOptionOffline extends Page {
 
         PlayPageSlither playPageSlither = new PlayPageSlither();
         window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.getConfigFoodDouble(), window.getConfigSnakeSlither()));
-        
+
+        if (mouseActivated) {
+            
+            scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    double x = event.getScreenX();
+                    double y = event.getScreenY();
+                    window.getOfflineSlither().getPlayers().get(0).mouseMoved(x, y);
+                }
+            });
+            scene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    double x = event.getScreenX();
+                    double y = event.getScreenY();
+                    window.getOfflineSlither().getPlayers().get(0).mouseReleased(x, y);
+                }
+            });
+
+            scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    double x = event.getScreenX();
+                    double y = event.getScreenY();
+                    window.getOfflineSlither().getPlayers().get(0).mousePressed(x, y);
+                }
+            });
+
+            window.getOfflineSlither().addPlayerMouse();
+
+
+        }
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
-            KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
-            window.getOfflineSlither().addPlayer(controler);
+            if(i != SetOfConfiguration.getIndexOfPlayerMouse()){
+                KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
+                window.getOfflineSlither().addPlayer(controler);
+            }
         }
 
         for(int i = 0;i<SetOfConfiguration.getNumberOfBot();i++){
@@ -85,6 +123,8 @@ public class PageMainOptionOffline extends Page {
         scene.setOnKeyPressed( ev -> {
             if(ev.getCode() == KeyCode.ESCAPE){
                 window.getOfflineSlither().stop();
+                PageMainOptionOffline.mouseActivated = false;
+
                 window.switchToMenuPage();
             }
             for (HumanPlayer p : window.getOfflineSlither().getPlayers()) {
@@ -104,6 +144,7 @@ public class PageMainOptionOffline extends Page {
         window.getLayout().getChildren().add(playPageSlither);
         
         TouchControler.resetNumber();
+        mouseActivated=false;
         SetOfConfiguration.resetConfiguration();
         window.getOfflineSlither().run();
     }
@@ -116,8 +157,11 @@ public class PageMainOptionOffline extends Page {
         window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.getConfigFoodSnake(), window.getConfigSnakeSnake()));
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
+            
             KeyboardControler<Integer,Direction> controler = new ControlerSnake (SetOfConfiguration.commandMapingPanes.get(i));
             window.getOfflineSnake().addPlayer(controler);
+        
+            
         }
         for(int i = 0;i<SetOfConfiguration.getNumberOfBot();i++){
             window.getOfflineSnake().addBot();

@@ -63,6 +63,8 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public static PlateauDouble createPlateauSlitherio(int radius, ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble snakeConfig){
         BorderDouble border = new BorderDouble(new CoordinateDouble(0.0,0.0), radius);
+        double aire = Math.PI * radius * radius;
+        //int nbFood = (int) (aire * foodConfig.getFoodRadius());
         PlateauDouble plateau = new PlateauDouble(new FoodFactory<Double,Angle>(foodConfig), snakeConfig , border);
         return plateau;
     }

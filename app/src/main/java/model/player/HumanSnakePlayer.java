@@ -32,4 +32,19 @@ public class HumanSnakePlayer implements HumanPlayer{
     public void keyReleased(KeyEvent ev) {
         controler.keyReleased(ev, snake);
     }
+
+    @Override
+    public void mouseMoved(double x,double y) {
+        
+    }
+
+    @Override
+    public void mousePressed(double x, double y) {
+    }
+
+    @Override
+    public void mouseReleased(double x, double y) {
+    }
+
+    
 }

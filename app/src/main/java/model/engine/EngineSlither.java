@@ -1,5 +1,4 @@
 package model.engine;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +19,7 @@ import model.plateau.PlateauDouble;
 import model.plateau.PlateauDouble.BorderDouble;
 import model.plateau.Snake;
 import model.plateau.SnakeDouble;
+import model.player.HumanMousePlayer;
 import model.player.HumanSlitherPlayer;
 import model.player.Bot.BotSlitherPlayer;
 
@@ -73,8 +73,17 @@ public class EngineSlither implements Engine<Double,Angle>{
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
         BotSlitherPlayer newBot = new BotSlitherPlayer(newSnake, plateau);
         bots.add(newBot);
-        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,newBot));
-        
+        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,newBot)); 
+    }
+
+
+    public void addPlayerMouse(){
+
+        SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
+        HumanMousePlayer newPlayer = new HumanMousePlayer(newSnake);
+        snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,null));
+        players.add(newPlayer);
+        notifyObservers();
     }
 
     public void addPlayer(KeyboardControler<Double,Angle> snakeControler ){
@@ -135,7 +144,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void makePressed(KeyEvent ev, HumanPlayer player) {
-        for(HumanSlitherPlayer p : players){
+        for(HumanPlayer p : players){
             if(p == player){
                 p.keyPressed(ev);
                 return;
@@ -145,7 +154,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public void makeReleased(KeyEvent ev, HumanPlayer player) {
-        for(HumanSlitherPlayer p : players){
+        for(HumanPlayer p : players){
             if(p == player){
                 p.keyReleased(ev);
                 return;

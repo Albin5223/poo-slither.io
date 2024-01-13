@@ -5,6 +5,12 @@ package slither;
 
 import org.junit.jupiter.api.Test;
 
+import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeInteger;
+import exceptions.ExceptionCollision;
+import model.plateau.PlateauInteger;
+import model.plateau.SnakeInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -13,5 +19,34 @@ class AppTest {
     
     @Test void testApp() {
         assertTrue(true);
+        
     }
+
+    @Test void testGrowing() {
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int MAX_CHARGE = snake.MAX_FOOD_CHARGING;
+        int n = snake.getTail().size();
+        snake.chargeFood(MAX_CHARGE);
+        int res = snake.getTail().size();
+
+        assertEquals(1+n,res);
+    }
+
+    @Test void testMoving() {
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int n = snake.getTail().size();
+        
+        try {
+            snake.move();
+        } catch (ExceptionCollision e) {
+            assertTrue(true);
+        }
+        int res = snake.getTail().size();
+
+        assertTrue(res >=n);
+    }
+
+    
 }

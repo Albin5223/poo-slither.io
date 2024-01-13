@@ -48,124 +48,126 @@ public class Window {
         gameHandler.setOfflineSlither(offlineSlither);
     }
     public void setOfflineSnake(EngineSnake offlineSnake) {
-        gameHandler.setOfflineSlither(offlineSnake);
+        gameHandler.setOfflineSnake(offlineSnake);
     }
 
     public void stopServer(){
-        gameHandler.stopServerSnake();
-        gameHandler.stopServerSlither();
+        gameHandler.getNetworkHandlerSnake().stopServer();
+        gameHandler.getNetworkHandlerSlither().stopServer();
     }
 
     public void stopClient(){
-        gameHandler.stopClientSnake();
-        gameHandler.stopClientSlither();
+        gameHandler.getNetworkHandlerSnake().stopClient();
+        gameHandler.getNetworkHandlerSlither().stopClient();
     }
 
 
     public void startClient(boolean isSnake){
         if(isSnake){
-            gameHandler.startClientSnake();
+            gameHandler.getNetworkHandlerSnake().startClient();
         }
         else{
-            gameHandler.startClientSlither();
+            gameHandler.getNetworkHandlerSlither().startClient();
         }
     }
 
     public void setPseudoClient(String pseudo,boolean isSnake){
         if(isSnake){
-            gameHandler.setClientSnakePseudo(pseudo);
+            gameHandler.getNetworkHandlerSnake().setClientPseudo(pseudo);
         }
         else{
-            gameHandler.setClientSlitherPseudo(pseudo);
+            gameHandler.getNetworkHandlerSlither().setClientPseudo(pseudo);
         }
     }
 
     public void setKeyCodeClient(KeyEvent ev, boolean isSnake){
         if(isSnake){
-            gameHandler.setKeyCodeClientSnake(ev);
+            gameHandler.getNetworkHandlerSnake().setKeyCode(ev);
         }
         else{
-            gameHandler.setKeyCodeClientSlither(ev);
+            gameHandler.getNetworkHandlerSlither().setKeyCode(ev);
         }
     }
 
     public PlayPageSnake getClientSnakePlayPage() {
-        return gameHandler.getClientSnakePlayPage();
+        return gameHandler.getClientSnake().getPlayPage();
     }
 
     public void setClientSkin(Skin skin,boolean isSnake){
         if(isSnake){
-            gameHandler.setClientSnakeSkin(skin);
+            gameHandler.getNetworkHandlerSnake().setClientSkin(skin);
         }
         else{
-            gameHandler.setClientSlitherSkin(skin);
+            gameHandler.getNetworkHandlerSlither().setClientSkin(skin);
         }
     }
 
     public void setIpClient(String ip,boolean isSnake){
         if(isSnake){
-            gameHandler.setClientSnakeIp(ip);
+            gameHandler.getNetworkHandlerSnake().setClientIp(ip);
         }
         else{
-            gameHandler.setClientSlitherIp(ip);
+            gameHandler.getNetworkHandlerSlither().setClientIp(ip);
         }
     }
 
     public void setReleasedKeyCodeClient(KeyEvent ev, boolean isSnake){
         if(isSnake){
-            gameHandler.setReleasedKeyCodeClientSnake(ev);
+            gameHandler.getNetworkHandlerSnake().setReleasedKeyCode(ev);
+            
         }
         else{
-            gameHandler.setReleasedKeyCodeClientSlither(ev);
+            gameHandler.getNetworkHandlerSlither().setReleasedKeyCode(ev);
         }
     }
 
     public void stopClient(boolean isSnake){
         if(isSnake){
-            gameHandler.stopClientSnake();
+            gameHandler.getNetworkHandlerSnake().stopClient();
         }
         else{
-            gameHandler.stopClientSlither();
+            gameHandler.getNetworkHandlerSlither().stopClient();;
         }   
     }
 
     public boolean isServerSnakeDone(){
-        return gameHandler.isServerSnakeDone();
+        return gameHandler.getNetworkHandlerSnake().isServerDone();
     }
 
     public boolean isServerSlitherDone(){
-        return gameHandler.isServerSlitherDone();
+        return gameHandler.getNetworkHandlerSlither().isServerDone();
     }
 
     public String getServerIp(boolean isSnake){
         if(isSnake){
-            return gameHandler.getServerSnakeIp();
+            return gameHandler.getNetworkHandlerSnake().getServerIp();
         }
         else{
-            return gameHandler.getServerSlitherIp();
+            return gameHandler.getNetworkHandlerSlither().getServerIp();
         }
     }
 
     public void stopServer(boolean isSnake){
         if(isSnake){
-            gameHandler.stopServerSnake();
+            gameHandler.getNetworkHandlerSnake().stopServer();
         }
         else{
-            gameHandler.stopServerSlither();
+            gameHandler.getNetworkHandlerSlither().stopServer();
         }
     }
 
     public void startServer(boolean isSnake){
         if(isSnake){
-            gameHandler.startServerSnake();
+            gameHandler.getNetworkHandlerSnake().startServer();
         }
         else{
-            gameHandler.startServerSlither();
+            gameHandler.getNetworkHandlerSlither().startServer();
         }
     }
 
+
     public PlayPageSlither getClientSlitherPlayPage() {
-        return gameHandler.getClientSlitherPlayPage();
+        return gameHandler.getClientSlither().getPlayPageSlither();
     }
 
     public ConfigurationFoodDouble getConfigFoodDouble() {

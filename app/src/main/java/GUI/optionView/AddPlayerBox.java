@@ -1,6 +1,7 @@
 package GUI.optionView;
 
 
+import GUI.PageMainOptionOffline;
 import GUI.customButton.ButtonGrisablePixelFont;
 import GUI.customButton.ButtonNotClickeablePixelFont;
 import configuration.TouchControler;
@@ -26,6 +27,9 @@ public class AddPlayerBox extends VBox {
 
     private int textSize = 25;
 
+    private ButtonGrisablePixelFont mouseControler;
+
+
     
     public AddPlayerBox(Boolean isSnake){
         id = numero;
@@ -34,6 +38,7 @@ public class AddPlayerBox extends VBox {
         touchControler = new TouchControler();
         numero++;
         present = new ButtonGrisablePixelFont("ADD PLAYER",textSize,true);
+        mouseControler = new ButtonGrisablePixelFont("MOUSE CONTROLER",textSize,true);
         
         present.setOnAction(e -> {
             
@@ -87,15 +92,45 @@ public class AddPlayerBox extends VBox {
             
         });
 
+        mouseControler.setOnAction(e -> {
+            if(mouseControler.switchGrise()){
+                afficheKeyControler();
+                PageMainOptionOffline.mouseActivated = false;
+                SetOfConfiguration.setIndexOfPlayerMouse(-1);
+            }else{
+                removeKeyControler();
+                if(PageMainOptionOffline.mouseActivated){
+                    mouseControler.switchGrise();
+                    afficheKeyControler();
+                }
+                else{
+                    PageMainOptionOffline.mouseActivated = true;
+                    SetOfConfiguration.setIndexOfPlayerMouse(id);
+                }
+                
+            }
+        });
+
         getChildren().addAll(present);
         removePlayer();
-        getChildren().addAll(title,droite,gauche,boost);
+        getChildren().addAll(title,droite,gauche,boost,mouseControler);
         if(isSnake){
             getChildren().addAll(haut,bas);
         }
 
 
 
+    }
+    private void afficheKeyControler(){
+        droite.setVisible(true);
+        gauche.setVisible(true);
+        boost.setVisible(true);
+    }
+
+    private void removeKeyControler(){
+        droite.setVisible(false);
+        gauche.setVisible(false);
+        boost.setVisible(false);
     }
 
     public int getIdentify(){
@@ -112,6 +147,7 @@ public class AddPlayerBox extends VBox {
         droite.setVisible(false);
         gauche.setVisible(false);
         boost.setVisible(false); 
+        mouseControler.setVisible(false);
         
         if(isSnake){
             haut.setVisible(false);
@@ -129,6 +165,9 @@ public class AddPlayerBox extends VBox {
         if(isSnake){
             haut.setVisible(true);
             bas.setVisible(true);
+        }
+        else{
+            mouseControler.setVisible(true);
         }
     }
     
