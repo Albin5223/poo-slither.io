@@ -13,25 +13,25 @@ public class ConfigurationFoodInteger implements ConfigurationFood {
     private int POISON_POWER = 1;
     private double POISON_FOOD_RADIUS = 9;
     private boolean POISON_FOOD_RESPAWN = true;
-    private int POISON_FOOD_PROBABILITY = 1;
+    private int POISON_FOOD_PROBABILITY = 2;
 
     /*Configuration for big growing food */
     private int GROWING_BIG_FOOD_VALUE = 10;
     private double GROWING_BIG_FOOD_RADIUS = 9;
     private boolean GROWING_BIG_FOOD_RESPAWN = true;
-    private int GROWING_BIG_FOOD_PROBABILITY = 10;
+    private int GROWING_BIG_FOOD_PROBABILITY = 50;
 
     /*Configuration for killer food */
     private int KILLER_FOOD_RADIUS = 9;
     private boolean KILLER_FOOD_RESPAWN = false;
-    private int KILLER_FOOD_PROBABILITY = 1;
+    private int KILLER_FOOD_PROBABILITY = 2;
 
 
     /*Configuration for growing food */
     private int GROWING_FOOD_VALUE = 5;
     private double GROWING_FOOD_RADIUS = 5;
     private boolean GROWING_FOOD_RESPAWN = true;
-    private int GROWING_FOOD_PROBABILITY = 10;
+    private int GROWING_FOOD_PROBABILITY = 80;
 
     /*Configuration for death food */
     private double DEATH_FOOD_RADIUS = 5;
@@ -42,7 +42,7 @@ public class ConfigurationFoodInteger implements ConfigurationFood {
     private double SHIELD_FOOD_RADIUS = 9;
     private int SHIELD_VALUE = 5;
     private boolean SHIELD_FOOD_RESPAWN = true;
-    private int SHIELD_FOOD_PROBABILITY = 1;
+    private int SHIELD_FOOD_PROBABILITY = 2;
 
     public ConfigurationFoodInteger setNbFood(int i){NB_FOOD = i;return this;}
     public ConfigurationFoodInteger setMaxFoodCoef(int i){MAX_FOOD_COEF = i;return this;}

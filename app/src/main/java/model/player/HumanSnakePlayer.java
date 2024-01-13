@@ -39,11 +39,11 @@ public class HumanSnakePlayer implements HumanPlayer{
     }
 
     @Override
-    public void mousePressed(double x, double y,boolean isCenter) {
+    public void mousePressed(boolean isCenter) {
     }
 
     @Override
-    public void mouseReleased(double x, double y,boolean isCenter) {
+    public void mouseReleased(boolean isCenter) {
     }
 
     
