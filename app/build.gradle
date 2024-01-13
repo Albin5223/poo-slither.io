@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id "io.gitlab.plunts.plantuml" version "2.1.3"
 }
 
 javafx {
@@ -21,6 +22,11 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+  plantuml // special configuration for local rendering
+}
+
+
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
@@ -29,6 +35,124 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:32.1.1-jre'
+
+    plantuml 'net.sourceforge.plantuml:plantuml:1.2023.10' // dependency for local rendering
+    plantuml 'org.apache.xmlgraphics:fop:2.9' // only if you want to render PDF
+    plantuml 'org.apache.xmlgraphics:batik-all:1.17' // only if you want to render PDF
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+}
+
+classDiagrams {
+
+    renderClasspath project.configurations.plantuml
+
+    defaults {
+        // This project will not inherit defaults from the parent project.
+        // Consequently, we have to define some excludes again here (if we want).
+        // You can use this directive in diagram blocks so they don't include this defaults.
+        style {
+            useIntermediatePackages()
+            theme "vibrant"
+            skinparam "packageStyle", "rectangle"
+            skinparam "PackageBorderThickness", "5"
+            skinparam "BackgroundColor", "#dedede"
+            skinparam "shadowing", "true"
+            skinparam "roundCorner", "20"
+
+            hide "empty members"
+        }
+
+    }
+
+    diagram {
+        name "All classes"
+
+        include packages().withNameLike("*")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_all.svg')
+    }
+
+    diagram {
+        name "client"
+
+        include packages().withNameLike("client")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_client.svg')
+    }
+
+    diagram {
+        name "configuration"
+
+        include packages().withNameLike("configuration")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_configuration.svg')
+    }
+
+    diagram {
+        name "controleur"
+
+        include packages().withNameLike("controleur")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_controleur.svg')
+    }
+
+    diagram {
+        name "exceptions"
+
+        include packages().withNameLike("exceptions")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_exceptions.svg')
+    }
+
+    diagram {
+        name "externData"
+
+        include packages().withNameLike("externData")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_externData.svg')
+    }
+
+    diagram {
+        name "GUI"
+
+        include packages().withNameLike("GUI")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_GUI.svg')
+    }
+
+    diagram {
+        name "Interfaces"
+
+        include packages().withNameLike("interfaces")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_interfaces.svg')
+    }
+
+    diagram {
+        name "Model"
+
+        include packages().withNameLike("model")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_model.svg')
+    }
+
+    diagram {
+        name "Server"
+
+        include packages().withNameLike("server")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_server.svg')
+    }
+
+    diagram {
+        name "Slither"
+
+        include packages().withNameLike("slither")
+        exclude classes().outsideOfProject()
+        renderTo file('docs/uml/diagram_slither.svg')
+    }
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
