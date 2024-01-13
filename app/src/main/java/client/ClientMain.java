@@ -88,7 +88,7 @@ public final class ClientMain <Type extends Number & Comparable<Type>, O extends
                     // On envoie au serveur nos informations (turning, boosting, ...)
                     oos.reset();
                     clientFactory.writeObject(oos);
-                    clientFactory.setTurning(Turning.FORWARD);
+                    if(clientFactory.resetTurningToForward()){clientFactory.setTurning(Turning.FORWARD);}
                 } catch (ClassNotFoundException e) {
                     System.out.println("Echec de la lecture");
                     e.printStackTrace();

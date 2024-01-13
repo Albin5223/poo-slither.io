@@ -15,7 +15,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     private int POISON_FOOD_PROBABILITY = 0;
 
     /*Configuration for big growing food */
-    private int GROWING_BIG_FOOD_VALUE = 20;
+    private int GROWING_BIG_FOOD_VALUE = 50;
     private double GROWING_BIG_FOOD_RADIUS = 10;
     private boolean GROWING_BIG_FOOD_RESPAWN = true;
     private int GROWING_BIG_FOOD_PROBABILITY = 10;

@@ -1,14 +1,12 @@
 package model.foods;
 
-import java.io.Serializable;
-
 import externData.OurColors;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.foods.FoodFactory.FoodType;
 import model.plateau.Snake;
 
-public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
+public abstract class Food<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     protected final Coordinate<Type, O> coordinate;
     protected final double radius;

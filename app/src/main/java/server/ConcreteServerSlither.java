@@ -133,19 +133,19 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     }
 
     @Override
-    public void sendObject(ObjectOutputStream oos, Snake<Double, Angle> snake, int window_width,
-            int window_height) {
+    public void sendObject(ObjectOutputStream oos, Snake<Double, Angle> snake, int window_width,int window_height) {
         
-        SnakeData<Double,Angle> snakeData = new SnakeData<>(snake);
-        ArrayList<SnakeData<Double,Angle>> snakesToDraw = engine.getAllSnake();
-        ArrayList<FoodData<Double,Angle>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
-        
-        PaquetSnakeStoC<Double,Angle> paquet = new PaquetSnakeStoC<>(snakeData, snakesToDraw, foodsToDraw);
         try {
+            SnakeData<Double,Angle> snakeData = new SnakeData<Double,Angle>(snake);
+            ArrayList<SnakeData<Double,Angle>> snakesToDraw = engine.getAllSnake();
+            ArrayList<FoodData<Double,Angle>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
+        
+            PaquetSnakeStoC<Double,Angle> paquet = new PaquetSnakeStoC<>(snakeData, snakesToDraw, foodsToDraw);
             oos.writeObject(paquet);
-        } catch (IOException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Something went wrong while sending the snake data");
         }
     }
 

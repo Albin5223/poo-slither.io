@@ -12,4 +12,5 @@ public interface ConfigurationSnake {
     public boolean isTraversableWall();
     public boolean isCollidingWithHimself();
     public boolean isRadiusGrowing();
+    public int getMaxRadius();
 }

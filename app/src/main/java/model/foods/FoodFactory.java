@@ -8,10 +8,9 @@ import interfaces.ConfigurationFood;
 import interfaces.Orientation;
 import model.coordinate.Coordinate;
 import model.plateau.Snake;
-import java.io.Serializable;
 
 
-public class FoodFactory<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable {
+public class FoodFactory<Type extends Number & Comparable<Type>, O extends Orientation<O>> {
 
     public static enum FoodType {
         GROWING_FOOD,

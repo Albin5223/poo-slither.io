@@ -10,6 +10,7 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     private int SNAKE_BIRTH_LENGTH = 10;
     private int SNAKE_MAX_FOOD_CHARGING = 5;
     private int SNAKE_BIRTH_HITBOX_RADIUS = 10;
+    private int SNAKE_MAX_RADIUS = SNAKE_BIRTH_HITBOX_RADIUS;
     private int SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
 
     private int SNAKE_DEFAULT_SPEED = 15;
@@ -36,6 +37,7 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     public ConfigurationSnakeInteger setTraversableWall(boolean b){TRAVERSABLE_WALL = b;return this;}
     public ConfigurationSnakeInteger setCollidingWithHimself(boolean b){CAN_COLLIDING_WITH_HIMSELF = b;return this;}
     public ConfigurationSnakeInteger setRadiusGrowing(boolean b){RADIUS_IS_GROWING = b;return this;}
+    public ConfigurationSnakeInteger setMaxRadius(int i){SNAKE_MAX_RADIUS = i;return this;}
 
     public boolean isAlignWithSnake(){return IS_ALIGN_WITH_SNAKE;}
     @Override public int getBirthLength(){return SNAKE_BIRTH_LENGTH;}
@@ -49,4 +51,5 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     @Override public boolean isTraversableWall(){return TRAVERSABLE_WALL;}
     @Override public boolean isCollidingWithHimself(){return CAN_COLLIDING_WITH_HIMSELF;}
     @Override public boolean isRadiusGrowing(){return RADIUS_IS_GROWING;}
+    @Override public int getMaxRadius(){return SNAKE_MAX_RADIUS;}
 }

@@ -154,5 +154,11 @@ public class ClientSnake implements ClientFactory<Integer,Direction> {
     public Coordinate<Integer, Direction> getMainSnakeCenter(){
         return snakeData.getHead();
     }
+
+
+    @Override
+    public boolean resetTurningToForward() {
+        return true;
+    }
     
 }

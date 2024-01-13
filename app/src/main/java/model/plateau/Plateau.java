@@ -15,9 +15,7 @@ import model.coordinate.Grid;
 import model.foods.Food;
 import model.foods.FoodFactory;
 
-import java.io.Serializable;
-
-public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Serializable permits PlateauDouble, PlateauInteger {
+public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
     protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
     protected Grid<Type,O> foodGrid = new Grid<Type,O>();
@@ -32,7 +30,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * This lock is used to avoid concurrent access to the board.
      * Usefull for having snakes with different speed.
      */
-    private Objet lock = new Objet();
+    private Object lock = new Object();
 
 
     protected Plateau(FoodFactory<Type,O> foodFactory, ConfigurationSnake snakeConfig, GameBorder<Type,O> border) {

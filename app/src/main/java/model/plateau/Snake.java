@@ -13,7 +13,7 @@ import model.skins.Skin;
 import java.io.Serializable;
 import model.skins.SkinRandom;
 
-public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O>,Serializable permits SnakeInteger, SnakeDouble {
+public sealed abstract class Snake<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Turnable<O> permits SnakeInteger, SnakeDouble {
 
     /** The skin of the snake, by default it's random */
     protected Skin skin = SkinRandom.build();
@@ -26,15 +26,16 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     protected int currentHitboxRadius;
     protected volatile boolean isBoosting = false;
 
-    private final Objet lock = new Objet();
+    private final Object lock = new Object();
 
-    private final int GAP_BETWEEN_TAIL;
-    private final int BIRTH_HITBOX_RADIUS;
-    private final int BIRTH_LENGTH;
+    public final int GAP_BETWEEN_TAIL;
+    public final int BIRTH_HITBOX_RADIUS;
+    public final int MAX_RADIUS;
+    public final int BIRTH_LENGTH;
     /** The amount of food that the snake needs to eat before growing */
     public final int MAX_FOOD_CHARGING;
-    private final int DEFAULT_SPEED;
-    private final int BOOST_SPEED;
+    public final int DEFAULT_SPEED;
+    public final int BOOST_SPEED;
 
     private int TIME_OF_POISON = 0;
     private int POWER_OF_POISON = 0;
@@ -96,6 +97,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.GAP_BETWEEN_TAIL = plateau.getSnakeConfig().getGapBetweenTail();
         this.BIRTH_HITBOX_RADIUS = plateau.getSnakeConfig().getBirthHitboxRadius();
         this.currentHitboxRadius = BIRTH_HITBOX_RADIUS;
+        this.MAX_RADIUS = plateau.getSnakeConfig().getMaxRadius();
         this.BIRTH_LENGTH = plateau.getSnakeConfig().getBirthLength();
         this.MAX_FOOD_CHARGING = plateau.getSnakeConfig().getMaxFoodCharging();
         this.DEFAULT_SPEED = plateau.getSnakeConfig().getDefaultSpeed();
@@ -289,8 +291,9 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.tail.add(0, head); // We add the old head to the tail
         this.head = newHead;    // We update the head
 
-        if(RADIUS_IS_GROWING){
+        if(RADIUS_IS_GROWING && currentHitboxRadius < MAX_RADIUS){
             this.currentHitboxRadius = (int) (BIRTH_HITBOX_RADIUS + (tail.size() * (BIRTH_HITBOX_RADIUS * 0.005)));
+            if (currentHitboxRadius > MAX_RADIUS) {currentHitboxRadius = MAX_RADIUS;}
         }
 
         plateau.addSnake(this);   // We update the position of the snake on the board

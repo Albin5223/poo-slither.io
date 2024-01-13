@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import externData.OurColors;
 
-public abstract class Skin implements Serializable{
+public abstract class Skin implements Serializable {
 
     private final OurColors head_color;
     private final ArrayList<OurColors> tail_pattern;

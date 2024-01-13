@@ -153,7 +153,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                 //System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
             } catch (IOException e) {
                 System.out.println("Failed sending to "+this.name);
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 

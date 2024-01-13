@@ -128,5 +128,10 @@ public class ClientSlither implements ClientFactory<Double, Angle> {
             boosting = false;
         }
     }
+
+    @Override
+    public boolean resetTurningToForward() {
+        return false;
+    }
     
 }

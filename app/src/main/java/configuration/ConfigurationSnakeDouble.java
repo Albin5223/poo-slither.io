@@ -14,6 +14,7 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     private int SLITHER_BIRTH_LENGTH = 15;
     private int SLITHER_MAX_FOOD_CHARGING = 10;
     private int SLITHER_BIRTH_HITBOX_RADIUS = 10;
+    private int SLITHER_MAX_RADIUS = SLITHER_BIRTH_HITBOX_RADIUS * 2;
 
     private int SLITHER_DEFAULT_SPEED = 75;
     private int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
@@ -40,6 +41,7 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     public ConfigurationSnakeDouble setTraversableWall(boolean b){IS_TRAVERSABLE_WALL = b;return this;}
     public ConfigurationSnakeDouble setCollidingWithHimself(boolean b){CAN_COLLIDING_WITH_HIMSELF = b;return this;}
     public ConfigurationSnakeDouble setRadiusGrowing(boolean b){RADIUS_IS_GROWING = b;return this;}
+    public ConfigurationSnakeDouble setMaxRadius(int i){SLITHER_MAX_RADIUS = i;return this;}
 
     public double getRandomRatio(){return RANDOM_RATIO;}
     public Angle getTurningForce(){return SLITHER_TURNING_FORCE;}
@@ -54,4 +56,5 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     @Override public boolean isTraversableWall(){return IS_TRAVERSABLE_WALL;}
     @Override public boolean isCollidingWithHimself(){return CAN_COLLIDING_WITH_HIMSELF;}
     @Override public boolean isRadiusGrowing(){return RADIUS_IS_GROWING;}
+    @Override public int getMaxRadius(){return SLITHER_MAX_RADIUS;}
 }

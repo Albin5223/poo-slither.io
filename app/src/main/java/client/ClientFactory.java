@@ -22,6 +22,7 @@ public interface ClientFactory<Type extends Number & Comparable<Type>, O extends
     public GameBorder<Type,O> getBorder();
     public Turnable.Turning getTurning();
     public void setTurning(Turnable.Turning turning);
+    public boolean resetTurningToForward();
     public void setBoosting(boolean boosting);
     public void setBorder(GameBorder<Type,O> border);
     public Observer<Type,O> getPlayPage();
