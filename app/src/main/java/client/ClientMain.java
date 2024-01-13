@@ -23,13 +23,13 @@ import model.paquet.snake.PaquetSnakeCtoS;
 import model.paquet.snake.PaquetSnakeFirstCtoS;
 import model.paquet.snake.PaquetSnakeFirstStoC;
 import model.skins.Skin;
-import server.ServerMain;
 
 public final class ClientMain <Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Runnable, Data<Type,O>,Observable<Type,O> {
 
     private String pseudo;
     private String ip;
     private Skin skin;
+    private final int port;
 
     private Object lock = new Object();
 
@@ -39,8 +39,9 @@ public final class ClientMain <Type extends Number & Comparable<Type>, O extends
     private ObjectInputStream ois;
     private ObjectOutputStream oos; 
 
-    public ClientMain(ClientFactory<Type,O> clientFactory){
+    public ClientMain(ClientFactory<Type,O> clientFactory, int port){
         this.clientFactory = clientFactory;
+        this.port = port;
         this.addObserver(clientFactory.getPlayPage());
     }
 
@@ -48,7 +49,7 @@ public final class ClientMain <Type extends Number & Comparable<Type>, O extends
     @SuppressWarnings("unchecked")
     public void run() {
         try {
-            client = new Socket(ip, ServerMain.port);
+            client = new Socket(ip, port);
             
             ois = new ObjectInputStream(client.getInputStream());
             oos = new ObjectOutputStream(client.getOutputStream());

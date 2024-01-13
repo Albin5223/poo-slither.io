@@ -23,7 +23,9 @@ import model.plateau.SnakeDouble;
 
 public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
 
-     private ConfigurationFoodDouble configFood = new ConfigurationFoodDouble();
+    public static final int port = 4000;
+
+    private ConfigurationFoodDouble configFood = new ConfigurationFoodDouble();
     private ConfigurationSnakeDouble configSnake = new ConfigurationSnakeDouble();
 
     private ArrayList<ServerMain<Double,Angle>.ConnexionHandle> clients;
@@ -104,7 +106,7 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     @Override
     public void run() {
         try {
-            server = new ServerSocket(ServerMain.port);
+            server = new ServerSocket(getPort());
             server.setPerformancePreferences(0, 1, 0);
             engine.run();
             pool = Executors.newCachedThreadPool();
@@ -145,6 +147,12 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public int getPort() {
+        return port;
     }
     
 }

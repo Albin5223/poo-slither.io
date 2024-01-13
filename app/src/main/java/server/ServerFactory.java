@@ -21,6 +21,8 @@ public interface ServerFactory <Type extends Number & Comparable<Type>, O extend
 
     public String getIp();
 
+    public int getPort();
+
     public void shutdown();
 
     public void run();

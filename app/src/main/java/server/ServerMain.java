@@ -17,12 +17,11 @@ import java.io.ObjectOutputStream;
 
 public class ServerMain<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Runnable {
     
-    public final static int port = 3000;
     ServerFactory<Type,O> server;
     private boolean onlyOneTurn = false;
 
 
-    public ServerMain(ServerFactory<Type,O> server) {
+    public ServerMain(ServerFactory<Type,O> server){
         this.server = server;
         onlyOneTurn = server.getOnlyOneTurn();
     }
@@ -42,8 +41,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         private Skin skin;
         
         
-        
-        private Thread frameRate = new Thread(new Runnable(){
+        private Runnable frameRate = new Runnable(){
             @Override
             public void run() {
                 while(!Thread.currentThread().isInterrupted()){
@@ -55,7 +53,9 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                     }
                 }
             }
-        });
+        };
+
+        private Thread frameRateThread = new Thread(frameRate);
 
         public ConnexionHandle(Socket client) throws SocketException{
             this.client = client;
@@ -106,7 +106,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                 System.out.println("Snake added to engine");
 
                 // Etape 5 : On lance le thread du frame rate
-                frameRate.start();
+                frameRateThread.start();
                 
                 // Etape 6 : On commence les échanges de données
                 /*
@@ -158,7 +158,8 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         }
 
         public void close(){
-            frameRate.interrupt();
+            frameRateThread.interrupt();
+            frameRateThread = new Thread(frameRate);
             server.removeClient(this);
             server.removeSnake(snake);
             System.out.println("Client "+name+" disconnected, "+server.sizeOfClient()+" clients remaining");

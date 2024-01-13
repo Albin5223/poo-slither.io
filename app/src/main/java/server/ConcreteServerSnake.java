@@ -23,6 +23,8 @@ import java.io.ObjectOutputStream;
 
 public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
 
+    public static final int port = 3000;
+
     private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger();
     private ConfigurationSnakeInteger configSnake = new ConfigurationSnakeInteger();
 
@@ -109,7 +111,7 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     public void run() {
         
         try {
-            server = new ServerSocket(ServerMain.port);
+            server = new ServerSocket(getPort());
             server.setPerformancePreferences(0, 1, 0);
             engine.run();
             pool = Executors.newCachedThreadPool();
@@ -146,6 +148,11 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int getPort() {
+        return port;
     }
     
 }

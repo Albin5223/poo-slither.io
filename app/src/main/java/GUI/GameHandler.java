@@ -83,7 +83,7 @@ public class GameHandler {
         public NetworkHandler(ServerFactory<Type,O> serverFactory,ClientFactory<Type,O> clientFactory){
             
             this.serverMain = new ServerMain<>(serverFactory);
-            this.clientMain = new ClientMain<>(clientFactory);
+            this.clientMain = new ClientMain<>(clientFactory, serverFactory.getPort());
             this.serverThread = new Thread(serverMain);
             clientTask = new Task<Void>() {
             @Override
