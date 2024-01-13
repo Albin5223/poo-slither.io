@@ -32,15 +32,15 @@ public class HumanSlitherPlayer implements HumanPlayer{
     }
 
     @Override
-    public void mouseMoved(double x, double y) {
+    public void mouseMoved(double x, double y,boolean isCenter) {
     }
 
     @Override
-    public void mousePressed(double x, double y) {
+    public void mousePressed(double x, double y,boolean isCenter) {
     }
 
     @Override
-    public void mouseReleased(double x, double y) {
+    public void mouseReleased(double x, double y,boolean isCenter) {
     }
 
 

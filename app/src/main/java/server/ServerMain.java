@@ -170,7 +170,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                     client.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("closing connexion with "+name);
             }
         }
     }

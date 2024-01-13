@@ -1,5 +1,6 @@
 package model.plateau;
 
+import interfaces.ConfigurationFood;
 import interfaces.GameBorder;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
@@ -48,6 +49,11 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
         public int getyMax() {
             return yMax;
+        }
+
+        @Override
+        public double getArea() {
+            return (xMax - xMin) * (yMax - yMin);
         }
 
         @Override
@@ -122,7 +128,9 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
 
     public static PlateauInteger createPlateauSnake(int width, int height, ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger snakeConfig){
         BorderInteger border = new BorderInteger(-width/2, width/2, -height/2,height/2, snakeConfig.getGapBetweenTail(), snakeConfig.getBirthHitboxRadius()*2, snakeConfig.isAlignWithSnake());
+        foodConfig.setNbFood((int) (border.getArea() * ConfigurationFood.RATIO_OF_FOOD  / foodConfig.getAverageFoodArea()));
         PlateauInteger plateau = new PlateauInteger(new FoodFactory<Integer,Direction>(foodConfig), snakeConfig, border);
+
         return plateau;
     }
 }

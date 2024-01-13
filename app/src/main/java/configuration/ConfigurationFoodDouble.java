@@ -4,6 +4,8 @@ import interfaces.ConfigurationFood;
 
 public class ConfigurationFoodDouble implements ConfigurationFood {
 
+    private double AVERAGE_FOOD_RADIUS = 7;
+
     private int NB_FOOD = 100;
     private int MAX_FOOD_COEF = 2;
 
@@ -68,6 +70,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     public ConfigurationFoodDouble setShieldValue(int i){SHIELD_VALUE = i;return this;}
     public ConfigurationFoodDouble setShieldFoodRespawn(boolean b){SHIELD_FOOD_RESPAWN = b;return this;}
     public ConfigurationFoodDouble setShieldFoodProbability(int i){SHIELD_FOOD_PROBABILITY = i;return this;}
+    public ConfigurationFoodDouble setAverageFoodRadius(double d){AVERAGE_FOOD_RADIUS = d;return this;}
     
     @Override public int getNbFood(){return NB_FOOD;}
     @Override public int getMaxFoodCoef(){return MAX_FOOD_COEF;}
@@ -94,4 +97,6 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     @Override public int getShieldValue(){return SHIELD_VALUE;}
     @Override public boolean getShieldFoodRespawn(){return SHIELD_FOOD_RESPAWN;}
     @Override public int getShieldFoodProbability(){return SHIELD_FOOD_PROBABILITY;}
+    @Override public double getAverageFoodRadius(){return AVERAGE_FOOD_RADIUS;}
+
 }

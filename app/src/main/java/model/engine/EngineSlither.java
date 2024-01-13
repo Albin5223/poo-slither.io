@@ -32,6 +32,8 @@ public class EngineSlither implements Engine<Double,Angle>{
     ArrayList<HumanSlitherPlayer> players;
     ArrayList<BotSlitherPlayer> bots;
 
+
+    private HumanMousePlayer mousePlayer;
     private AnimationTimer animationEffect;
     private long lastUpdate = 0;
 
@@ -78,12 +80,14 @@ public class EngineSlither implements Engine<Double,Angle>{
 
 
     public void addPlayerMouse(){
-
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);
-        HumanMousePlayer newPlayer = new HumanMousePlayer(newSnake);
+        mousePlayer = new HumanMousePlayer(newSnake);
         snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,null));
-        players.add(newPlayer);
         notifyObservers();
+    }
+
+    public HumanMousePlayer getMousePlayer() {
+        return mousePlayer;
     }
 
     public void addPlayer(KeyboardControler<Double,Angle> snakeControler ){
@@ -165,6 +169,9 @@ public class EngineSlither implements Engine<Double,Angle>{
     @Override
     public void run() {
         animationEffect.start();
+        if(mousePlayer != null){
+            mousePlayer.startMouseThread();
+        }
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.start();
         }
@@ -173,6 +180,9 @@ public class EngineSlither implements Engine<Double,Angle>{
     @Override
     public void stop() {
         animationEffect.stop();
+        if(mousePlayer != null){
+            mousePlayer.stopMouseThread();
+        }
         for(SnakeMover<Double,Angle> snakeMover : snakeMovers){
             snakeMover.stop();
         }
@@ -180,8 +190,11 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public Coordinate<Double,Angle> getMainSnakeCenter() {
-        if(players.size() == 1){
+        if((players.size() == 1 && mousePlayer == null)){
             return players.get(0).getSnake().getHead().getCenter();
+        }
+        else if((players.size() == 0 && mousePlayer != null)){
+            return mousePlayer.getSnake().getHead().getCenter();
         }
         else{
             return null;

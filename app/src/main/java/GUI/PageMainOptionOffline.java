@@ -5,6 +5,7 @@ import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
 import GUI.customButton.ButtonNotClickeablePixelFont;
 import GUI.customButton.ButtonPixelFont;
+import GUI.optionView.AddPlayerBox;
 import GUI.optionView.OptionConfigPane;
 import GUI.optionView.PlayerChoosePane;
 import GUI.optionView.SetOfConfiguration;
@@ -82,26 +83,27 @@ public class PageMainOptionOffline extends Page {
             scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    double x = event.getScreenX();
-                    double y = event.getScreenY();
-                    window.getOfflineSlither().getPlayers().get(0).mouseMoved(x, y);
+                    double x = event.getScreenX()-Window.WITDH/2;
+                    double y = event.getScreenY()-Window.HEIGHT/2;
+                    window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
                 }
             });
             scene.setOnMouseReleased(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    double x = event.getScreenX();
-                    double y = event.getScreenY();
-                    window.getOfflineSlither().getPlayers().get(0).mouseReleased(x, y);
+                    
+                    double x = event.getScreenX()-Window.WITDH/2;
+                    double y = event.getScreenY()-Window.HEIGHT/2;
+                    window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
                 }
             });
 
             scene.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    double x = event.getScreenX();
-                    double y = event.getScreenY();
-                    window.getOfflineSlither().getPlayers().get(0).mousePressed(x, y);
+                    double x = event.getScreenX()-Window.WITDH/2;
+                    double y = event.getScreenY()-Window.HEIGHT/2;
+                    window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
                 }
             });
 
@@ -109,10 +111,13 @@ public class PageMainOptionOffline extends Page {
 
 
         }
-        for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
-            if(i != SetOfConfiguration.getIndexOfPlayerMouse()){
-                KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
-                window.getOfflineSlither().addPlayer(controler);
+        if(!(SetOfConfiguration.getNumberOfHuman() == 1 && mouseActivated)){
+            for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
+                if(i != SetOfConfiguration.getIndexOfPlayerMouse()){
+                    
+                    KeyboardControler<Double,Angle> controler = new ControlerSlither(SetOfConfiguration.commandMapingPanes.get(i));
+                    window.getOfflineSlither().addPlayer(controler);
+                }
             }
         }
 
@@ -124,7 +129,7 @@ public class PageMainOptionOffline extends Page {
             if(ev.getCode() == KeyCode.ESCAPE){
                 window.getOfflineSlither().stop();
                 PageMainOptionOffline.mouseActivated = false;
-
+                
                 window.switchToMenuPage();
             }
             for (HumanPlayer p : window.getOfflineSlither().getPlayers()) {
@@ -144,6 +149,7 @@ public class PageMainOptionOffline extends Page {
         window.getLayout().getChildren().add(playPageSlither);
         
         TouchControler.resetNumber();
+        AddPlayerBox.resetNumero();
         mouseActivated=false;
         SetOfConfiguration.resetConfiguration();
         window.getOfflineSlither().run();
@@ -190,6 +196,7 @@ public class PageMainOptionOffline extends Page {
         window.getLayout().getChildren().add(playPageSnake);
 
         TouchControler.resetNumber();
+        AddPlayerBox.resetNumero();
         SetOfConfiguration.resetConfiguration();
         window.getOfflineSnake().run();
     }

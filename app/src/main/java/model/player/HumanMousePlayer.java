@@ -1,17 +1,36 @@
 package model.player;
 
-
 import GUI.Window;
+import interfaces.HumanPlayer;
 import interfaces.Orientation.Angle;
 import interfaces.Turnable.Turning;
 import javafx.scene.input.KeyEvent;
 import model.plateau.Snake;
 
-public class HumanMousePlayer extends HumanSlitherPlayer {
+public class HumanMousePlayer implements HumanPlayer {
+
+
+    private Thread mouseThread = new Thread(){
+        public void run(){
+            while(!Thread.currentThread().isInterrupted()){
+                calculateAngle(lastX, lastY,isCenter);
+                try {
+                    Thread.sleep(1000/60);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                
+                
+            }
+        }
+    };
+    
+    private volatile int lastX;
+    private volatile boolean isCenter;
+    private volatile int lastY;
 
     private Snake<Double,Angle> snake;
     public HumanMousePlayer(Snake<Double, Angle> snake){
-        super(snake,null);
         this.snake = snake;
     }
 
@@ -22,6 +41,14 @@ public class HumanMousePlayer extends HumanSlitherPlayer {
 
     @Override
     public void keyReleased(KeyEvent ev) {
+    }
+
+    public void startMouseThread(){
+        mouseThread.start();
+    }
+
+    public void stopMouseThread(){
+        mouseThread.interrupt();
     }
 
 
@@ -35,9 +62,24 @@ public class HumanMousePlayer extends HumanSlitherPlayer {
         return angle;
     }
 
-    private void calculateAngle(double x, double y){
-        double centerX = Window.WITDH / 2;
-        double centerY = Window.HEIGHT / 2;
+    private void calculateAngle(double x, double y,boolean isCenter){
+
+       
+        int centerX = 0;
+        int centerY = 0;
+
+        if(isCenter){
+            centerX = Window.WITDH/2;
+            centerY = Window.HEIGHT/2;
+
+            x = x + centerX;
+            y = y + centerY;
+
+        }
+        else{
+            centerX= snake.getHead().getCenter().getX().intValue(); 
+            centerY = snake.getHead().getCenter().getY().intValue();
+        }   
 
 
         //double distance = Math.sqrt(Math.pow(xSnake-x,2)+Math.pow(ySnake-y,2));
@@ -59,20 +101,26 @@ public class HumanMousePlayer extends HumanSlitherPlayer {
     }
 
     @Override
-    public void mouseMoved(double x,double y) {
-        calculateAngle(x, y);
+    public void mouseMoved(double x,double y,boolean isCenter) {
+        this.isCenter = isCenter;
+        lastX = (int)x;
+        lastY = (int)y;
     }
 
     @Override
-    public void mousePressed(double x, double y) {
+    public void mousePressed(double x, double y,boolean isCenter) {
         snake.setBoosting(true);
-        calculateAngle(x, y);
+        calculateAngle(x, y,isCenter);
     }
 
     @Override
-    public void mouseReleased(double x, double y) {
+    public void mouseReleased(double x, double y,boolean isCenter) {
         snake.setBoosting(false);
-        calculateAngle(x, y);
+        calculateAngle(x, y,isCenter);
+    }
+
+    public Snake<Double, Angle> getSnake() {
+        return snake;
     }
 
 

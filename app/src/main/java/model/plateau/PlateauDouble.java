@@ -2,6 +2,7 @@ package model.plateau;
 
 import java.util.Random;
 
+import interfaces.ConfigurationFood;
 import interfaces.GameBorder;
 import interfaces.Orientation.Angle;
 import model.coordinate.Coordinate;
@@ -26,6 +27,11 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
         public boolean isInside(Coordinate<Double, Angle> c) {
             double distance = c.distanceTo(map_center);
             return distance <= map_radius;
+        }
+
+        @Override
+        public double getArea() {
+            return Math.PI * map_radius * map_radius;
         }
 
         @Override
@@ -63,8 +69,8 @@ public final class PlateauDouble extends Plateau<Double,Angle>{
 
     public static PlateauDouble createPlateauSlitherio(int radius, ConfigurationFoodDouble foodConfig, ConfigurationSnakeDouble snakeConfig){
         BorderDouble border = new BorderDouble(new CoordinateDouble(0.0,0.0), radius);
-        double aire = Math.PI * radius * radius;
-        //int nbFood = (int) (aire * foodConfig.getFoodRadius());
+        
+        foodConfig.setNbFood((int) (border.getArea() * ConfigurationFood.RATIO_OF_FOOD / foodConfig.getAverageFoodArea()));
         PlateauDouble plateau = new PlateauDouble(new FoodFactory<Double,Angle>(foodConfig), snakeConfig , border);
         return plateau;
     }

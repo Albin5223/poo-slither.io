@@ -13,6 +13,9 @@ public class AddPlayerBox extends VBox {
     ButtonGrisablePixelFont present;
 
     private static int numero = 0;
+    public static void resetNumero(){
+        numero = 0;
+    }
     private int id;
 
     ButtonNotClickeablePixelFont title;
