@@ -6,7 +6,6 @@ import model.coordinate.Coordinate;
 import model.coordinate.CoordinateInteger;
 import model.foods.FoodFactory;
 
-import java.io.Serializable;
 import java.util.Random;
 
 import configuration.ConfigurationFoodInteger;
@@ -14,7 +13,7 @@ import configuration.ConfigurationSnakeInteger;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
-    public static class BorderInteger implements GameBorder<Integer,Direction>,Serializable {
+    public static class BorderInteger implements GameBorder<Integer,Direction> {
 
         public final int xMin;
         public final int xMax;

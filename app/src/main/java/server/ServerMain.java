@@ -1,42 +1,32 @@
 package server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import configuration.ConfigurationFoodInteger;
-import configuration.ConfigurationSnakeInteger;
-import interfaces.Orientation.Direction;
-import model.FoodData;
-import model.SnakeData;
-import model.engine.EngineSnakeOnline;
 import model.paquet.snake.PaquetSnakeCtoS;
 import model.paquet.snake.PaquetSnakeFirstCtoS;
 import model.paquet.snake.PaquetSnakeFirstStoC;
-import model.paquet.snake.PaquetSnakeStoC;
-import model.plateau.PlateauInteger;
-import model.plateau.SnakeInteger;
-import model.plateau.PlateauInteger.BorderInteger;
+import model.plateau.Snake;
 import model.skins.Skin;
+import java.net.Socket;
+import java.net.SocketException;
 
-public class Server implements Runnable{
+import interfaces.Orientation;
+import interfaces.Turnable.Turning;
 
-    private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger();
-    private ConfigurationSnakeInteger configSnake = new ConfigurationSnakeInteger();
+import java.io.ObjectInputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
-    private ArrayList<ConnexionHandle> clients;
-    private ServerSocket server;
+public class ServerMain<Type extends Number & Comparable<Type>, O extends Orientation<O>> implements Runnable {
+    
     public final static int port = 3000;
+    ServerFactory<Type,O> server;
+    private boolean onlyOneTurn = false;
 
-    private ExecutorService pool;
-    private EngineSnakeOnline engine;
+
+    public ServerMain(ServerFactory<Type,O> server) {
+        this.server = server;
+        onlyOneTurn = server.getOnlyOneTurn();
+    }
+
 
     public class ConnexionHandle implements Runnable{
 
@@ -48,13 +38,31 @@ public class Server implements Runnable{
         private ObjectInputStream ois;
         private ObjectOutputStream oos;
         private String name;
-        private SnakeInteger snake;
+        private Snake<Type,O> snake;
         private Skin skin;
         
+        
+        
+        private Thread frameRate = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while(!Thread.currentThread().isInterrupted()){
+                    sendInformationsToDraw();
+                    try {
+                        Thread.sleep(1000/60);  // 60 fps
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+        });
 
-        public ConnexionHandle(Socket client){
+        public ConnexionHandle(Socket client) throws SocketException{
             this.client = client;
+            client.setTcpNoDelay(true);
+            
         }
+
         @Override
         public void run() {
             try{
@@ -75,16 +83,16 @@ public class Server implements Runnable{
                     PaquetSnakeFirstCtoS paquet = (PaquetSnakeFirstCtoS) ois.readObject();
                     name = paquet.getMessage();
                     skin = paquet.getSkin();
-                    window_width = paquet.getWindow_width();
+                    window_width = paquet.getWindow_width(); 
                     window_height = paquet.getWindow_height();
                     System.out.println("New client : " + name + " with skin " + skin + " and window size : [" + window_width + "x" + window_height+"]");
 
                     // Etape 2 : Envoyer la border au client
                     oos.reset();
-                    oos.writeObject(new PaquetSnakeFirstStoC((BorderInteger) engine.getPlateau().getBorder()));
+                    oos.writeObject(new PaquetSnakeFirstStoC<>(server.getBorder()));
                     
                     // Etape 3 : Créer son snake avec le plateau du serveur
-                    snake = SnakeInteger.createSnakeInteger((PlateauInteger) engine.getPlateau());
+                    snake = server.createSnake();
                     snake.setSkin(skin);
                     System.out.println("Snake created in "+ snake.getHead().getCenter().getX() + " " + snake.getHead().getCenter().getY());
                 }
@@ -93,9 +101,12 @@ public class Server implements Runnable{
                     e.printStackTrace();
                 }
 
-                // Etape 5 : On ajoute son snake au moteur de jeu
-                engine.addSnake(snake);
+                // Etape 4 : On ajoute son snake au moteur de jeu
+                server.addSnake(snake);
                 System.out.println("Snake added to engine");
+
+                // Etape 5 : On lance le thread du frame rate
+                frameRate.start();
                 
                 // Etape 6 : On commence les échanges de données
                 /*
@@ -105,14 +116,21 @@ public class Server implements Runnable{
                  * - Changer les données du snake du serveur
                  */
                 while(!Thread.currentThread().isInterrupted()){
-                    System.out.println("Waiting for "+name+" to send informations");
+                    //System.out.println("Waiting for "+name+" to send informations");
                     PaquetSnakeCtoS message = (PaquetSnakeCtoS) ois.readObject();
                     if(message.isQuit()){
                         close();
                         break;
                     }
                     snake.setBoosting(message.isBoost());
-                    snake.setTurning(message.getTurning());            
+                    if(onlyOneTurn){
+                        if(snake.getCurrentTurning() == Turning.FORWARD){
+                            snake.setTurning(message.getTurning());
+                        }
+                    }
+                    else{
+                        snake.setTurning(message.getTurning());
+                    }
                 }
 
             }catch(IOException e){
@@ -126,13 +144,13 @@ public class Server implements Runnable{
         }
 
         public void sendInformationsToDraw(){
-            SnakeData<Integer,Direction> snakeData = new SnakeData<>(snake);
-            ArrayList<SnakeData<Integer,Direction>> snakesToDraw = engine.getAllSnake();
-            ArrayList<FoodData<Integer,Direction>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
+            
             try {
                 oos.reset();
-                oos.writeObject(new PaquetSnakeStoC(snakeData, snakesToDraw, foodsToDraw));
-                System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
+                
+                server.sendObject(oos,snake,window_width,window_height);
+                //oos.writeObject(server.getPaquetSnakeStoC(snake, window_width, window_height));
+                //System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());
             } catch (IOException e) {
                 System.out.println("Failed sending to "+this.name);
                 e.printStackTrace();
@@ -140,9 +158,10 @@ public class Server implements Runnable{
         }
 
         public void close(){
-            clients.remove(this);
-            engine.removeSnake(snake);
-            System.out.println("Client "+name+" disconnected, "+clients.size()+" clients remaining");
+            frameRate.interrupt();
+            server.removeClient(this);
+            server.removeSnake(snake);
+            System.out.println("Client "+name+" disconnected, "+server.sizeOfClient()+" clients remaining");
             try {
                 ois.close();
                 oos.close();
@@ -155,67 +174,35 @@ public class Server implements Runnable{
         }
     }
 
-
-    public Server(){
-        clients = new ArrayList<ConnexionHandle>();
-        engine = EngineSnakeOnline.createEngineSnakeOnline(4000, 4000, configFood, configSnake ,this);
+    public String getIp(){
+        return server.getIp();
     }
 
-    public void sendInformationsToDrawToAll(){
-        for(ConnexionHandle client : clients){
-            if(client != null){
-                client.sendInformationsToDraw();
-            }
-        }
+    public void shutdown(){
+        server.shutdown();
     }
 
     @Override
     public void run() {
-        try {
-            server = new ServerSocket(port);
 
-            engine.run();
-            
-            pool = Executors.newCachedThreadPool();
+        try{
+            server.run();
             while(!Thread.currentThread().isInterrupted()){
-                Socket client = server.accept();
+                Socket client;
+            
+                client = server.getServerSocket().accept();
                 ConnexionHandle handle = new ConnexionHandle(client);
-                clients.add(handle);
-                pool.execute(handle);
+                server.add(handle);
             }
-
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
             System.out.println("Server closed");
         }
+        
     }
 
+    
 
-    public void shutdown(){
 
-        if(!Thread.currentThread().isInterrupted()){    // Garantie
-            Thread.currentThread().interrupt();
-        }
-        try {
-            ArrayList<ConnexionHandle> clients_copy = new ArrayList<ConnexionHandle>(this.clients);
-            for(ConnexionHandle client : clients_copy){
-                client.close();
-            }
-            if(server != null && !server.isClosed()){
-                server.close();
-            }
-            engine.stop();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public String getIp(){
-        try {
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            return inetAddress.getHostAddress().toString();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return "ERROR : IP NOT FOUND";
-    }
 }

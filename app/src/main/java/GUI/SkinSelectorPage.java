@@ -69,18 +69,28 @@ public class SkinSelectorPage extends Page {
         });
 
         play.setOnAction(e -> {
-            window.setClientSkin(allSkins[currentSkin]);
+            window.setClientSkin(allSkins[currentSkin],isSnake);
             clear();
             window.getScene().setOnKeyPressed(ev ->{
                 if(ev.getCode() == KeyCode.ESCAPE){
-                    window.stopClient();
+                    window.stopClient(isSnake);
                     window.switchToMenuPage();
                 }
-                window.getClient().setKeyCode(ev);
+                window.setKeyCodeClient(ev,isSnake);
+            });
+
+            window.getScene().setOnKeyReleased(ev ->{
+                window.setReleasedKeyCodeClient(ev,isSnake);
             });
             
-            window.getLayout().getChildren().add(window.getClientPlayPageSnakeOnline());
-            window.startClient();
+            if(isSnake){
+                window.getLayout().getChildren().add(window.getClientSnakePlayPage());
+            }
+            else{
+                window.getLayout().getChildren().add(window.getClientSlitherPlayPage());
+            }
+            
+            window.startClient(isSnake);
         });
 
         skinImageView = isSnake ? new ImageView(allSnakeImages[currentSkin]) : new ImageView(allSlitherImages[currentSkin]);

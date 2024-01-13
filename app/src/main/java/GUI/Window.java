@@ -1,77 +1,23 @@
 package GUI;
 
+import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
-import client.Client;
 import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationFoodInteger;
 import configuration.ConfigurationSnakeDouble;
 import configuration.ConfigurationSnakeInteger;
-import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
 import model.skins.Skin;
-import server.Server;
 
 public class Window {
 
-    private Server serverSnake = new Server();
-    private Thread serverSnakeThread = new Thread(serverSnake);
-    public void startServerSnake(){serverSnakeThread.start();}
-    public void stopServerSnake(){
-        serverSnake.shutdown();
-        serverSnakeThread = new Thread(serverSnake);
-    }
-    public boolean isServerSnakeDone(){
-        return !serverSnakeThread.isAlive();
-    }
-    public String getServerSnakeIp(){return serverSnake.getIp();}
-
-    private Server serverSlither = new Server();
-    private Thread serverSlitherThread = new Thread(serverSlither);
-    public void startServerSlither(){serverSlitherThread.start();}
-    public void stopServerSlither(){
-        serverSlither.shutdown();
-        serverSlitherThread = new Thread(serverSlither);
-    }
-    public boolean isServerSlitherDone(){return !serverSlitherThread.isAlive();}
-    public String getServerSlitherIp(){return serverSlither.getIp();}
-
-    private Client client = new Client();
-    public Client getClient() {
-        return client;
-    }
-    public void setClientPseudo(String pseudo){client.setPseudo(pseudo);}
-    public void setClientIp(String ip){client.setIp(ip);}
-    public void setClientSkin(Skin skin){client.setSkin(skin);}
-    public PlayPageSnake getClientPlayPageSnakeOnline() {return client.getPlayPageSnakeOnline();}
-
-    private Task<Void> clientTask = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            // long-running task
-            client.run();
-            return null;
-        }
-    };
-    private Thread clientThread = new Thread(clientTask);
-    public void startClient(){clientThread.start();}
-    public void stopClient(){
-        client.shutdown();
-        clientThread = new Thread(clientTask);
-    }
-
-    private EngineSlither offlineSlither;
-    public final ConfigurationFoodDouble configFoodSlither = new ConfigurationFoodDouble();
-    public final ConfigurationSnakeDouble configSnakeSlither = new ConfigurationSnakeDouble();
-
-    private EngineSnake offlineSnake;
-    public final ConfigurationFoodInteger configFoodSnake = new ConfigurationFoodInteger();
-    public final ConfigurationSnakeInteger configSnakeSnake = new ConfigurationSnakeInteger();
 
     public static final Rectangle2D screen = Screen.getPrimary().getBounds();
     public static final int WITDH = (int) screen.getWidth();
@@ -89,10 +35,155 @@ public class Window {
         scene.setRoot(layout);
     }
 
-    public EngineSlither getOfflineSlither() {return offlineSlither;}
-    public EngineSnake getOfflineSnake() {return offlineSnake;}
-    public void setOfflineSlither(EngineSlither offlineSlither) {this.offlineSlither = offlineSlither;}
-    public void setOfflineSnake(EngineSnake offlineSnake) {this.offlineSnake = offlineSnake;}
+    GameHandler gameHandler = new GameHandler();
+
+    public EngineSlither getOfflineSlither() {
+        return gameHandler.getOfflineSlither();
+    }
+    public EngineSnake getOfflineSnake() {
+        return gameHandler.getOfflineSnake();
+    }
+
+    public void setOfflineSlither(EngineSlither offlineSlither) {
+        gameHandler.setOfflineSlither(offlineSlither);
+    }
+    public void setOfflineSnake(EngineSnake offlineSnake) {
+        gameHandler.setOfflineSlither(offlineSnake);
+    }
+
+    public void stopServer(){
+        gameHandler.stopServerSnake();
+        gameHandler.stopServerSlither();
+    }
+
+    public void stopClient(){
+        gameHandler.stopClientSnake();
+        gameHandler.stopClientSlither();
+    }
+
+
+    public void startClient(boolean isSnake){
+        if(isSnake){
+            gameHandler.startClientSnake();
+        }
+        else{
+            gameHandler.startClientSlither();
+        }
+    }
+
+    public void setPseudoClient(String pseudo,boolean isSnake){
+        if(isSnake){
+            gameHandler.setClientSnakePseudo(pseudo);
+        }
+        else{
+            gameHandler.setClientSlitherPseudo(pseudo);
+        }
+    }
+
+    public void setKeyCodeClient(KeyEvent ev, boolean isSnake){
+        if(isSnake){
+            gameHandler.setKeyCodeClientSnake(ev);
+        }
+        else{
+            gameHandler.setKeyCodeClientSlither(ev);
+        }
+    }
+
+    public PlayPageSnake getClientSnakePlayPage() {
+        return gameHandler.getClientSnakePlayPage();
+    }
+
+    public void setClientSkin(Skin skin,boolean isSnake){
+        if(isSnake){
+            gameHandler.setClientSnakeSkin(skin);
+        }
+        else{
+            gameHandler.setClientSlitherSkin(skin);
+        }
+    }
+
+    public void setIpClient(String ip,boolean isSnake){
+        if(isSnake){
+            gameHandler.setClientSnakeIp(ip);
+        }
+        else{
+            gameHandler.setClientSlitherIp(ip);
+        }
+    }
+
+    public void setReleasedKeyCodeClient(KeyEvent ev, boolean isSnake){
+        if(isSnake){
+            gameHandler.setReleasedKeyCodeClientSnake(ev);
+        }
+        else{
+            gameHandler.setReleasedKeyCodeClientSlither(ev);
+        }
+    }
+
+    public void stopClient(boolean isSnake){
+        if(isSnake){
+            gameHandler.stopClientSnake();
+        }
+        else{
+            gameHandler.stopClientSlither();
+        }   
+    }
+
+    public boolean isServerSnakeDone(){
+        return gameHandler.isServerSnakeDone();
+    }
+
+    public boolean isServerSlitherDone(){
+        return gameHandler.isServerSlitherDone();
+    }
+
+    public String getServerIp(boolean isSnake){
+        if(isSnake){
+            return gameHandler.getServerSnakeIp();
+        }
+        else{
+            return gameHandler.getServerSlitherIp();
+        }
+    }
+
+    public void stopServer(boolean isSnake){
+        if(isSnake){
+            gameHandler.stopServerSnake();
+        }
+        else{
+            gameHandler.stopServerSlither();
+        }
+    }
+
+    public void startServer(boolean isSnake){
+        if(isSnake){
+            gameHandler.startServerSnake();
+        }
+        else{
+            gameHandler.startServerSlither();
+        }
+    }
+
+    public PlayPageSlither getClientSlitherPlayPage() {
+        return gameHandler.getClientSlitherPlayPage();
+    }
+
+    public ConfigurationFoodDouble getConfigFoodDouble() {
+        return gameHandler.getConfigFoodSlither();
+    }
+
+    public ConfigurationSnakeDouble getConfigSnakeSlither() {
+        return gameHandler.getConfigSnakeSlither();
+    }
+
+    public ConfigurationFoodInteger getConfigFoodSnake(){
+        return gameHandler.getConfigFoodSnake();
+    }
+
+    public ConfigurationSnakeInteger getConfigSnakeSnake(){
+        return gameHandler.getConfigSnakeSnake();
+    }
+
 
     public Window(Stage primaryStage) {
         this.primaryStage = primaryStage;
