@@ -41,6 +41,11 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     }
 
     @Override
+    public boolean getOnlyOneTurn() {
+        return true;
+    }
+
+    @Override
     public GameBorder<Integer,Direction> getBorder() {
         return engine.getPlateau().getBorder();
     }
@@ -68,15 +73,6 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     @Override
     public int sizeOfClient() {
         return clients.size();
-    }
-
-    @Override
-    public void sendInformationsToDrawToAll() {
-        for(ServerMain<Integer,Direction>.ConnexionHandle client : clients){
-            if(client != null){
-                client.sendInformationsToDraw();
-            }
-        }
     }
 
     @Override

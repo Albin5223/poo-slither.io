@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
 import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationFoodInteger;
@@ -52,12 +53,12 @@ public class Window {
 
     public void stopServer(){
         gameHandler.stopServerSnake();
-        //gameHandler.stopServerSlither();
+        gameHandler.stopServerSlither();
     }
 
     public void stopClient(){
         gameHandler.stopClientSnake();
-        //gameHandler.stopClientSlither();
+        gameHandler.stopClientSlither();
     }
 
 
@@ -66,7 +67,7 @@ public class Window {
             gameHandler.startClientSnake();
         }
         else{
-            //gameHandler.startClientSlither();
+            gameHandler.startClientSlither();
         }
     }
 
@@ -84,7 +85,7 @@ public class Window {
             gameHandler.setKeyCodeClientSnake(ev);
         }
         else{
-            //gameHandler.setKeyCodeClientSlither(ev);
+            gameHandler.setKeyCodeClientSlither(ev);
         }
     }
 
@@ -97,7 +98,7 @@ public class Window {
             gameHandler.setClientSnakeSkin(skin);
         }
         else{
-            //gameHandler.setClientSlitherSkin(skin);
+            gameHandler.setClientSlitherSkin(skin);
         }
     }
 
@@ -106,7 +107,7 @@ public class Window {
             gameHandler.setClientSnakeIp(ip);
         }
         else{
-            //gameHandler.setClientSlitherIp(ip);
+            gameHandler.setClientSlitherIp(ip);
         }
     }
 
@@ -115,7 +116,7 @@ public class Window {
             gameHandler.setReleasedKeyCodeClientSnake(ev);
         }
         else{
-            //gameHandler.setReleasedKeyCodeClientSlither(ev);
+            gameHandler.setReleasedKeyCodeClientSlither(ev);
         }
     }
 
@@ -124,7 +125,7 @@ public class Window {
             gameHandler.stopClientSnake();
         }
         else{
-            //gameHandler.stopClientSlither();
+            gameHandler.stopClientSlither();
         }   
     }
 
@@ -163,9 +164,9 @@ public class Window {
         }
     }
 
-    //public PlayPageSlither getClientSlitherPlayPage() {
-        //return gameHandler.getClientSlitherPlayPage();
-    //}
+    public PlayPageSlither getClientSlitherPlayPage() {
+        return gameHandler.getClientSlitherPlayPage();
+    }
 
     public ConfigurationFoodDouble getConfigFoodDouble() {
         return gameHandler.getConfigFoodSlither();

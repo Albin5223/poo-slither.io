@@ -19,10 +19,12 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
     
     public final static int port = 3000;
     ServerFactory<Type,O> server;
+    private boolean onlyOneTurn = false;
 
 
     public ServerMain(ServerFactory<Type,O> server) {
         this.server = server;
+        onlyOneTurn = server.getOnlyOneTurn();
     }
 
 
@@ -38,6 +40,8 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         private String name;
         private Snake<Type,O> snake;
         private Skin skin;
+        
+        
         
         private Thread frameRate = new Thread(new Runnable(){
             @Override
@@ -56,6 +60,7 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
         public ConnexionHandle(Socket client) throws SocketException{
             this.client = client;
             client.setTcpNoDelay(true);
+            
         }
 
         @Override
@@ -118,7 +123,12 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                         break;
                     }
                     snake.setBoosting(message.isBoost());
-                    if(snake.getCurrentTurning() == Turning.FORWARD){
+                    if(onlyOneTurn){
+                        if(snake.getCurrentTurning() == Turning.FORWARD){
+                            snake.setTurning(message.getTurning());
+                        }
+                    }
+                    else{
                         snake.setTurning(message.getTurning());
                     }
                 }

@@ -72,15 +72,6 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     }
 
     @Override
-    public void sendInformationsToDrawToAll() {
-        for(ServerMain<Double,Angle>.ConnexionHandle client : clients){
-            if(client != null){
-                client.sendInformationsToDraw();
-            }
-        }
-    }
-
-    @Override
     public String getIp() {
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
@@ -114,12 +105,18 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     public void run() {
         try {
             server = new ServerSocket(ServerMain.port);
+            server.setPerformancePreferences(0, 1, 0);
             engine.run();
             pool = Executors.newCachedThreadPool();
 
         } catch (IOException e) {
             System.out.println("Server closed");
         }
+    }
+
+    @Override
+    public boolean getOnlyOneTurn() {
+        return false;
     }
 
     @Override

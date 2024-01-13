@@ -162,7 +162,7 @@ public final class ClientMain <Type extends Number & Comparable<Type>, O extends
 
     @Override
     public List<FoodData<Type, O>> getAllFood(Coordinate<Type, O> coordinate, double radius) {
-        return clientFactory.getAllFood(coordinate, radius);
+        return clientFactory.getAllFood();
     }
 
     @Override

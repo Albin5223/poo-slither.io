@@ -1,9 +1,11 @@
 package GUI;
 
 
+import GUI.PlayPage.PlayPageSlither;
 import GUI.PlayPage.PlayPageSnake;
 import client.ClientFactory;
 import client.ClientMain;
+import client.ClientSlither;
 import client.ClientSnake;
 import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationFoodInteger;
@@ -17,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import model.engine.EngineSlither;
 import model.engine.EngineSnake;
 import model.skins.Skin;
+import server.ConcreteServerSlither;
 import server.ConcreteServerSnake;
 import server.ServerFactory;
 import server.ServerMain;
@@ -49,13 +52,19 @@ public class GameHandler {
     private ConcreteServerSnake serverSnake;
     private ClientSnake clientSnake;
 
+    private ConcreteServerSlither serverSlither;
+    private ClientSlither clientSlither;
+
 
 
     public GameHandler(){
         serverSnake = new ConcreteServerSnake();
         clientSnake = new ClientSnake();
         networkHandlerSnake = new NetworkHandler<>(serverSnake,clientSnake);
-        //networkHandlerSlither = new NetworkHandler<>(null,null);
+
+        serverSlither = new ConcreteServerSlither();
+        clientSlither = new ClientSlither();
+        networkHandlerSlither = new NetworkHandler<>(serverSlither,clientSlither);
         
     }
     
@@ -214,12 +223,36 @@ public class GameHandler {
         return networkHandlerSlither.isServerDone();
     }
 
+    public void setKeyCodeClientSlither(KeyEvent ev){
+        networkHandlerSlither.setKeyCode(ev);
+    }
+
+    public void setClientSlitherSkin(Skin skin){
+        networkHandlerSlither.setClientSkin(skin);
+    }
+
+    public void startClientSlither(){
+        networkHandlerSlither.startClient();
+    }
+
     public String getServerSlitherIp(){
         return networkHandlerSlither.getServerIp();
     }
 
     public void stopClientSlither(){
         networkHandlerSlither.stopClient();
+    }
+
+    public void setClientSlitherIp(String ip){
+        networkHandlerSlither.setClientIp(ip);
+    }
+
+    public void setReleasedKeyCodeClientSlither(KeyEvent ev){
+        networkHandlerSlither.setReleasedKeyCode(ev);
+    }
+
+    public PlayPageSlither getClientSlitherPlayPage(){
+        return clientSlither.getPlayPageSlither();
     }
 
     public void stopServerSlither(){

@@ -26,7 +26,7 @@ public interface ClientFactory<Type extends Number & Comparable<Type>, O extends
     public void setBorder(GameBorder<Type,O> border);
     public Observer<Type,O> getPlayPage();
     public ArrayList<SnakeData<Type, O>> getAllSnake();
-    public List<FoodData<Type, O>> getAllFood(Coordinate<Type, O> coordinate, double radius);
+    public List<FoodData<Type, O>> getAllFood();
     public Coordinate<Type, O> getMainSnakeCenter();
     public void setKeyCode(KeyEvent ev);
     public void setReleasedKeyCode(KeyEvent ev);

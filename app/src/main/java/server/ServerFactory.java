@@ -19,8 +19,6 @@ public interface ServerFactory <Type extends Number & Comparable<Type>, O extend
 
     public int sizeOfClient();
 
-    public void sendInformationsToDrawToAll();
-
     public String getIp();
 
     public void shutdown();
@@ -32,6 +30,8 @@ public interface ServerFactory <Type extends Number & Comparable<Type>, O extend
     public void add(ServerMain<Type,O>.ConnexionHandle handle);
 
     public void sendObject(ObjectOutputStream oos,Snake<Type,O> snakeFromMain,int window_width, int window_height);
+
+    public boolean getOnlyOneTurn();
 
 
 }

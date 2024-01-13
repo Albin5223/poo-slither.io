@@ -147,7 +147,7 @@ public class ClientSnake implements ClientFactory<Integer,Direction> {
     }
 
     @Override
-    public List<FoodData<Integer,Direction>> getAllFood(Coordinate<Integer, Direction> coordinate, double radius){
+    public List<FoodData<Integer,Direction>> getAllFood(){
         return foodsToDraw;
     }
 

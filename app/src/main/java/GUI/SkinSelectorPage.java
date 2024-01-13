@@ -86,6 +86,9 @@ public class SkinSelectorPage extends Page {
             if(isSnake){
                 window.getLayout().getChildren().add(window.getClientSnakePlayPage());
             }
+            else{
+                window.getLayout().getChildren().add(window.getClientSlitherPlayPage());
+            }
             
             window.startClient(isSnake);
         });

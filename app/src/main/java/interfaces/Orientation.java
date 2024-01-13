@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.io.Serializable;
+
 import interfaces.Turnable.Turning;
 
 public sealed interface Orientation<O extends Orientation<O>> {
@@ -7,7 +9,7 @@ public sealed interface Orientation<O extends Orientation<O>> {
     public O opposite();
     public O getRandom();
     
-    public final class Angle implements Orientation<Angle> {
+    public final class Angle implements Orientation<Angle>, Serializable {
 
         private double angle;
 
