@@ -514,11 +514,11 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
 
     public final void shrink(int nb){
-        int newSize = Math.max(tail.size() - nb, 3);
+        int newSize = Math.max(tail.size() - nb, BIRTH_LENGTH);
         while (tail.size() > newSize) {
             tail.remove(tail.size() - 1);
         }
-        if(tail.size() <= 3){
+        if(tail.size() <= BIRTH_LENGTH){
             TIME_OF_POISON = 0;
         }
     }
@@ -577,15 +577,20 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
      * @param isBoosting the new boosting of the snake
      */
     public final void setBoosting(boolean isBoosting) {
-        synchronized(lock) {
-            this.isBoosting = isBoosting;
-            if(isBoosting){
-                this.currentSpeed = BOOST_SPEED;
-            }
-            else{
-                this.currentSpeed = DEFAULT_SPEED;
-            }
+        
+        if(this.getTail().size() <= BIRTH_LENGTH){
+            this.isBoosting = false;
+            currentSpeed = DEFAULT_SPEED;
+            return;
         }
+        this.isBoosting = isBoosting;
+        if(isBoosting){
+            this.currentSpeed = BOOST_SPEED;
+        }
+        else{
+            this.currentSpeed = DEFAULT_SPEED;
+        }
+        
     }
 
     /**
