@@ -30,8 +30,8 @@ The same commands can be used to run the project using the Gradle Wrapper (`./gr
 
 To generate UML diagrams, execute the following command in your shell:
 
-```
-> gradlew generateClassDiagrams
+```bash
+gradlew generateClassDiagrams
 ```
 
 The generated diagrams will be located in the `app/docs/uml` directory.

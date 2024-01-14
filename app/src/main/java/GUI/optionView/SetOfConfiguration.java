@@ -7,6 +7,8 @@ import configuration.TouchControler;
 import javafx.scene.input.KeyCode;
 
 public class SetOfConfiguration {
+
+    public static final int NB_BOTS_MAX = 10;
     
     private static int numberOfPlayer;
     private static int numberOfHumanPlayer;
@@ -65,7 +67,7 @@ public class SetOfConfiguration {
     }
 
     public static void incrementNumberOfBot(){
-        if(numberOfPlayer < 6){
+        if(numberOfPlayer < NB_BOTS_MAX){
             numberOfBotPlayer++;
         }
         updateNumberOfPlayer();

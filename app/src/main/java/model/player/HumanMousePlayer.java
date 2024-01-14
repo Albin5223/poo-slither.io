@@ -65,18 +65,18 @@ public class HumanMousePlayer implements HumanPlayer {
         int centerX = 0;
         int centerY = 0;
 
-        int x = 0;
-        int y = 0;
+        int x = lastX;
+        int y = lastY;
 
         if(isCenter){
             centerX = Window.WITDH/2;
             centerY = Window.HEIGHT/2;
 
-            x = centerX + lastX;
-            y = centerY + lastY;
+            x += centerX;
+            y += centerY;
         }
         else{
-            centerX= snake.getHead().getCenter().getX().intValue(); 
+            centerX = snake.getHead().getCenter().getX().intValue(); 
             centerY = snake.getHead().getCenter().getY().intValue();
         }   
 

@@ -13,8 +13,8 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     private int SNAKE_MAX_RADIUS = SNAKE_BIRTH_HITBOX_RADIUS;
     private int SNAKE_GAP_BETWEEN_TAIL = SNAKE_BIRTH_HITBOX_RADIUS*2;
 
-    private int SNAKE_DEFAULT_SPEED = 15;
-    private int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
+    private int SNAKE_DEFAULT_SPEED = 20;
+    private int SNAKE_BOOST_SPEED = (int) (SNAKE_DEFAULT_SPEED * 1.8);
 
     /** Do we want to add food behind a dead snake ? */
     private boolean IS_DEATH_FOOD = true;

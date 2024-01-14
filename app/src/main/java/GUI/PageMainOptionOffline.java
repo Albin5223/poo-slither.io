@@ -29,6 +29,9 @@ import model.engine.EngineSnake;
 
 public class PageMainOptionOffline extends Page {
 
+    public static final int SOLO_SLITHER_MAP_RADIUS = 2000;
+    public static final int SOLO_SNAKE_MAP_WIDTH = 4000;
+
     private boolean isSnake;
     public static boolean mouseActivated;
 
@@ -76,7 +79,13 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSlither playPageSlither = new PlayPageSlither();
-        window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.getConfigFoodDouble(), window.getConfigSnakeSlither()));
+        if(SetOfConfiguration.getNumberOfHuman() <= 1){
+            window.setOfflineSlither(EngineSlither.createGame(SOLO_SLITHER_MAP_RADIUS, window.getConfigFoodDouble(), window.getConfigSnakeSlither()));
+        }
+        else{
+            window.setOfflineSlither(EngineSlither.createGame(Math.min((int) scene.getWidth(),(int)scene.getHeight())/2, window.getConfigFoodDouble(), window.getConfigSnakeSlither()));
+        }
+        
 
         if (mouseActivated) {
             
@@ -164,7 +173,12 @@ public class PageMainOptionOffline extends Page {
         Scene scene = window.getScene();
 
         PlayPageSnake playPageSnake = new PlayPageSnake();
-        window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.getConfigFoodSnake(), window.getConfigSnakeSnake()));
+        if(SetOfConfiguration.getNumberOfHuman() <= 1){
+            window.setOfflineSnake(EngineSnake.createGame(SOLO_SNAKE_MAP_WIDTH, SOLO_SNAKE_MAP_WIDTH, window.getConfigFoodSnake(), window.getConfigSnakeSnake()));
+        }
+        else{
+            window.setOfflineSnake(EngineSnake.createGame((int) scene.getWidth(),(int)scene.getHeight(), window.getConfigFoodSnake(), window.getConfigSnakeSnake()));
+        }
         
         for(int i = 0;i<SetOfConfiguration.getNumberOfHuman();i++){
             
