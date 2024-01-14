@@ -140,6 +140,11 @@ public class PageMainOptionOffline extends Page {
         
         scene.setOnKeyPressed( ev -> {
             if(ev.getCode() == KeyCode.ESCAPE){
+                scene.setOnMouseClicked(null);
+                scene.setOnMouseMoved(null);
+                scene.setOnMousePressed(null);
+                scene.setOnMouseReleased(null);
+                scene.setOnMouseDragged(null);
                 TouchControler.resetNumber();
                 AddPlayerBox.resetNumero();
                 mouseActivated=false;

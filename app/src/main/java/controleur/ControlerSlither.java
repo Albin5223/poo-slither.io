@@ -34,7 +34,6 @@ public class ControlerSlither implements KeyboardControler<Double,Angle>{
             snake.setTurning(Turning.GO_RIGHT);
         }
         else if(ev.getCode() == BOOST){
-            System.out.println("BOOST");
             snake.setBoosting(true);
         }
     }
@@ -45,7 +44,6 @@ public class ControlerSlither implements KeyboardControler<Double,Angle>{
             snake.setTurning(Turning.FORWARD);
         }
         else if(ev.getCode() == BOOST){
-            System.out.println("STOOOOOOP BOOST");
             snake.setBoosting(false);
         }
     }
