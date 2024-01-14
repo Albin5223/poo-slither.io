@@ -94,7 +94,7 @@ public class EngineSnake implements Engine<Integer,Direction> {
 
     @Override
     public List<FoodData<Integer,Direction>> getAllFood(Coordinate<Integer,Direction> coord, double radius) {
-        return plateau.getFoods().getRenderZone(coord, radius);
+        return plateau.getRenderZone(coord, radius);
     }
 
     @Override

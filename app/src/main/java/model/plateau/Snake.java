@@ -18,7 +18,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The skin of the snake, by default it's random */
     protected Skin skin = SkinRandom.build();
 
-    private double NUMBER_OF_SHRINK = 0;
+    private volatile double NUMBER_OF_SHRINK = 0;
 
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
@@ -62,8 +62,10 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
 
     private int TIME_OF_INVINCIBILITY = 0;
 
+    public final int BOOST_FOOD_SEGMENT_MODULO;
+
     /** The amount of death food that the snake will drop when he's dead */
-    public final int DEATH_FOOD_PER_SEGMENT;
+    public final int DEATH_FOOD_SEGMENT_MODULO;
     /** Is the snake traversing the wall ? */
     public final boolean IS_TRAVERSABLE_WALL;
     /** Is the snake dropping food when he's dead ? */
@@ -75,6 +77,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     
     /** The amount of food that the snake has eaten */
     private int foodCharging = 0;
+
+    private int lastBoostFoodAdded = 0;
 
     /** Is the snake dead ? */
     private boolean isDead = false;
@@ -152,7 +156,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.BOOST_SPEED = plateau.getSnakeConfig().getBoostSpeed();
         this.currentSpeed = DEFAULT_SPEED;
         this.INVINCIBILITY_MAX_TIME = plateau.getSnakeConfig().getInvincibilityTime();
-        this.DEATH_FOOD_PER_SEGMENT = plateau.getSnakeConfig().getDeathFoodPerSegment();
+        this.DEATH_FOOD_SEGMENT_MODULO = plateau.getSnakeConfig().getDeathFoodSegmentModulo();
+        this.BOOST_FOOD_SEGMENT_MODULO = plateau.getSnakeConfig().getBoostFoodSegmentModulo();
         this.IS_TRAVERSABLE_WALL = plateau.getSnakeConfig().isTraversableWall();
         this.IS_DROPING_FOOD_ON_DEATH = plateau.getSnakeConfig().isDeathFood();
         this.CAN_COLLIDING_WITH_HIMSELF = plateau.getSnakeConfig().isCollidingWithHimself();
@@ -411,6 +416,15 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             if (currentHitboxRadius > MAX_RADIUS) {currentHitboxRadius = MAX_RADIUS;}
         }
 
+        if(this.isBoosting()){
+            this.incrementeShrink(0.1);
+            this.lastBoostFoodAdded += 1;
+            if(this.lastBoostFoodAdded >= BOOST_FOOD_SEGMENT_MODULO){
+                this.lastBoostFoodAdded = 0;
+                plateau.addBoostFood(this);
+            }
+        }
+
         plateau.addSnake(this);   // We update the position of the snake on the board
 
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
@@ -419,7 +433,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             }
             else{
                 setShielded(0);
-                setInvincible(INVINCIBILITY_MAX_TIME);
+                if(!isInvincible()) {setInvincible(INVINCIBILITY_MAX_TIME);}
             }
         }
         ArrayList<Food<Type,O>> collidingFoods = plateau.isCollidingWithFoods(this);
@@ -493,12 +507,6 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         return head.center.distanceTo(other.getCenter()) <= this.currentHitboxRadius + other.getRadius();
     }
 
-    /**
-     * Method to shrink the snake
-     * @param nb the number of segments that the snake will lose
-     * @apiNote the snake cannot be more small than 3, so the {@link #TIME_OF_POISON} will be set to 0 if the snake is more small than 3
-     */
-
     
     public final void incrementeShrink(double n){
         synchronized(lock) {
@@ -510,9 +518,11 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
     }
 
-
-
-
+    /**
+     * Method to shrink the snake
+     * @param nb the number of segments that the snake will lose
+     * @apiNote the snake cannot be more small than {@link #BIRTH_LENGTH}, so the {@link #TIME_OF_POISON} will be set to 0 if the snake is more small than {@link #BIRTH_LENGTH}
+     */
     public final void shrink(int nb){
         int newSize = Math.max(tail.size() - nb, BIRTH_LENGTH);
         while (tail.size() > newSize) {
@@ -538,10 +548,12 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
      * Method to grow the snake (add a segment to the tail)
      */
     private final void grow(){
-        SnakePart lastTail = tail.get(tail.size() - 1);
-        O direction = lastTail.getOrientation();
-        SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction);
-        tail.add(newTail);
+        synchronized(lock){
+            SnakePart lastTail = tail.get(tail.size() - 1);
+            O direction = lastTail.getOrientation();
+            SnakePart newTail = new SnakePart(lastTail.getCenter().placeCoordinateFrom(direction.opposite(),GAP_BETWEEN_TAIL), direction);
+            tail.add(newTail);
+        }
     }
 
     /**
@@ -577,20 +589,20 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
      * @param isBoosting the new boosting of the snake
      */
     public final void setBoosting(boolean isBoosting) {
-        
-        if(this.getTail().size() <= BIRTH_LENGTH){
-            this.isBoosting = false;
-            currentSpeed = DEFAULT_SPEED;
-            return;
+        synchronized(lock) {
+            if(this.tail.size() <= BIRTH_LENGTH){
+                this.isBoosting = false;
+                currentSpeed = DEFAULT_SPEED;
+                return;
+            }
+            this.isBoosting = isBoosting;
+            if(isBoosting){
+                this.currentSpeed = BOOST_SPEED;
+            }
+            else{
+                this.currentSpeed = DEFAULT_SPEED;
+            }
         }
-        this.isBoosting = isBoosting;
-        if(isBoosting){
-            this.currentSpeed = BOOST_SPEED;
-        }
-        else{
-            this.currentSpeed = DEFAULT_SPEED;
-        }
-        
     }
 
     /**

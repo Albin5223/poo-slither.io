@@ -10,6 +10,7 @@ import exceptions.ExceptionCollisionWithSnake;
 import interfaces.ConfigurationSnake;
 import interfaces.GameBorder;
 import interfaces.Orientation;
+import model.FoodData;
 import model.coordinate.Coordinate;
 import model.coordinate.Grid;
 import model.foods.Food;
@@ -121,7 +122,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      */
     protected void addSnake(Snake<Type,O> snake) throws ExceptionCollisionWithSnake {
         synchronized(lock) {
-            if(isCollidingWithAll(snake)){
+            if(snakeBoard.containsKey(snake.getHead().getCenter())){
                 throw new ExceptionCollisionWithSnake("Snake added is colliding with another snake");
             }
             snakeBoard.put(snake.getHead().getCenter(), snake);
@@ -161,8 +162,8 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      */
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
-            ArrayList<FoodFactory<Type,O>.DeathFood> deathFoods = foodFactory.getDeathFoods(snake);
             if(foodGrid.size() > foodFactory.getFoodConfig().getNbFood()*foodFactory.getFoodConfig().getMaxFoodCoef()){return;}
+            ArrayList<FoodFactory<Type,O>.DeathFood> deathFoods = foodFactory.getDeathFoods(snake);
             for(FoodFactory<Type,O>.DeathFood food : deathFoods){
                 try {
                     addFood(food);
@@ -172,6 +173,24 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
             }
         }
     }
+
+    protected void addBoostFood(Snake<Type,O> snake) {
+        synchronized(lock) {
+            if(foodGrid.size() > foodFactory.getFoodConfig().getNbFood()*foodFactory.getFoodConfig().getMaxFoodCoef()){return;}
+           FoodFactory<Type,O>.DeathFood food = foodFactory.getBoostFoods(snake);
+            try {
+                addFood(food);
+            } catch ( ExceptionCollisionWithFood e ) {
+                // If the food is already present then we do nothing
+            }
+        }
+    }
+
+    public ArrayList<FoodData<Type,O>> getRenderZone(Coordinate<Type, O> coordinate, double radius) {
+        synchronized(lock) {
+            return foodGrid.getRenderZone(coordinate, radius);
+        }
+    } 
 
     /**
      * Remove a food from the board
@@ -256,7 +275,10 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         ArrayList<Food<Type,O>> collidingFoods = new ArrayList<Food<Type,O>>();
         int foodsToAdd = 0;
 
-        List<Food<Type,O>> nearbyFoods = foodGrid.getNearbyFoods(snake);
+        List<Food<Type,O>> nearbyFoods;
+        synchronized(lock){
+            nearbyFoods = foodGrid.getNearbyFoods(snake);
+        }
 
         for (Food<Type,O> food : nearbyFoods) {
             if (snake.isCollidingWith(food)) {

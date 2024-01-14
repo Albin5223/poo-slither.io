@@ -16,11 +16,22 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     private int SNAKE_DEFAULT_SPEED = 20;
     private int SNAKE_BOOST_SPEED = (int) (SNAKE_DEFAULT_SPEED * 1.8);
 
-    private int SNAKE_INVINCIBILITY_TIME = 2;
+    private int SNAKE_INVINCIBILITY_TIME = 1;
 
     /** Do we want to add food behind a dead snake ? */
     private boolean IS_DEATH_FOOD = true;
-    private int DEATH_FOOD_PER_SEGMENT = 1;
+
+    /**
+     * What is the frequency of the food spawning behind a dead snake ?
+     * <p>
+     * If the frequency is 1, then a food will be spawned behind a dead snake for each segment of the snake
+     * <p>
+     * If the frequency is 2, then a food will be spawned behind a dead snake for each 2 segments of the snake
+     * <p>
+     * etc...
+     */
+    private int DEATH_FOOD_SEGMENT_MODULO = 1;
+    private int BOOST_FOOD_SEGMENT_MODULO = 3;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
     private boolean TRAVERSABLE_WALL = true;
@@ -36,7 +47,8 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     public ConfigurationSnakeInteger setBoostSpeed(int i){SNAKE_BOOST_SPEED = i;return this;}
     public ConfigurationSnakeInteger setInvincibilityTime(int i){SNAKE_INVINCIBILITY_TIME = i;return this;}
     public ConfigurationSnakeInteger setDeathFood(boolean b){IS_DEATH_FOOD = b;return this;}
-    public ConfigurationSnakeInteger setDeathFoodPerSegment(int i){DEATH_FOOD_PER_SEGMENT = i;return this;}
+    public ConfigurationSnakeInteger setDeathFoodPerModulo(int i){DEATH_FOOD_SEGMENT_MODULO = i;return this;}
+    public ConfigurationSnakeInteger setBoostFoodPerModulo(int i){BOOST_FOOD_SEGMENT_MODULO = i;return this;}
     public ConfigurationSnakeInteger setTraversableWall(boolean b){TRAVERSABLE_WALL = b;return this;}
     public ConfigurationSnakeInteger setCollidingWithHimself(boolean b){CAN_COLLIDING_WITH_HIMSELF = b;return this;}
     public ConfigurationSnakeInteger setRadiusGrowing(boolean b){RADIUS_IS_GROWING = b;return this;}
@@ -51,7 +63,8 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     @Override public int getBoostSpeed(){return SNAKE_BOOST_SPEED;}
     @Override public int getInvincibilityTime(){return SNAKE_INVINCIBILITY_TIME;}
     @Override public boolean isDeathFood(){return IS_DEATH_FOOD;}
-    @Override public int getDeathFoodPerSegment(){return DEATH_FOOD_PER_SEGMENT;}
+    @Override public int getDeathFoodSegmentModulo(){return DEATH_FOOD_SEGMENT_MODULO;}
+    @Override public int getBoostFoodSegmentModulo(){return BOOST_FOOD_SEGMENT_MODULO;}
     @Override public boolean isTraversableWall(){return TRAVERSABLE_WALL;}
     @Override public boolean isCollidingWithHimself(){return CAN_COLLIDING_WITH_HIMSELF;}
     @Override public boolean isRadiusGrowing(){return RADIUS_IS_GROWING;}

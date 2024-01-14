@@ -133,7 +133,7 @@ public class EngineSlither implements Engine<Double,Angle>{
 
     @Override
     public List<FoodData<Double,Angle>> getAllFood(Coordinate<Double,Angle> coordinate, double radius) {
-        return plateau.getFoods().getRenderZone(coordinate, radius);
+        return plateau.getRenderZone(coordinate, radius);
     }
 
     @Override

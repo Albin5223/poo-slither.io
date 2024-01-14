@@ -183,32 +183,68 @@ public class FoodFactory<Type extends Number & Comparable<Type>, O extends Orien
         }
     }
 
+    /**
+     * Return a list of food that will be spawned when the snake dies
+     * @param snake the snake that dies
+     * @return a list of food that have to be spawned when the snake dies
+     */
     public ArrayList<DeathFood> getDeathFoods(Snake<Type, O> snake) {
         ArrayList<DeathFood> deathFoods = new ArrayList<>();
         double radius = snake.getHitboxRadius();
         
+        int i = 0;
         for (Snake<Type, O>.SnakePart s : snake.getAllSnakePart()) {
             Coordinate<Type, O> center = s.getCenter();
 
-            for(int i = 0; i < snake.DEATH_FOOD_PER_SEGMENT; i++){
-                if(foodConfig.getDeathFoodSpawnInCenter()){
-                    deathFoods.add(new DeathFood(center));
-                }
-                else{
-                    Random random = new Random();
-
-                    double randomAngle = 2 * Math.PI * random.nextDouble();
-                    double randomRadius = radius * Math.sqrt(random.nextDouble());
-
-                    double x = center.getX().doubleValue() + randomRadius * Math.cos(randomAngle);
-                    double y = center.getY().doubleValue() + randomRadius * Math.sin(randomAngle);
-
-                    Coordinate<Type,O> c = center.clone(x, y);
-                    deathFoods.add(new DeathFood(c));
-                }
+            if(i % snake.DEATH_FOOD_SEGMENT_MODULO != 0){
+                i++;
+                continue;
             }
+            if(foodConfig.getDeathFoodSpawnInCenter()){
+                deathFoods.add(new DeathFood(center));
+            }
+            else{
+                Random random = new Random();
+
+                double randomAngle = 2 * Math.PI * random.nextDouble();
+                double randomRadius = radius * Math.sqrt(random.nextDouble());
+
+                double x = center.getX().doubleValue() + randomRadius * Math.cos(randomAngle);
+                double y = center.getY().doubleValue() + randomRadius * Math.sin(randomAngle);
+
+                Coordinate<Type,O> c = center.clone(x, y);
+                deathFoods.add(new DeathFood(c));
+            }
+            i++;
         }
         return deathFoods;
+    }
+
+    /**
+     * Return the food that will be spawned behind the snake when he boosts
+     * @param snake the snake that boosts
+     * @return the food that will be spawned behind the snake when he boosts
+     */
+    public DeathFood getBoostFoods(Snake<Type, O> snake) {
+        double radius = snake.getHitboxRadius();
+        
+        Coordinate<Type, O> center = snake.getTail().get(snake.getTail().size() - 1).getCenter();
+
+        if(foodConfig.getDeathFoodSpawnInCenter()){
+            return new DeathFood(center);
+        }
+        else{
+            Random random = new Random();
+
+            double randomAngle = 2 * Math.PI * random.nextDouble();
+            double randomRadius = radius * Math.sqrt(random.nextDouble()) * 0.5;
+
+            double x = center.getX().doubleValue() + randomRadius * Math.cos(randomAngle);
+            double y = center.getY().doubleValue() + randomRadius * Math.sin(randomAngle);
+
+            Coordinate<Type,O> c = center.clone(x, y);
+            return new DeathFood(c);
+        }
     }
 
     public Food<Type,O> getRandomFood(Coordinate<Type,O> coordinate){

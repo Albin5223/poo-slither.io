@@ -8,7 +8,8 @@ public interface ConfigurationSnake {
     public int getDefaultSpeed();
     public int getBoostSpeed();
     public boolean isDeathFood();
-    public int getDeathFoodPerSegment();
+    public int getDeathFoodSegmentModulo();
+    public int getBoostFoodSegmentModulo();
     public boolean isTraversableWall();
     public boolean isCollidingWithHimself();
     public boolean isRadiusGrowing();
