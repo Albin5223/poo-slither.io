@@ -17,12 +17,12 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     private int SNAKE_BOOST_SPEED = SNAKE_DEFAULT_SPEED * 2;
 
     /** Do we want to add food behind a dead snake ? */
-    private boolean IS_DEATH_FOOD = false;
+    private boolean IS_DEATH_FOOD = true;
     private int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */
     private boolean TRAVERSABLE_WALL = true;
-    private boolean CAN_COLLIDING_WITH_HIMSELF = false;
+    private boolean CAN_COLLIDING_WITH_HIMSELF = true;
     private boolean RADIUS_IS_GROWING = false;
 
     public ConfigurationSnakeInteger setAlignWithSnake(boolean b){IS_ALIGN_WITH_SNAKE = b;return this;}

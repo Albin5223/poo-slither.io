@@ -20,12 +20,14 @@ import model.paquet.snake.PaquetSnakeStoC;
 import model.plateau.PlateauDouble;
 import model.plateau.Snake;
 import model.plateau.SnakeDouble;
+import model.player.Bot.BotSlitherPlayer;
 
 public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
 
     public static final int port = 4000;
+    public static final int NB_BOTS_CONSTANT = 10;
 
-    private ConfigurationFoodDouble configFood = new ConfigurationFoodDouble();
+    private ConfigurationFoodDouble configFood = new ConfigurationFoodDouble().setRatioOfFood(0.5/100);
     private ConfigurationSnakeDouble configSnake = new ConfigurationSnakeDouble();
 
     private ArrayList<ServerMain<Double,Angle>.ConnexionHandle> clients;
@@ -69,6 +71,16 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     }
 
     @Override
+    public void addBot() {
+        engine.addBot();
+    }
+
+    @Override
+    public BotSlitherPlayer removeRandomBot() {
+        return engine.removeRandomBot();
+    }
+
+    @Override
     public int sizeOfClient() {
         return clients.size();
     }
@@ -108,6 +120,11 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
         try {
             server = new ServerSocket(getPort());
             server.setPerformancePreferences(0, 1, 0);
+            
+            for(int i = 0; i < NB_BOTS_CONSTANT; i++){
+                engine.addBot();
+            }
+
             engine.run();
             pool = Executors.newCachedThreadPool();
 
@@ -134,7 +151,6 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
 
     @Override
     public void sendObject(ObjectOutputStream oos, Snake<Double, Angle> snake, int window_width,int window_height) {
-        
         try {
             SnakeData<Double,Angle> snakeData = new SnakeData<Double,Angle>(snake);
             ArrayList<SnakeData<Double,Angle>> snakesToDraw = engine.getAllSnake();
@@ -143,8 +159,6 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
             PaquetSnakeStoC<Double,Angle> paquet = new PaquetSnakeStoC<>(snakeData, snakesToDraw, foodsToDraw);
             oos.writeObject(paquet);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
             System.out.println("Something went wrong while sending the snake data");
         }
     }
@@ -153,6 +167,12 @@ public class ConcreteServerSlither implements ServerFactory<Double,Angle> {
     @Override
     public int getPort() {
         return port;
+    }
+
+
+    @Override
+    public int getNbBotsMax() {
+        return NB_BOTS_CONSTANT;
     }
     
 }

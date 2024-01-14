@@ -36,7 +36,7 @@ public class ClientSlither implements ClientFactory<Double, Angle> {
 
     private KeyCode LEFT =  KeyCode.LEFT;
     private KeyCode RIGHT = KeyCode.RIGHT;
-    private KeyCode BOOST = KeyCode.SPACE;
+    private KeyCode BOOST = KeyCode.UP;
 
 
     public ClientSlither(){

@@ -101,6 +101,9 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
                     e.printStackTrace();
                 }
 
+                if(server.sizeOfClient() < server.getNbBotsMax()){
+                    server.removeRandomBot();
+                }
                 // Etape 4 : On ajoute son snake au moteur de jeu
                 server.addSnake(snake);
                 System.out.println("Snake added to engine");
@@ -162,6 +165,9 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
             frameRateThread = new Thread(frameRate);
             server.removeClient(this);
             server.removeSnake(snake);
+
+            server.addBot();
+
             System.out.println("Client "+name+" disconnected, "+server.sizeOfClient()+" clients remaining");
             try {
                 ois.close();

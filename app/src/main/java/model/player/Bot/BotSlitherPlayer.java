@@ -32,5 +32,9 @@ public class BotSlitherPlayer implements BotPlayer {
                 break;
         }
     }
+
+    public SnakeDouble getSnake() {
+        return snake;
+    }
     
 }

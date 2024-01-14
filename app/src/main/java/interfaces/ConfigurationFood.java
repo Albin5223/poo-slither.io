@@ -2,9 +2,9 @@ package interfaces;
 
 public interface ConfigurationFood {
 
-    public static double RATIO_OF_FOOD = 2.0/100;
     public int getNbFood();
     public int getMaxFoodCoef();
+    public double getRatioOfFood();
 
     public int getPoisonTime();
     public int getPoisonPower();

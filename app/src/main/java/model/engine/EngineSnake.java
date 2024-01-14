@@ -8,7 +8,7 @@ import configuration.ConfigurationSnakeInteger;
 import controleur.KeyboardControler;
 import interfaces.Engine;
 import interfaces.HumanPlayer;
-import interfaces.Observer; 
+import interfaces.Observer;
 import interfaces.Orientation.Direction;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyEvent;
@@ -116,6 +116,19 @@ public class EngineSnake implements Engine<Integer,Direction> {
         BotSnakePlayer newBot = new BotSnakePlayer(newSnake,plateau);
         bots.add(newBot);
         snakeMovers.add(new SnakeMover<Integer,Direction>(newSnake,this,newBot));
+    }
+
+    public BotSnakePlayer removeRandomBot(){
+        if(bots.size() > 0){
+            int index = (int) (Math.random() * bots.size());
+            BotSnakePlayer bot = bots.get(index);
+            bots.remove(index);
+            SnakeMover<Integer,Direction> botMover = snakeMovers.remove(index);
+            botMover.stop();
+            plateau.removeSnake(bot.getSnake());
+            return bot;
+        }
+        return null;
     }
 
 

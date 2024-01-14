@@ -1,6 +1,5 @@
 package model.plateau;
 
-import interfaces.ConfigurationFood;
 import interfaces.GameBorder;
 import interfaces.Orientation.Direction;
 import model.coordinate.Coordinate;
@@ -14,6 +13,11 @@ import configuration.ConfigurationSnakeInteger;
 
 public final class PlateauInteger extends Plateau<Integer,Direction>{
 
+    /**
+     * The border of the map in the Snake game.
+     * <p>
+     * The map is a rectangle with 4 points.
+     */
     public static class BorderInteger implements GameBorder<Integer,Direction> {
 
         public final int xMin;
@@ -26,6 +30,16 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         public final int snakeSize;
         public final boolean isAlignWithSnake;
 
+        /**
+         * Constructs a new game border with the provided arguments.
+         * @param xMin the minimum x value of the border
+         * @param xMax the maximum x value of the border
+         * @param yMin the minimum y value of the border
+         * @param yMax the maximum y value of the border
+         * @param snakeGap the snakes segments gap (to know where to put the center of the foods)
+         * @param snakeSize the size of the snake (to know where to put the center of the foods)
+         * @param isAlignWithSnake true if the foods should be aligned with the snake, false otherwise
+         */
         public BorderInteger(int xMin, int xMax, int yMin, int yMax, int snakeGap, int snakeSize, boolean isAlignWithSnake) {
             this.xMin = xMin;
             this.xMax = xMax;
@@ -51,16 +65,27 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
             return yMax;
         }
 
+        /**
+         * @return the area of the map
+         */
         @Override
         public double getArea() {
             return (xMax - xMin) * (yMax - yMin);
         }
 
+        /**
+         * @param c the coordinate to check
+         * @return true if the coordinate is inside the map, false otherwise
+         */
         @Override
         public boolean isInside(Coordinate<Integer, Direction> c) {
             return c.getX() >= xMin && c.getX() <= xMax && c.getY() >= yMin && c.getY() <= yMax;
         }
 
+        /**
+         * @param c the coordinate to get the opposite of
+         * @return the opposite coordinate of the given coordinate
+         */
         @Override
         public Coordinate<Integer, Direction> getOpposite(Coordinate<Integer, Direction> c) {
             int x = c.getX();
@@ -95,6 +120,9 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
             return new CoordinateInteger(x,y);
         }
 
+        /**
+         * @return a random coordinate inside the map
+         */
         @Override
         public Coordinate<Integer, Direction> getRandomCoordinate() {
             if(isAlignWithSnake){
@@ -122,13 +150,13 @@ public final class PlateauInteger extends Plateau<Integer,Direction>{
         }
     }
 
-    public PlateauInteger(FoodFactory<Integer,Direction> foodFactory, ConfigurationSnakeInteger config, BorderInteger border) {
+    private PlateauInteger(FoodFactory<Integer,Direction> foodFactory, ConfigurationSnakeInteger config, BorderInteger border) {
         super(foodFactory, config, border);
     }
 
     public static PlateauInteger createPlateauSnake(int width, int height, ConfigurationFoodInteger foodConfig, ConfigurationSnakeInteger snakeConfig){
         BorderInteger border = new BorderInteger(-width/2, width/2, -height/2,height/2, snakeConfig.getGapBetweenTail(), snakeConfig.getBirthHitboxRadius()*2, snakeConfig.isAlignWithSnake());
-        foodConfig.setNbFood((int) (border.getArea() * ConfigurationFood.RATIO_OF_FOOD  / foodConfig.getAverageFoodArea()));
+        foodConfig.setNbFood((int) (border.getArea() * foodConfig.getRatioOfFood() / foodConfig.getAverageFoodArea()));
         PlateauInteger plateau = new PlateauInteger(new FoodFactory<Integer,Direction>(foodConfig), snakeConfig, border);
 
         return plateau;

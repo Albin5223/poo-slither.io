@@ -14,25 +14,53 @@ import model.coordinate.Coordinate;
 import model.coordinate.Grid;
 import model.foods.Food;
 import model.foods.FoodFactory;
+import interfaces.ConfigurationFood;
 
+/**
+ * The board of the game.
+ * It contains all the snakes and the foods.
+ * It is also responsible for the collisions between the snakes and the foods.
+ * @param Type the type of the coordinate, used to specify the position of snakes and food on the board
+ * @param O the type of the orientation, used to specify how the snakes are turning
+ */
 public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O extends Orientation<O>> permits PlateauDouble, PlateauInteger {
 
-    protected HashMap<Coordinate<Type,O>, Snake<Type,O>> plateau = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
+    /** The board of the game where the snakes are */
+    protected HashMap<Coordinate<Type,O>, Snake<Type,O>> snakeBoard = new HashMap<Coordinate<Type,O>, Snake<Type,O>>();
+    /** The board of the game where the foods are */
     protected Grid<Type,O> foodGrid = new Grid<Type,O>();
     
+    /** The factory used to create the foods */
     protected final FoodFactory<Type,O> foodFactory;
+    /** The border of the game */
     protected final GameBorder<Type,O> border;
+    /** The configuration of the snakes */
     protected final ConfigurationSnake snakeConfig;
+    /**
+     * @return the configuration of the snakes
+     */
     public ConfigurationSnake getSnakeConfig() {return snakeConfig;}
 
     /**
      * The lock used to synchronize the access to the board.
-     * This lock is used to avoid concurrent access to the board.
-     * Usefull for having snakes with different speed.
+     * <p>
+     * Used to avoid concurrent access to the board and useful for having snakes with different speed.
      */
     private Object lock = new Object();
 
-
+    /**
+     * Constructs a new game board with the provided food factory, snake configuration, and game border.
+     * <p>
+     * @apiNote All foods are added to the board upon creation.
+     *
+     * @param foodFactory the factory used to generate food items on the board
+     * @param snakeConfig the configuration settings for the snakes
+     * @param border the boundaries of the game
+     *
+     * @see FoodFactory
+     * @see ConfigurationSnake
+     * @see GameBorder
+     */
     protected Plateau(FoodFactory<Type,O> foodFactory, ConfigurationSnake snakeConfig, GameBorder<Type,O> border) {
         this.foodFactory = foodFactory;
         this.border = border;
@@ -41,20 +69,34 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         this.addAllFood();
     }
 
+    /**
+     * @return the board of the game where the snakes are
+     */
     public HashMap<Coordinate<Type,O>, Snake<Type,O>> getHashMap() {
-        return plateau;
+        return snakeBoard;
     }
 
+    /**
+     * @return the board of the game where the foods are
+     */
     public Grid<Type,O> getFoods() {
         return foodGrid;
     }
 
+    /**
+     * @return the border of the game
+     */
     public GameBorder<Type,O> getBorder() {
         return border;
     }
 
+    /**
+     * This method is called at each step of a snake, to see if the snake is still on the board.
+     * @param snake the snake to check
+     * @return true if the snake is still on the board, false otherwise
+     */
     protected boolean isSnakeOnBoard(Snake<Type,O> snake){
-        for (Snake<Type,O> s : plateau.values()) {
+        for (Snake<Type,O> s : snakeBoard.values()) {
             if(snake == s){ // We check if the snake is on the board
                 return true;
             }
@@ -62,8 +104,11 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         return false;
     }
 
+    /**
+     * @return the list of all the snakes on the board
+     */
     public ArrayList<Snake<Type,O>> getSnakes() {
-        return new ArrayList<Snake<Type,O>>(plateau.values());
+        return new ArrayList<Snake<Type,O>>(snakeBoard.values());
     }
 
 
@@ -77,7 +122,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
             if(isCollidingWithAll(snake)){
                 throw new ExceptionCollisionWithSnake("Snake added is colliding with another snake");
             }
-            plateau.put(snake.getHead().getCenter(), snake);
+            snakeBoard.put(snake.getHead().getCenter(), snake);
         }
     }
 
@@ -88,10 +133,15 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      */
     public boolean removeSnake(Snake<Type,O> snake) {
         synchronized(lock) {
-            return plateau.remove(snake.getHead().getCenter()) != null;
+            return snakeBoard.remove(snake.getHead().getCenter()) != null;
         }
     }
 
+    /**
+     * Add a food to the board
+     * @param food the food to add
+     * @throws ExceptionCollisionWithFood if the food is added in the exact same center as another food already on the board
+     */
     protected void addFood(Food<Type,O> food) throws ExceptionCollisionWithFood {
         synchronized(lock) {
             if(!foodGrid.insert(food)){
@@ -100,6 +150,13 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         }
     }
 
+    /**
+     * Add a snake's death food to the board
+     * @apiNote This method is called when a snake dies
+     * @apiNote If the number of food on the board is already too high, then no food is added
+     * @param snake the snake to add the death food
+     * @see ConfigurationFood#getMaxFoodCoef()
+     */
     protected void addDeathFood(Snake<Type,O> snake) {
         synchronized(lock) {
             ArrayList<FoodFactory<Type,O>.DeathFood> deathFoods = foodFactory.getDeathFoods(snake);
@@ -114,6 +171,11 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         }
     }
 
+    /**
+     * Remove a food from the board
+     * @param food the food to remove
+     * @throws IllegalArgumentException if the food is not on the board
+     */
     public void removeFood(Food<Type,O> food) throws IllegalArgumentException {
         synchronized(lock) {
             if(!foodGrid.remove(food)){
@@ -122,15 +184,24 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         }
     }
 
+    /**
+     * Add a random food to the board at a random position
+     * @apiNote This method is called when a food is eaten by a snake
+     */
     public void addOneFood(){
         try {
             Coordinate<Type,O> c = border.getRandomCoordinate();
             addFood(foodFactory.getRandomFood(c));
         } catch (ExceptionCollision e) {
-            // If the food is already present then we do nothing
+            // If the food is already present, then we retry
+            addOneFood();
         }
     }
 
+    /**
+     * Add all the foods to the board
+     * @apiNote This method is called when the board is created
+     */
     private void addAllFood() {
         for(int i = 0; i < foodFactory.getFoodConfig().getNbFood(); i++){
             addOneFood();
@@ -143,7 +214,7 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * @return true if the snake is colliding with another snake already on the board, false otherwise
      */
     public boolean isCollidingWithAll(Snake<Type,O> snake){
-        for (Snake<Type,O> s : plateau.values()) {
+        for (Snake<Type,O> s : snakeBoard.values()) {
             if(snake.isCollidingWith(s)){ // We check if the snake is colliding with another snake already on the board
                 System.out.println("Collision with " + s.head.getCenter().toString()+ " at " + snake.getHead().getCenter().toString());
                 return true;
@@ -152,6 +223,29 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
         return false;
     }
 
+    /**
+     * Check if a coordinate is colliding with a snake already on the board
+     * @param c the coordinate to check
+     * @param radius the radius of the coordinate
+     * @param snake the snake to check
+     * @return true if the coordinate is colliding with the snake already on the board, false otherwise
+     */
+    public boolean willYouCollideWith(Coordinate<Type,O> c, double radius, Snake<Type,O> snake){
+        for (Snake<Type,O>.SnakePart s : snake.getAllSnakePart()) {
+            if(s.getCenter().distanceTo(c) < radius + snake.getHitboxRadius()){ // We check if the coordinate is colliding with the snake already on the board
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if the snake is colliding with a food already on the board
+     * @param snake the snake to check
+     * @return the list of all the foods colliding with the snake
+     * 
+     * @apiNote This method also removes the food from the board if it is colliding with the snake
+     */
     public ArrayList<Food<Type,O>> isCollidingWithFoods(Snake<Type,O> snake){
 
         ArrayList<Food<Type,O>> collidingFoods = new ArrayList<Food<Type,O>>();

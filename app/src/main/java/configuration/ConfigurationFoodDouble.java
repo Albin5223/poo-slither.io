@@ -2,10 +2,17 @@ package configuration;
 
 import interfaces.ConfigurationFood;
 
+/**
+ * This class is used to configure the food of the game in the double mode.
+ * <p>
+ * This class implements the interface ConfigurationFood,
+ * and you can change the value of the attributes to change the configuration of the food
+ */
 public class ConfigurationFoodDouble implements ConfigurationFood {
 
     private double AVERAGE_FOOD_RADIUS = 7;
 
+    private double RATIO_OF_FOOD = 1.0/100;
     private int NB_FOOD = 100;
     private int MAX_FOOD_COEF = 2;
 
@@ -45,6 +52,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     private boolean SHIELD_FOOD_RESPAWN = true;
     private int SHIELD_FOOD_PROBABILITY = 2;
 
+    public ConfigurationFoodDouble setRatioOfFood(double i){RATIO_OF_FOOD = i;return this;}
     public ConfigurationFoodDouble setNbFood(int i){NB_FOOD = i;return this;}
     public ConfigurationFoodDouble setMaxFoodCoef(int i){MAX_FOOD_COEF = i;return this;}
     public ConfigurationFoodDouble setPoisonTime(int i){POISON_TIME = i;return this;}
@@ -72,6 +80,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     public ConfigurationFoodDouble setShieldFoodProbability(int i){SHIELD_FOOD_PROBABILITY = i;return this;}
     public ConfigurationFoodDouble setAverageFoodRadius(double d){AVERAGE_FOOD_RADIUS = d;return this;}
     
+    @Override public double getRatioOfFood(){return RATIO_OF_FOOD;}
     @Override public int getNbFood(){return NB_FOOD;}
     @Override public int getMaxFoodCoef(){return MAX_FOOD_COEF;}
     @Override public int getPoisonTime(){return POISON_TIME;}

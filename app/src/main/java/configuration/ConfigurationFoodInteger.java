@@ -5,6 +5,8 @@ import interfaces.ConfigurationFood;
 public class ConfigurationFoodInteger implements ConfigurationFood {
 
     private double AVERAGE_FOOD_RADIUS = 7;
+
+    private double RATIO_OF_FOOD = 1.0/100;
     private int NB_FOOD = 100;
     private int MAX_FOOD_COEF = 2;
 
@@ -44,6 +46,7 @@ public class ConfigurationFoodInteger implements ConfigurationFood {
     private boolean SHIELD_FOOD_RESPAWN = true;
     private int SHIELD_FOOD_PROBABILITY = 2;
 
+    public ConfigurationFoodInteger setRatioOfFood(double i){RATIO_OF_FOOD = i;return this;}
     public ConfigurationFoodInteger setNbFood(int i){NB_FOOD = i;return this;}
     public ConfigurationFoodInteger setMaxFoodCoef(int i){MAX_FOOD_COEF = i;return this;}
     public ConfigurationFoodInteger setPoisonTime(int i){POISON_TIME = i;return this;}
@@ -71,6 +74,7 @@ public class ConfigurationFoodInteger implements ConfigurationFood {
     public ConfigurationFoodInteger setShieldFoodProbability(int i){SHIELD_FOOD_PROBABILITY = i;return this;}
     public ConfigurationFoodInteger setAverageFoodRadius(double d){AVERAGE_FOOD_RADIUS = d;return this;}
     
+    @Override public double getRatioOfFood(){return RATIO_OF_FOOD;}
     @Override public int getNbFood(){return NB_FOOD;}
     @Override public int getMaxFoodCoef(){return MAX_FOOD_COEF;}
     @Override public int getPoisonTime(){return POISON_TIME;}

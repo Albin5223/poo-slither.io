@@ -20,7 +20,7 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     private int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
 
     /** Do we want to add food behind a dead snake ? */
-    private boolean IS_DEATH_FOOD = false;
+    private boolean IS_DEATH_FOOD = true;
     private int DEATH_FOOD_PER_SEGMENT = 1;
 
     /** Are we reappearing in the opposite side of the board when traversing the wall ? */

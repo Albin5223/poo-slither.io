@@ -78,6 +78,19 @@ public class EngineSlither implements Engine<Double,Angle>{
         snakeMovers.add(new SnakeMover<Double,Angle>(newSnake,this,newBot)); 
     }
 
+    public BotSlitherPlayer removeRandomBot(){
+        if(bots.size() > 0){
+            int index = (int) (Math.random() * bots.size());
+            BotSlitherPlayer bot = bots.get(index);
+            bots.remove(index);
+            SnakeMover<Double,Angle> botMover = snakeMovers.remove(index);
+            botMover.stop();
+            plateau.removeSnake(bot.getSnake());
+            return bot;
+        }
+        return null;
+    }
+
 
     public void addPlayerMouse(){
         SnakeDouble newSnake = SnakeDouble.createSnakeDouble(plateau);

@@ -3,6 +3,8 @@ package server;
 import interfaces.GameBorder;
 import interfaces.Orientation;
 import model.plateau.Snake;
+import model.player.Bot.BotPlayer;
+
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 
@@ -16,6 +18,10 @@ public interface ServerFactory <Type extends Number & Comparable<Type>, O extend
     public void removeClient(ServerMain<Type,O>.ConnexionHandle client);
 
     public void removeSnake(Snake<Type,O> snake); // engine.removeSnake(snake);
+
+    public void addBot(); // engine.addBot();
+
+    public BotPlayer removeRandomBot(); // engine.removeRandomBot();
 
     public int sizeOfClient();
 
@@ -34,6 +40,8 @@ public interface ServerFactory <Type extends Number & Comparable<Type>, O extend
     public void sendObject(ObjectOutputStream oos,Snake<Type,O> snakeFromMain,int window_width, int window_height);
 
     public boolean getOnlyOneTurn();
+
+    public int getNbBotsMax();
 
 
 }

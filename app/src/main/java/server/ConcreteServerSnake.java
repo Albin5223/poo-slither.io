@@ -13,6 +13,8 @@ import model.paquet.snake.PaquetSnakeStoC;
 import model.plateau.PlateauInteger;
 import model.plateau.Snake;
 import model.plateau.SnakeInteger;
+import model.player.Bot.BotSnakePlayer;
+
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,8 +26,9 @@ import java.io.ObjectOutputStream;
 public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
 
     public static final int port = 3000;
+    public static final int NB_BOTS_CONSTANT = 10;
 
-    private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger();
+    private ConfigurationFoodInteger configFood = new ConfigurationFoodInteger().setRatioOfFood(0.5/100);
     private ConfigurationSnakeInteger configSnake = new ConfigurationSnakeInteger();
 
     private ArrayList<ServerMain<Integer,Direction>.ConnexionHandle> clients;
@@ -73,6 +76,16 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     }
 
     @Override
+    public void addBot() {
+        engine.addBot();
+    }
+
+    @Override
+    public BotSnakePlayer removeRandomBot() {
+        return engine.removeRandomBot();
+    }
+
+    @Override
     public int sizeOfClient() {
         return clients.size();
     }
@@ -113,6 +126,11 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
         try {
             server = new ServerSocket(getPort());
             server.setPerformancePreferences(0, 1, 0);
+
+            for(int i = 0; i < NB_BOTS_CONSTANT; i++){
+                engine.addBot();
+            }
+
             engine.run();
             pool = Executors.newCachedThreadPool();
 
@@ -134,18 +152,15 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
 
     @Override
     public void sendObject(ObjectOutputStream oos,Snake<Integer,Direction> snake,int window_width, int window_height) {
-
-        SnakeData<Integer,Direction> snakeData = new SnakeData<Integer, Direction>(snake);
-        ArrayList<SnakeData<Integer,Direction>> snakesToDraw = engine.getAllSnake();
-        ArrayList<FoodData<Integer,Direction>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
-        
-        PaquetSnakeStoC<Integer,Direction> paquet = new PaquetSnakeStoC<Integer, Direction>(snakeData, snakesToDraw, foodsToDraw);
-
         try {
+            SnakeData<Integer,Direction> snakeData = new SnakeData<Integer, Direction>(snake);
+            ArrayList<SnakeData<Integer,Direction>> snakesToDraw = engine.getAllSnake();
+            ArrayList<FoodData<Integer,Direction>> foodsToDraw = snake.getPlateau().getFoods().getRenderZone(snake.getHead().getCenter(), Math.max(window_height, window_width));
+            
+            PaquetSnakeStoC<Integer,Direction> paquet = new PaquetSnakeStoC<Integer, Direction>(snakeData, snakesToDraw, foodsToDraw);
             oos.writeObject(paquet);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something went wrong while sending the snake data");
         }
 
     }
@@ -153,6 +168,11 @@ public class ConcreteServerSnake implements ServerFactory<Integer,Direction> {
     @Override
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public int getNbBotsMax() {
+        return NB_BOTS_CONSTANT;
     }
     
 }

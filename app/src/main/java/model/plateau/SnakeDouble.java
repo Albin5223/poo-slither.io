@@ -5,6 +5,9 @@ import interfaces.Orientation.Angle;
 import model.coordinate.CoordinateDouble;
 import configuration.ConfigurationSnakeDouble;
 
+/**
+ * A snake in the Slither.io game.
+ */
 public final class SnakeDouble extends Snake<Double,Angle> {
 
     private SnakeDouble(CoordinateDouble location, PlateauDouble plateau, Angle startingDirection) throws ExceptionCollision {

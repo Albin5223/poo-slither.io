@@ -4,6 +4,9 @@ import interfaces.Orientation.Direction;
 import model.coordinate.CoordinateInteger;
 import exceptions.ExceptionCollision;
 
+/**
+ * A snake in the Snake game.
+ */
 public final class SnakeInteger extends Snake<Integer,Direction> {
 
     private SnakeInteger(CoordinateInteger location, PlateauInteger plateau, Direction startingDirection) throws ExceptionCollision {
