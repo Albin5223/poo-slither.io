@@ -150,7 +150,6 @@ public class ServerMain<Type extends Number & Comparable<Type>, O extends Orient
             
             try {
                 oos.reset();
-                
                 server.sendObject(oos,snake,window_width,window_height);
                 //oos.writeObject(server.getPaquetSnakeStoC(snake, window_width, window_height));
                 //System.out.println(">> Snake data sent to "+this.name+" in "+ this.snake.getHead().getCenter().getX() + " " + this.snake.getHead().getCenter().getY());

@@ -48,7 +48,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
 
     /*Configuration for shield food */
     private double SHIELD_FOOD_RADIUS = 10;
-    private int SHIELD_VALUE = 5;
+    private int SHIELD_TIME = 5;
     private boolean SHIELD_FOOD_RESPAWN = true;
     private int SHIELD_FOOD_PROBABILITY = 2;
 
@@ -75,7 +75,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     public ConfigurationFoodDouble setDeathFoodValue(int i){DEATH_FOOD_VALUE = i;return this;}
     public ConfigurationFoodDouble setDeathFoodSpawnInCenter(boolean b){DEATH_FOOD_SPAWN_IN_CENTER = b;return this;}
     public ConfigurationFoodDouble setShieldFoodRadius(double d){SHIELD_FOOD_RADIUS = d;return this;}
-    public ConfigurationFoodDouble setShieldValue(int i){SHIELD_VALUE = i;return this;}
+    public ConfigurationFoodDouble setShieldValue(int i){SHIELD_TIME = i;return this;}
     public ConfigurationFoodDouble setShieldFoodRespawn(boolean b){SHIELD_FOOD_RESPAWN = b;return this;}
     public ConfigurationFoodDouble setShieldFoodProbability(int i){SHIELD_FOOD_PROBABILITY = i;return this;}
     public ConfigurationFoodDouble setAverageFoodRadius(double d){AVERAGE_FOOD_RADIUS = d;return this;}
@@ -103,7 +103,7 @@ public class ConfigurationFoodDouble implements ConfigurationFood {
     @Override public int getDeathFoodValue(){return DEATH_FOOD_VALUE;}
     @Override public boolean getDeathFoodSpawnInCenter(){return DEATH_FOOD_SPAWN_IN_CENTER;}
     @Override public double getShieldFoodRadius(){return SHIELD_FOOD_RADIUS;}
-    @Override public int getShieldValue(){return SHIELD_VALUE;}
+    @Override public int getShieldTime(){return SHIELD_TIME;}
     @Override public boolean getShieldFoodRespawn(){return SHIELD_FOOD_RESPAWN;}
     @Override public int getShieldFoodProbability(){return SHIELD_FOOD_PROBABILITY;}
     @Override public double getAverageFoodRadius(){return AVERAGE_FOOD_RADIUS;}

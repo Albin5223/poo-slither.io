@@ -4,20 +4,20 @@ import interfaces.ConfigurationSnake;
 import interfaces.Orientation.Angle;
 
 public class ConfigurationSnakeDouble implements ConfigurationSnake {
-    /* The ratio of the random coordinate to be inside the map */
-    private double RANDOM_RATIO = 0.9;
     /*
      * The turning force of the snake is the angle that the snake will turn when the player press the left or right key
      */
     private Angle SLITHER_TURNING_FORCE = new Angle(4);
-    private int SLITHER_GAP_BETWEEN_TAIL = 4;
+    private int SLITHER_GAP_BETWEEN_TAIL = 5;
     private int SLITHER_BIRTH_LENGTH = 15;
     private int SLITHER_MAX_FOOD_CHARGING = 10;
     private int SLITHER_BIRTH_HITBOX_RADIUS = 10;
     private int SLITHER_MAX_RADIUS = SLITHER_BIRTH_HITBOX_RADIUS * 2;
 
-    private int SLITHER_DEFAULT_SPEED = 75;
-    private int SLITHER_BOOST_SPEED = SLITHER_DEFAULT_SPEED * 3;
+    private int SLITHER_DEFAULT_SPEED = 55;
+    private int SLITHER_BOOST_SPEED = (int) (SLITHER_DEFAULT_SPEED * 1.7);
+
+    private int SLITHER_INVINCIBILITY_TIME = 2;
 
     /** Do we want to add food behind a dead snake ? */
     private boolean IS_DEATH_FOOD = true;
@@ -28,7 +28,6 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     private boolean CAN_COLLIDING_WITH_HIMSELF = false;
     private boolean RADIUS_IS_GROWING = true;
 
-    public ConfigurationSnakeDouble setRandomRatio(double d){RANDOM_RATIO = d;return this;}
     public ConfigurationSnakeDouble setTurningForce(Angle a){SLITHER_TURNING_FORCE = a;return this;}
     public ConfigurationSnakeDouble setGapBetweenTail(int i){SLITHER_GAP_BETWEEN_TAIL = i;return this;}
     public ConfigurationSnakeDouble setBirthLength(int i){SLITHER_BIRTH_LENGTH = i;return this;}
@@ -36,6 +35,7 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     public ConfigurationSnakeDouble setBirthHitboxRadius(int i){SLITHER_BIRTH_HITBOX_RADIUS = i;return this;}
     public ConfigurationSnakeDouble setDefaultSpeed(int i){SLITHER_DEFAULT_SPEED = i;return this;}
     public ConfigurationSnakeDouble setBoostSpeed(int i){SLITHER_BOOST_SPEED = i;return this;}
+    public ConfigurationSnakeDouble setInvincibilityTime(int i){SLITHER_INVINCIBILITY_TIME = i;return this;}
     public ConfigurationSnakeDouble setDeathFood(boolean b){IS_DEATH_FOOD = b;return this;}
     public ConfigurationSnakeDouble setDeathFoodPerSegment(int i){DEATH_FOOD_PER_SEGMENT = i;return this;}
     public ConfigurationSnakeDouble setTraversableWall(boolean b){IS_TRAVERSABLE_WALL = b;return this;}
@@ -43,7 +43,6 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     public ConfigurationSnakeDouble setRadiusGrowing(boolean b){RADIUS_IS_GROWING = b;return this;}
     public ConfigurationSnakeDouble setMaxRadius(int i){SLITHER_MAX_RADIUS = i;return this;}
 
-    public double getRandomRatio(){return RANDOM_RATIO;}
     public Angle getTurningForce(){return SLITHER_TURNING_FORCE;}
     @Override public int getGapBetweenTail(){return SLITHER_GAP_BETWEEN_TAIL;}
     @Override public int getBirthLength(){return SLITHER_BIRTH_LENGTH;}
@@ -51,6 +50,7 @@ public class ConfigurationSnakeDouble implements ConfigurationSnake {
     @Override public int getBirthHitboxRadius(){return SLITHER_BIRTH_HITBOX_RADIUS;}
     @Override public int getDefaultSpeed(){return SLITHER_DEFAULT_SPEED;}
     @Override public int getBoostSpeed(){return SLITHER_BOOST_SPEED;}
+    @Override public int getInvincibilityTime(){return SLITHER_INVINCIBILITY_TIME;}
     @Override public boolean isDeathFood(){return IS_DEATH_FOOD;}
     @Override public int getDeathFoodPerSegment(){return DEATH_FOOD_PER_SEGMENT;}
     @Override public boolean isTraversableWall(){return IS_TRAVERSABLE_WALL;}

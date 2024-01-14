@@ -51,14 +51,29 @@ public class Window {
         gameHandler.setOfflineSnake(offlineSnake);
     }
 
-    public void stopServer(){
+    private void stopServer(){
         gameHandler.getNetworkHandlerSnake().stopServer();
         gameHandler.getNetworkHandlerSlither().stopServer();
     }
 
-    public void stopClient(){
+    private void stopClient(){
         gameHandler.getNetworkHandlerSnake().stopClient();
         gameHandler.getNetworkHandlerSlither().stopClient();
+    }
+
+    private void stopOfflineEngines(){
+        if(gameHandler.getOfflineSlither() != null){
+            gameHandler.getOfflineSlither().stop();
+        }
+        if(gameHandler.getOfflineSnake() != null){
+            gameHandler.getOfflineSnake().stop();
+        }
+    }
+
+    public void stopAll(){
+        stopServer();
+        stopClient();
+        stopOfflineEngines();
     }
 
 

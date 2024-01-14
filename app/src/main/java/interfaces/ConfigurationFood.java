@@ -26,7 +26,7 @@ public interface ConfigurationFood {
     public double getDeathFoodRadius();
     public boolean getDeathFoodSpawnInCenter();
     public double getShieldFoodRadius();
-    public int getShieldValue();
+    public int getShieldTime();
     public boolean getShieldFoodRespawn();
     public int getShieldFoodProbability();
     public double getAverageFoodRadius();

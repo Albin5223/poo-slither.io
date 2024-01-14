@@ -33,13 +33,10 @@ public class HumanMousePlayer implements HumanPlayer {
     }
 
     @Override
-    public void keyPressed(KeyEvent ev) {
-        
-    }
+    public void keyPressed(KeyEvent ev) {}
 
     @Override
-    public void keyReleased(KeyEvent ev) {
-    }
+    public void keyReleased(KeyEvent ev) {}
 
     public void startMouseThread(){
         mouseThread.start();

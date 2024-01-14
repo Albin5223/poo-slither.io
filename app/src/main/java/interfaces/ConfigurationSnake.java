@@ -13,4 +13,5 @@ public interface ConfigurationSnake {
     public boolean isCollidingWithHimself();
     public boolean isRadiusGrowing();
     public int getMaxRadius();
+    public int getInvincibilityTime();
 }

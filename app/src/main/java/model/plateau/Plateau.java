@@ -96,12 +96,14 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * @return true if the snake is still on the board, false otherwise
      */
     protected boolean isSnakeOnBoard(Snake<Type,O> snake){
-        for (Snake<Type,O> s : snakeBoard.values()) {
-            if(snake == s){ // We check if the snake is on the board
-                return true;
+        synchronized(lock) {
+            for (Snake<Type,O> s : snakeBoard.values()) {
+                if(snake == s){ // We check if the snake is on the board
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     /**
@@ -212,15 +214,18 @@ public abstract sealed class Plateau<Type extends Number & Comparable<Type>, O e
      * Check if the snake is colliding with another snake already on the board (or maybe itself)
      * @param snake the snake to check
      * @return true if the snake is colliding with another snake already on the board, false otherwise
+     * @apiNote This method is synchronized to avoid that a changement is occuring in the snake board while we are checking if it is colliding with another snake
      */
     public boolean isCollidingWithAll(Snake<Type,O> snake){
-        for (Snake<Type,O> s : snakeBoard.values()) {
-            if(snake.isCollidingWith(s)){ // We check if the snake is colliding with another snake already on the board
-                System.out.println("Collision with " + s.head.getCenter().toString()+ " at " + snake.getHead().getCenter().toString());
-                return true;
+        synchronized(lock){
+            for (Snake<Type,O> s : snakeBoard.values()) {
+                if(snake.isCollidingWith(s)){ // We check if the snake is colliding with another snake already on the board
+                    System.out.println("Collision with " + s.head.getCenter().toString()+ " at " + snake.getHead().getCenter().toString());
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     /**

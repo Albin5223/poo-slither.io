@@ -16,6 +16,8 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     private int SNAKE_DEFAULT_SPEED = 20;
     private int SNAKE_BOOST_SPEED = (int) (SNAKE_DEFAULT_SPEED * 1.8);
 
+    private int SNAKE_INVINCIBILITY_TIME = 2;
+
     /** Do we want to add food behind a dead snake ? */
     private boolean IS_DEATH_FOOD = true;
     private int DEATH_FOOD_PER_SEGMENT = 1;
@@ -32,6 +34,7 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     public ConfigurationSnakeInteger setGapBetweenTail(int i){SNAKE_GAP_BETWEEN_TAIL = i;return this;}
     public ConfigurationSnakeInteger setDefaultSpeed(int i){SNAKE_DEFAULT_SPEED = i;return this;}
     public ConfigurationSnakeInteger setBoostSpeed(int i){SNAKE_BOOST_SPEED = i;return this;}
+    public ConfigurationSnakeInteger setInvincibilityTime(int i){SNAKE_INVINCIBILITY_TIME = i;return this;}
     public ConfigurationSnakeInteger setDeathFood(boolean b){IS_DEATH_FOOD = b;return this;}
     public ConfigurationSnakeInteger setDeathFoodPerSegment(int i){DEATH_FOOD_PER_SEGMENT = i;return this;}
     public ConfigurationSnakeInteger setTraversableWall(boolean b){TRAVERSABLE_WALL = b;return this;}
@@ -46,6 +49,7 @@ public class ConfigurationSnakeInteger implements ConfigurationSnake {
     @Override public int getGapBetweenTail(){return SNAKE_GAP_BETWEEN_TAIL;}
     @Override public int getDefaultSpeed(){return SNAKE_DEFAULT_SPEED;}
     @Override public int getBoostSpeed(){return SNAKE_BOOST_SPEED;}
+    @Override public int getInvincibilityTime(){return SNAKE_INVINCIBILITY_TIME;}
     @Override public boolean isDeathFood(){return IS_DEATH_FOOD;}
     @Override public int getDeathFoodPerSegment(){return DEATH_FOOD_PER_SEGMENT;}
     @Override public boolean isTraversableWall(){return TRAVERSABLE_WALL;}

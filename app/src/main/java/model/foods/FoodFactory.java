@@ -126,7 +126,7 @@ public class FoodFactory<Type extends Number & Comparable<Type>, O extends Orien
 
         @Override
         public void actOnSnake(Snake<Type, O> snake) {
-            snake.setShielded(foodConfig.getShieldValue());
+            snake.setShielded(foodConfig.getShieldTime());
         }
 
         @Override

@@ -24,20 +24,14 @@ import model.player.HumanSnakePlayer;
 import model.player.Bot.BotSnakePlayer;
 
 public class EngineSnake implements Engine<Integer,Direction> {
-    /*
-     * 
-     * 
-     * 
-     * FAIRE EN SORTE QUE IL Y A AU MAX 60% de nourriture
-     */
-    protected PlateauInteger plateau;
-    ArrayList<SnakeMover<Integer,Direction>> snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
-    ArrayList<HumanSnakePlayer> players;
-    
-    ArrayList<Observer<Integer,Direction>> observers;
-    ArrayList<BotSnakePlayer> bots;
 
-    protected AnimationTimer animationEffect;
+    protected PlateauInteger plateau;
+    protected ArrayList<SnakeMover<Integer,Direction>> snakeMovers = new ArrayList<SnakeMover<Integer,Direction>>();
+    protected ArrayList<HumanSnakePlayer> players;
+    protected ArrayList<Observer<Integer,Direction>> observers;
+    protected ArrayList<BotSnakePlayer> bots;
+
+    private AnimationTimer animationEffect;
     private long lastUpdate = 0;
 
     protected EngineSnake(ArrayList<SnakeInteger> snakes, PlateauInteger plateau){
@@ -55,7 +49,8 @@ public class EngineSnake implements Engine<Integer,Direction> {
                 
                 if((now-lastUpdate) >= 1_000_000_000){
                     //System.out.println("Update");
-                    for(Snake<Integer,Direction> snake : plateau.getHashMap().values()){
+                    List<Snake<Integer,Direction>> snakes = new ArrayList<>(plateau.getHashMap().values());
+                    for(Snake<Integer,Direction> snake : snakes){
                         if(snake.underEffect()){
                             snake.applyEffect();
                         }

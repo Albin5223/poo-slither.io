@@ -27,15 +27,15 @@ import model.player.Bot.BotSlitherPlayer;
 public class EngineSlither implements Engine<Double,Angle>{
     
     protected PlateauDouble plateau;
-    ArrayList<SnakeMover<Double,Angle>> snakeMovers;
-    ArrayList<Observer<Double,Angle>> observers;
-    ArrayList<HumanSlitherPlayer> players;
-    ArrayList<BotSlitherPlayer> bots;
+    protected ArrayList<SnakeMover<Double,Angle>> snakeMovers;
+    protected ArrayList<Observer<Double,Angle>> observers;
+    protected ArrayList<HumanSlitherPlayer> players;
+    protected ArrayList<BotSlitherPlayer> bots;
 
 
-    private HumanMousePlayer mousePlayer;
-    private AnimationTimer animationEffect;
-    private long lastUpdate = 0;
+    protected HumanMousePlayer mousePlayer;
+    protected AnimationTimer animationEffect;
+    protected long lastUpdate = 0;
 
     protected EngineSlither(ArrayList<SnakeDouble> snakes, PlateauDouble plateau){
         this.snakeMovers = new ArrayList<SnakeMover<Double,Angle>>();
@@ -53,7 +53,8 @@ public class EngineSlither implements Engine<Double,Angle>{
                 
                 if((now-lastUpdate) >= 1_000_000_000){
                     //System.out.println("Update");
-                    for(Snake<Double,Angle> snake : plateau.getHashMap().values()){
+                    List<Snake<Double,Angle>> snakes = new ArrayList<>(plateau.getHashMap().values());
+                    for(Snake<Double,Angle> snake : snakes){
                         if(snake.underEffect()){
                             snake.applyEffect();
                         }

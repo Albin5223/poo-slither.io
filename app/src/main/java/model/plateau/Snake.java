@@ -45,6 +45,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     public final int DEFAULT_SPEED;
     /** The speed of the snake when he's boosting */
     public final int BOOST_SPEED;
+    /** The max time of invincibility */
+    public final int INVINCIBILITY_MAX_TIME;
 
     /** The time of poison */
     private int TIME_OF_POISON = 0;
@@ -55,6 +57,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     private int POWER_OF_POISON = 0;
     /** The time of shield */
     private int TIME_OF_SHIELD = 0;
+
+    private int TIME_OF_INVINCIBILITY = 0;
 
     /** The amount of death food that the snake will drop when he's dead */
     public final int DEATH_FOOD_PER_SEGMENT;
@@ -145,6 +149,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.DEFAULT_SPEED = plateau.getSnakeConfig().getDefaultSpeed();
         this.BOOST_SPEED = plateau.getSnakeConfig().getBoostSpeed();
         this.currentSpeed = DEFAULT_SPEED;
+        this.INVINCIBILITY_MAX_TIME = plateau.getSnakeConfig().getInvincibilityTime();
         this.DEATH_FOOD_PER_SEGMENT = plateau.getSnakeConfig().getDeathFoodPerSegment();
         this.IS_TRAVERSABLE_WALL = plateau.getSnakeConfig().isTraversableWall();
         this.IS_DROPING_FOOD_ON_DEATH = plateau.getSnakeConfig().isDeathFood();
@@ -211,6 +216,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         this.setBoosting(false);
         this.setPoisoned(0,0);
         this.setShielded(0);
+        this.setInvincible(0);
     }
 
     /**
@@ -295,7 +301,7 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
      * @return true if the snake is under effect (poisoned or shielded), false otherwise
      */
     public final boolean underEffect(){
-        return isPoisoned() || isShielded();
+        return isPoisoned() || isShielded() || isInvincible();
     }
 
     /** @return true if the snake is poisoned, false otherwise */
@@ -322,11 +328,24 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     }
 
     /**
+     * Make the snake invincible
+     * @param TIME the time of invincibility (the number of time that the snake will be invincible)
+     */
+    public final void setInvincible(int TIME){
+        TIME_OF_INVINCIBILITY = TIME > 0 ? TIME : 0;
+    }
+
+    /** @return true if the snake is invincible, false otherwise */
+    public final boolean isInvincible(){
+        return TIME_OF_INVINCIBILITY > 0;
+    }
+
+    /**
      * Try to kill the snake
      * @apiNote if the snake is shielded, the shield will be removed
      */
     public final void try_to_kill(){
-        if(!isShielded()){
+        if(!(isShielded() || isInvincible())){
             this.reset();
         }
         else{
@@ -344,6 +363,9 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         }
         if(isShielded()){
             TIME_OF_SHIELD -= 1;
+        }
+        if(isInvincible()){
+            TIME_OF_INVINCIBILITY -= 1;
         }
     }
 
@@ -390,7 +412,13 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
         plateau.addSnake(this);   // We update the position of the snake on the board
 
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
-            throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
+            if(!isShielded() && !isInvincible()){
+                throw new ExceptionCollisionWithSnake("Snake is colliding with another snake");
+            }
+            else{
+                setShielded(0);
+                setInvincible(INVINCIBILITY_MAX_TIME);
+            }
         }
         ArrayList<Food<Type,O>> collidingFoods = plateau.isCollidingWithFoods(this);
         if(collidingFoods.size() != 0){ // We check if the snake is colliding with foods

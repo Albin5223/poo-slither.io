@@ -29,8 +29,7 @@ public class App extends Application{
         primaryStage.setFullScreenExitHint("");
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.valueOf("Ctrl+C"));
         primaryStage.setOnCloseRequest(e -> {
-            window.stopServer();
-            window.stopClient();
+            window.stopAll();
             primaryStage.close();
         });
         primaryStage.setFullScreen(true);
