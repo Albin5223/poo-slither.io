@@ -7,6 +7,10 @@ public interface HumanPlayer {
     public void keyReleased(KeyEvent ev);
 
     public void mouseMoved(double x, double y,boolean isCenter);
-    public void mousePressed(double x, double y,boolean isCenter);
-    public void mouseReleased(double x, double y,boolean isCenter);
+    public void mousePressed(boolean isCenter);
+    public void mouseReleased(boolean isCenter);
+    public default void mouseDragged(double x, double y,boolean isCenter){
+        mouseMoved(x,y,isCenter);
+        mousePressed(isCenter);
+    }
 }

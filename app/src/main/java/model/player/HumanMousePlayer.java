@@ -13,14 +13,12 @@ public class HumanMousePlayer implements HumanPlayer {
     private Thread mouseThread = new Thread(){
         public void run(){
             while(!Thread.currentThread().isInterrupted()){
-                calculateAngle(lastX, lastY,isCenter);
+                calculateAngle(isCenter);
                 try {
                     Thread.sleep(1000/60);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                }
-                
-                
+                }   
             }
         }
     };
@@ -62,19 +60,20 @@ public class HumanMousePlayer implements HumanPlayer {
         return angle;
     }
 
-    private void calculateAngle(double x, double y,boolean isCenter){
-
+    private void calculateAngle(boolean isCenter){
        
         int centerX = 0;
         int centerY = 0;
+
+        int x = 0;
+        int y = 0;
 
         if(isCenter){
             centerX = Window.WITDH/2;
             centerY = Window.HEIGHT/2;
 
-            x = x + centerX;
-            y = y + centerY;
-
+            x = centerX + lastX;
+            y = centerY + lastY;
         }
         else{
             centerX= snake.getHead().getCenter().getX().intValue(); 
@@ -108,15 +107,13 @@ public class HumanMousePlayer implements HumanPlayer {
     }
 
     @Override
-    public void mousePressed(double x, double y,boolean isCenter) {
+    public void mousePressed(boolean isCenter) {
         snake.setBoosting(true);
-        calculateAngle(x, y,isCenter);
     }
 
     @Override
-    public void mouseReleased(double x, double y,boolean isCenter) {
+    public void mouseReleased(boolean isCenter) {
         snake.setBoosting(false);
-        calculateAngle(x, y,isCenter);
     }
 
     public Snake<Double, Angle> getSnake() {

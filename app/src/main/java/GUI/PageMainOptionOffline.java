@@ -83,27 +83,31 @@ public class PageMainOptionOffline extends Page {
             scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    double x = event.getScreenX()-Window.WITDH/2;
-                    double y = event.getScreenY()-Window.HEIGHT/2;
+                    double x = event.getX()-Window.WITDH/2;
+                    double y = event.getY()-Window.HEIGHT/2;
                     window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
                 }
             });
             scene.setOnMouseReleased(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    
-                    double x = event.getScreenX()-Window.WITDH/2;
-                    double y = event.getScreenY()-Window.HEIGHT/2;
-                    window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
+                    window.getOfflineSlither().getMousePlayer().mouseReleased(isSnake);
                 }
             });
 
             scene.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    double x = event.getScreenX()-Window.WITDH/2;
-                    double y = event.getScreenY()-Window.HEIGHT/2;
-                    window.getOfflineSlither().getMousePlayer().mouseMoved(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
+                    window.getOfflineSlither().getMousePlayer().mousePressed(isSnake);
+                }
+            });
+
+            scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    double x = event.getX()-Window.WITDH/2;
+                    double y = event.getY()-Window.HEIGHT/2;
+                    window.getOfflineSlither().getMousePlayer().mouseDragged(x, y,SetOfConfiguration.getNumberOfHuman() == 1);
                 }
             });
 
@@ -127,6 +131,10 @@ public class PageMainOptionOffline extends Page {
         
         scene.setOnKeyPressed( ev -> {
             if(ev.getCode() == KeyCode.ESCAPE){
+                TouchControler.resetNumber();
+                AddPlayerBox.resetNumero();
+                mouseActivated=false;
+                SetOfConfiguration.resetConfiguration();
                 window.getOfflineSlither().stop();
                 PageMainOptionOffline.mouseActivated = false;
                 
@@ -148,10 +156,6 @@ public class PageMainOptionOffline extends Page {
 
         window.getLayout().getChildren().add(playPageSlither);
         
-        TouchControler.resetNumber();
-        AddPlayerBox.resetNumero();
-        mouseActivated=false;
-        SetOfConfiguration.resetConfiguration();
         window.getOfflineSlither().run();
     }
 
