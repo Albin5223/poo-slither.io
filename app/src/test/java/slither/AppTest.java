@@ -5,11 +5,26 @@ package slither;
 
 import org.junit.jupiter.api.Test;
 
+import configuration.ConfigurationFoodDouble;
 import configuration.ConfigurationFoodInteger;
+import configuration.ConfigurationSnakeDouble;
 import configuration.ConfigurationSnakeInteger;
+import configuration.TouchControler;
+import controleur.ControlerSnake;
+import controleur.KeyboardControler;
 import exceptions.ExceptionCollision;
+import interfaces.Orientation.Angle;
+import interfaces.Orientation.Direction;
+import model.coordinate.Coordinate;
+import model.coordinate.CoordinateDouble;
+import model.coordinate.CoordinateInteger;
+import model.engine.EngineSnake;
+import model.plateau.PlateauDouble;
 import model.plateau.PlateauInteger;
 import model.plateau.SnakeInteger;
+import model.plateau.PlateauInteger.BorderInteger;
+import model.plateau.SnakeDouble;
+import interfaces.Turnable.Turning;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +62,234 @@ class AppTest {
 
         assertTrue(res >=n);
     }
+
+    @Test void testDistance() {
+        CoordinateInteger c1 = new CoordinateInteger(0,0);
+        CoordinateInteger c2 = new CoordinateInteger(0,4);
+
+        assertEquals(4,c1.distanceTo(c2));
+    }
+
+    @Test void testShrink(){
+
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int n = snake.getTail().size();
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.shrink(4);
+        int res = snake.getTail().size();
+
+        assertEquals(n,res);
+    }
+
+    @Test void testShrink2(){
+
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int n = snake.getTail().size();
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.chargeFood(snake.MAX_FOOD_CHARGING);
+        snake.shrink(2);
+        int res = snake.getTail().size();
+
+        assertEquals(n+2,res);
+    }
+
+    @Test void testTurnable1(){
+        Direction l = Direction.LEFT;
+        Direction res = l.changeDirectionWithTurn(Turning.GO_LEFT);
+
+        assertEquals(Direction.DOWN,res);
+    }
+
+    @Test void testTurnable2(){
+        Direction l = Direction.LEFT;
+        Direction res = l.changeDirectionWithTurn(Turning.GO_RIGHT);
+
+        assertEquals(Direction.UP,res);
+    }
+
+    @Test void testTurnable3(){
+        Direction l = Direction.LEFT;
+        Direction res = l.changeDirectionWithTurn(Turning.FORWARD);
+
+        assertEquals(Direction.LEFT,res);
+    }
+
+    @Test void testBorder(){
+        BorderInteger border = new BorderInteger(-10, 10, -10, 10, 0, 0, false);
+        CoordinateInteger c = new CoordinateInteger(11,0);
+
+        assertEquals(false,border.isInside(c));
+    }
+
+    @Test void testBorder2(){
+        BorderInteger border = new BorderInteger(-10, 10, -10, 10, 0, 0, false);
+        CoordinateInteger c = new CoordinateInteger(0,0);
+
+        assertTrue(border.isInside(c));
+    }
+
+    @Test void testPlaceCoordinateUP(){
+        CoordinateInteger c = new CoordinateInteger(0,0);
+        CoordinateInteger res = c.placeCoordinateFrom(Direction.UP, 10);
+
+        assertEquals(new CoordinateInteger(0,-10),res);
+    }
+
+    @Test void testPlaceCoordinateDOWN(){
+        CoordinateInteger c = new CoordinateInteger(0,0);
+        CoordinateInteger res = c.placeCoordinateFrom(Direction.DOWN, 10);
+
+        assertEquals(new CoordinateInteger(0,10),res);
+    }
+
+    @Test void testPlaceCoordinateRIGHT(){
+        CoordinateInteger c = new CoordinateInteger(0,0);
+        CoordinateInteger res = c.placeCoordinateFrom(Direction.RIGHT, 10);
+
+        assertEquals(new CoordinateInteger(10,0),res);
+    }
+
+    @Test void testPlaceCoordinateLEFT(){
+        CoordinateInteger c = new CoordinateInteger(0,0);
+        CoordinateInteger res = c.placeCoordinateFrom(Direction.LEFT, 10);
+
+        assertEquals(new CoordinateInteger(-10,0),res);
+    }
+
+    @Test void testCreateCoord(){
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        
+        boolean valid = true;
+        for(int i = 0;i<100;i++){
+            CoordinateInteger c = (CoordinateInteger) plateau.getBorder().getRandomCoordinate();
+            valid = valid && plateau.getBorder().isInside(c);
+        }
+        
+        assertTrue(valid);
+    }
+
+    @Test void testEqualCoord(){
+        CoordinateInteger c1 = new CoordinateInteger(0,0);
+        CoordinateInteger c2 = new CoordinateInteger(0,0);
+
+        assertEquals(c1.equals(c2),true);
+    }
+
+    @Test void testCollisionWithWall(){
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger().setTraversableWall(false));
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        boolean death = false;
+        for(int i = 0;i<100;i++){
+            try {
+                snake.move();
+            } catch (ExceptionCollision e) {
+                death = true;
+                break;
+            }
+            
+        }
+
+        assertTrue(death);
+    }
+
+    @Test void testSnakeMovementException() {
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger().setKillerFoodProbability(0), new ConfigurationSnakeInteger().setTraversableWall(false));
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        
+        assertThrows(ExceptionCollision.class, () -> {
+            for(int i = 0; i < 200; i++) {
+                snake.move();
+            }
+        });
+    }
+
+     @Test
+    void testGetArea() {
+        PlateauDouble.BorderDouble border = new PlateauDouble.BorderDouble(new CoordinateDouble(0.0, 0.0), 10.0);
+        assertEquals(Math.PI * 100, border.getArea());
+    }
+
+    @Test
+    void testGetOpposite() {
+        PlateauDouble.BorderDouble border = new PlateauDouble.BorderDouble(new CoordinateDouble(0.0, 0.0), 10.0);
+        CoordinateDouble opposite = (CoordinateDouble) border.getOpposite(new CoordinateDouble(10.0, 0.0));
+        assertEquals(new CoordinateDouble(-10.0, 0.0), opposite);
+    }
+
+    @Test
+    void testCreateSnakeDouble() {
+        ConfigurationFoodDouble foodConfig = new ConfigurationFoodDouble();
+        ConfigurationSnakeDouble snakeConfig = new ConfigurationSnakeDouble();
+        PlateauDouble plateau = PlateauDouble.createPlateauSlitherio(10, foodConfig, snakeConfig);
+        SnakeDouble snake = SnakeDouble.createSnakeDouble(plateau);
+        assertNotNull(snake);
+    }
+
+    @Test
+    void testTurn() {
+        ConfigurationFoodDouble foodConfig = new ConfigurationFoodDouble();
+        ConfigurationSnakeDouble snakeConfig = new ConfigurationSnakeDouble();
+        PlateauDouble plateau = PlateauDouble.createPlateauSlitherio(10, foodConfig, snakeConfig);
+        SnakeDouble snake = SnakeDouble.createSnakeDouble(plateau);
+        Angle initialDirection = snake.getDirection();
+        Angle newDirection = snake.turn(Turning.GO_LEFT, initialDirection);
+        assertNotEquals(initialDirection, newDirection);
+    }
+
+
+    @Test void testMove(){
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        Coordinate<Integer,Direction> c = snake.getHead().getCenter().clone();
+
+        try {
+            snake.move();
+        } catch (ExceptionCollision e) {
+            assertTrue(true);
+        }
+
+        boolean idem = c.equals(snake.getHead().getCenter());
+        assertFalse(idem);
+    }
+
+    @Test
+    void testAddPlayer() {
+        ConfigurationFoodInteger foodConfig = new ConfigurationFoodInteger();
+        ConfigurationSnakeInteger snakeConfig = new ConfigurationSnakeInteger();
+        EngineSnake engine = EngineSnake.createGame(100, 100, foodConfig, snakeConfig);
+        
+        KeyboardControler<Integer,Direction> controler = new ControlerSnake (new TouchControler());
+        engine.addPlayer(controler);
+        assertEquals(1, engine.getPlayers().size());
+    }
+
+
+    @Test void createAngle(){
+        boolean valid= true;
+        for(int i = 0;i<100;i++){
+            Angle a = Angle.getRandomAngle();
+            valid = valid && (a.getAngle()>=0) && (a.getAngle()<=360);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 }
