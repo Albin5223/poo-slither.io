@@ -18,6 +18,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
     /** The skin of the snake, by default it's random */
     protected Skin skin = SkinRandom.build();
 
+    private double NUMBER_OF_SHRINK = 0;
+
     /** The turning of the snake */
     protected Turning currentTurning = Turning.FORWARD;
 
@@ -496,6 +498,21 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
      * @param nb the number of segments that the snake will lose
      * @apiNote the snake cannot be more small than 3, so the {@link #TIME_OF_POISON} will be set to 0 if the snake is more small than 3
      */
+
+    
+    public final void incrementeShrink(double n){
+        synchronized(lock) {
+            NUMBER_OF_SHRINK +=n;
+            if(NUMBER_OF_SHRINK > 1){
+                shrink(1);
+                NUMBER_OF_SHRINK -= 1;
+            }
+        }
+    }
+
+
+
+
     public final void shrink(int nb){
         int newSize = Math.max(tail.size() - nb, 3);
         while (tail.size() > newSize) {

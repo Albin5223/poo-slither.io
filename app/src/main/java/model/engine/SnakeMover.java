@@ -21,6 +21,9 @@ public class SnakeMover<Type extends Number & Comparable<Type>, O extends Orient
                     bot.nextTurning();
                 }
                 move();
+                if(snake.isBoosting()){
+                    snake.incrementeShrink(0.2);
+                }
                 try {
                     Thread.sleep(1000/snake.getCurrentSpeed());
                 } catch (InterruptedException e) {

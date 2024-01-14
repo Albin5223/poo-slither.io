@@ -279,6 +279,24 @@ class AppTest {
         }
     }
 
+    @Test
+    void testIncrementeShrinkLessThanOne() {
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int initialSize = snake.getTail().size();
+        snake.incrementeShrink(0.5);
+        assertEquals(initialSize, snake.getTail().size());
+    }
+
+    @Test
+    void testIncrementeShrinkMoreThanOne() {
+        PlateauInteger plateau = PlateauInteger.createPlateauSnake(100,100, new ConfigurationFoodInteger(), new ConfigurationSnakeInteger());
+        SnakeInteger snake = SnakeInteger.createSnakeInteger(plateau);
+        int initialSize = snake.getTail().size();
+        snake.incrementeShrink(1.5);
+        assertEquals(initialSize - 1, snake.getTail().size());
+    }
+
 
 
 
