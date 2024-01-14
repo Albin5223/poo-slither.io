@@ -425,6 +425,8 @@ public sealed abstract class Snake<Type extends Number & Comparable<Type>, O ext
             }
         }
 
+        this.setBoosting(isBoosting);
+
         plateau.addSnake(this);   // We update the position of the snake on the board
 
         if(plateau.isCollidingWithAll(this)){  // We check if the snake is colliding with another snake
